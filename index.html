@@ -3,372 +3,540 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brasas El Gordo - Auténtico Sabor Sonorense</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'sonoran-copper': '#b87333',
-                        'sonoran-gold': '#d4af37',
-                        'sonoran-sand': '#f4e4a6',
-                        'mesquite-brown': '#8b4513',
-                        'desert-stone': '#d2b48c',
-                        'warm-white': '#faf9f7',
-                        'chile-red': '#cc4125',
-                        'primary': '#b87333'
-                    },
-                    fontFamily: {
-                        'sans': ['Inter', 'sans-serif'],
-                        'serif': ['Playfair Display', 'serif']
-                    },
-                    maxWidth: {
-                        '8xl': '88rem'
-                    }
-                }
-            }
-        }
-    </script>
+    <title>Brasas El Gordo - Tacos a la Leña</title>
     <style>
-        .hero-gradient {
-            background: linear-gradient(135deg, #faf9f7 0%, #f5f4f2 100%);
-        }
-        
-        .product-card-bg {
-            background: linear-gradient(135deg, var(--bg-start), var(--bg-end));
-            transition: all 0.3s ease-in-out;
-        }
-        
-        .product-card-bg:hover {
-            transform: translateY(-2px);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        .scroll-indicator {
-            height: 2px;
-            background: linear-gradient(90deg, #b87333, #d4af37);
-            transform-origin: left;
-            transform: scaleX(0);
-            transition: transform 0.1s ease;
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #ff4500;
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        .nav-menu a:hover {
+            color: #ff4500;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><rect fill="%23ff4500" width="1200" height="800"/><g fill="%23000" opacity="0.1"><circle cx="200" cy="200" r="100"/><circle cx="800" cy="300" r="80"/><circle cx="400" cy="600" r="120"/></g></svg>');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(255,69,0,0.2) 0%, rgba(0,0,0,0.6) 100%);
+        }
+
+        .hero-content {
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 2rem;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            color: #ff4500;
+        }
+
+        .hero .subtitle {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .hero .tagline {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #ddd;
+            font-style: italic;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #ff4500;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e63e00;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255,69,0,0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            color: #333;
+        }
+
+        /* Sections */
+        .section {
+            padding: 5rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #333;
+        }
+
+        .section-title .accent {
+            color: #ff4500;
+        }
+
+        /* Two Column Layout */
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .column h3 {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: #ff4500;
+        }
+
+        .column p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: #666;
+        }
+
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 4px solid #ff4500;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .product-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .product-card .emoji {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        /* Menu Section */
+        .menu-section {
+            background: #f8f8f8;
+            padding: 5rem 0;
+        }
+
+        .menu-categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .menu-category {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .menu-category:hover {
+            transform: translateY(-5px);
+        }
+
+        .menu-category .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .menu-category h4 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ff4500;
+        }
+
+        /* Retail Section */
+        .retail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .retail-item {
+            background: linear-gradient(135deg, #ff4500 0%, #e63e00 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .retail-item:hover {
+            transform: scale(1.05);
+        }
+
+        .retail-item h4 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .retail-item p {
+            opacity: 0.9;
+        }
+
+        /* Contact Section */
+        .contact-section {
+            background: #2a2a2a;
+            color: white;
+            text-align: center;
+            padding: 5rem 0;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .contact-item {
+            padding: 2rem;
+        }
+
+        .contact-item .icon {
+            font-size: 2rem;
+            color: #ff4500;
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.3rem;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease;
+            animation: fadeInUp 0.6s ease-out;
         }
 
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
         }
-
-        .mobile-menu-enter {
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-        }
-
-        .mobile-menu-enter.active {
-            transform: translateX(0);
-        }
-
-        .product-card-1 { --bg-start: #8b4513; --bg-end: #a0522d; }
-        .product-card-2 { --bg-start: #cc4125; --bg-end: #d2691e; }
-        .product-card-3 { --bg-start: #b87333; --bg-end: #d4af37; }
-        .product-card-4 { --bg-start: #2a5729; --bg-end: #4a7c59; }
-        .product-card-5 { --bg-start: #6b4423; --bg-end: #8b5a2b; }
     </style>
 </head>
-<body class="bg-warm-white text-gray-900 font-sans overflow-x-hidden">
-    <!-- Scroll Indicator -->
-    <div class="fixed top-0 left-0 w-full h-0.5 z-50">
-        <div class="scroll-indicator h-full"></div>
-    </div>
-
+<body>
     <!-- Header -->
-    <header class="fixed top-0 left-0 right-0 bg-warm-white/95 backdrop-blur-md z-40 border-b border-gray-200">
-        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <!-- Logo -->
-                <div class="flex-shrink-0">
-                    <a href="#inicio" class="font-serif text-xl font-semibold text-gray-900">
-                        Brasas El Gordo
-                    </a>
-                    <div class="text-xs text-sonoran-copper uppercase tracking-wide font-medium">
-                        Auténtico Sabor Sonorense
-                    </div>
-                </div>
-
-                <!-- Desktop Navigation -->
-                <nav class="hidden md:flex space-x-8">
-                    <a href="#inicio" class="nav-link text-sm font-medium text-gray-700 hover:text-sonoran-copper transition-colors uppercase tracking-wide">Inicio</a>
-                    <a href="#productos" class="nav-link text-sm font-medium text-gray-700 hover:text-sonoran-copper transition-colors uppercase tracking-wide">Productos</a>
-                    <a href="#historia" class="nav-link text-sm font-medium text-gray-700 hover:text-sonoran-copper transition-colors uppercase tracking-wide">Historia</a>
-                    <a href="#ubicacion" class="nav-link text-sm font-medium text-gray-700 hover:text-sonoran-copper transition-colors uppercase tracking-wide">Ubicación</a>
-                </nav>
-
-                <!-- Mobile menu button -->
-                <button class="md:hidden p-2 rounded-md text-gray-700 hover:text-sonoran-copper" id="mobile-menu-button">
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-            </div>
-        </div>
-
-        <!-- Mobile Navigation -->
-        <div class="md:hidden mobile-menu-enter" id="mobile-menu">
-            <div class="px-4 pt-2 pb-3 space-y-1 bg-warm-white border-t border-gray-200">
-                <a href="#inicio" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-sonoran-copper uppercase tracking-wide">Inicio</a>
-                <a href="#productos" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-sonoran-copper uppercase tracking-wide">Productos</a>
-                <a href="#historia" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-sonoran-copper uppercase tracking-wide">Historia</a>
-                <a href="#ubicacion" class="block px-3 py-2 text-sm font-medium text-gray-700 hover:text-sonoran-copper uppercase tracking-wide">Ubicación</a>
-            </div>
+    <header class="header">
+        <div class="nav-container">
+            <a href="#" class="logo">BRASAS 🔥</a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a href="#home">Inicio</a></li>
+                    <li><a href="#restaurant">Restaurante</a></li>
+                    <li><a href="#retail">Productos</a></li>
+                    <li><a href="#contact">Contacto</a></li>
+                </ul>
+            </nav>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section id="inicio" class="hero-gradient min-h-screen flex items-center justify-center pt-16">
-        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-medium text-gray-900 mb-6 leading-tight">
-                Brasas El Gordo
-            </h1>
-            <p class="text-lg sm:text-xl text-sonoran-copper mb-4 uppercase tracking-wide font-medium">
-                Auténtico Sabor Sonorense
-            </p>
-            <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-                Donde la tradición culinaria de Sonora se encuentra con técnicas artesanales modernas.
-            </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="#productos" class="bg-gray-900 text-white px-8 py-3 text-sm font-semibold uppercase tracking-wide hover:bg-gray-800 transition-colors rounded-full">
-                    Explorar Productos
-                </a>
-                <a href="#ubicacion" class="border border-sonoran-copper text-sonoran-copper px-8 py-3 text-sm font-semibold uppercase tracking-wide hover:bg-sonoran-copper hover:text-white transition-colors rounded-full">
-                    Visítanos
-                </a>
+    <section id="home" class="hero">
+        <div class="hero-content fade-in">
+            <h1>BRASAS</h1>
+            <p class="subtitle">EL GORDO</p>
+            <p class="tagline">Tacos a la Leña - Auténtico Sabor Sonorense</p>
+            <p style="margin-bottom: 2rem; font-size: 1.1rem;">"Aquí empieza el sabor de Sonora"</p>
+            <div class="cta-buttons">
+                <a href="#restaurant" class="btn btn-primary">Ver Menú</a>
+                <a href="#retail" class="btn btn-secondary">Productos Retail</a>
             </div>
         </div>
     </section>
 
-    <!-- Products Section with Crumbl-style Layout -->
-    <section id="productos" class="py-6 px-4 md:py-[100px] md:px-[30px]">
-        <div class="max-w-8xl mx-auto overflow-x-clip">
-            <!-- Section Header -->
-            <div class="flex flex-col gap-y-4 lg:gap-y-[30px] mb-4">
-                <div>
-                    <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] inline-block py-[3px] px-[18px] bg-primary text-white rounded-[7.5px] md:!text-[21px] md:!leading-9">
-                        Temporada 2025
-                    </p>
+    <!-- About Section -->
+    <section class="section">
+        <div class="two-column">
+            <div class="column">
+                <h3>🔥 Tradición Sonorense</h3>
+                <p>En Brasas El Gordo celebramos la auténtica tradición culinaria de Sonora con nuestros tacos cocinados a la leña de mesquite. Cada platillo refleja generaciones de técnicas perfeccionadas, desde nuestro chicharrón de panceta hasta nuestras carnitas a la naranja.</p>
+                <p>Utilizamos métodos artesanales como el confitado en manteca, el asado directo al carbón, y marinados con cítricos frescos que capturan la esencia del noroeste mexicano.</p>
+            </div>
+            <div class="column">
+                <h3>🏪 Productos Premium</h3>
+                <p>Llevamos la experiencia de Brasas a tu hogar con nuestra línea de productos artesanales. Desde nuestra signature Manteca Ahumada hasta nuestros aceites de chile y mezclas de especias, cada producto está diseñado para elevar tu cocina.</p>
+                <p>Perfectos para chefs profesionales y entusiastas caseros que buscan ese auténtico sabor a leña y especias sonorenses.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Restaurant Menu Section -->
+    <section id="restaurant" class="menu-section">
+        <div class="section">
+            <h2 class="section-title">Nuestra <span class="accent">Cocina</span></h2>
+            
+            <div class="menu-categories">
+                <div class="menu-category">
+                    <div class="icon">🌮</div>
+                    <h4>Tacos Signature</h4>
+                    <p>Chicharrón de panceta, espaldilla asada, carnitas a la naranja, chambarete, brisket</p>
                 </div>
-                <div>
-                    <h1 class="font-extrabold text-[44px] leading-[50px] lg:text-[60px] lg:leading-[66px] 2xl:text-[75px] 2xl:leading-[80px] md:!text-[55px] md:!leading-[60px] lg:!text-[100px] lg:!leading-none capitalize">
-                        Sabores Sonorenses
-                    </h1>
+                <div class="menu-category">
+                    <div class="icon">🥣</div>
+                    <h4>Bowls & Burritos</h4>
+                    <p>Combinaciones personalizables con nuestras carnes premium y acompañamientos frescos</p>
+                </div>
+                <div class="menu-category">
+                    <div class="icon">🍳</div>
+                    <h4>Desayunos</h4>
+                    <p>Opciones matutinas con huevos, chorizo artesanal y tortillas recién hechas</p>
+                </div>
+                <div class="menu-category">
+                    <div class="icon">🫘</div>
+                    <h4>Guarniciones</h4>
+                    <p>Frijoles refritos con manteca ahumada, queso blanco blend, salsas de la casa</p>
                 </div>
             </div>
 
-            <!-- Product Cards in Crumbl Style -->
-            <!-- Manteca Ahumada -->
-            <div class="group py-5 flex items-center min-h-[230px] sm:min-h-[380px] lg:min-h-[600px] md:py-20 xl:mx-0 -ml-28 md:-ml-[325px]">
-                <div class="hover:cursor-pointer product-card-bg product-card-1 flex flex-grow justify-between p-5 rounded-2xl min-h-[165px] sm:min-h-[220px] md:p-[50px] md:rounded-[40px] lg:min-h-[374px] transition-colors duration-300 ease-in flex-row">
-                    <div class="relative flex items-start flex-grow-0 flex-shrink-0 w-[260px] sm:w-[400px] md:w-[600px] justify-end mr-6">
-                        <div class="absolute top-1/2 -translate-y-1/2 lg:size-[600px] hidden lg:block md:left-1/2 md:-translate-x-1/2 -scale-x-100 bg-warm-white/20 rounded-full flex items-center justify-center text-8xl">
-                            🥓
-                        </div>
-                        <div class="absolute top-1/2 -translate-y-1/2 lg:size-[600px] lg:hidden md:left-1/2 md:-translate-x-1/2 -scale-x-100 bg-warm-white/20 rounded-full flex items-center justify-center text-6xl">
-                            🥓
-                        </div>
-                    </div>
-                    <div class="flex flex-col flex-grow gap-y-[5px] md:gap-y-6">
-                        <div class="flex flex-col gap-y-[5px] md:gap-y-0">
-                            <div class="flex justify-start pb-[10px] md:pb-[15px] items-center">
-                                <p class="font-normal text-[14px] leading-[18px] 2xl:text-[16px] 2xl:leading-[20px] hidden md:block text-white/80">
-                                    Tier 1 - Signature
-                                </p>
-                            </div>
-                            <p class="font-extrabold text-[28px] leading-[32px] lg:text-[32px] lg:leading-[36px] 2xl:text-[36px] 2xl:leading-[40px] text-white !text-[35px] md:!text-[45px] md:!leading-[60px] lg:!text-[70px] lg:!leading-none transition-colors duration-300 ease-in">
-                                Manteca Ahumada
-                            </p>
-                            <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] hidden text-white/90 pt-[15px] md:block">
-                                Grasa de cerdo premium ahumada lentamente sobre carbón de mesquite con ajo asado, cebolla y hierbas aromáticas. La base de nuestro sabor distintivo.
-                            </p>
-                        </div>
-                        <div class="flex gap-2 sm:gap-5">
-                            <a class="text-white md:hidden inline-flex items-center gap-x-1 h-[40px] md:h-[50px] rounded-full py-3 transition-all duration-300 ease-in group-hover:lg:px-[25px] group-hover:lg:border lg:border-transparent">
-                                <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] pl-[5px] sm:!text-[13px] !text-[12px] md:!text-base md:!font-bold text-nowrap">Ver Más</p>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M10 16.75a.75.75 0 0 1-.53-1.281l3.47-3.47-3.47-3.47a.75.75 0 0 1 1.061-1.061l4 4a.75.75 0 0 1 0 1.061l-4 4a.75.75 0 0 1-.531.221"></path></svg>
-                            </a>
-                            <a class="text-white hidden md:inline-flex items-center h-[40px] md:h-[50px] rounded-full py-3 transition-all duration-300 ease-in group-hover:lg:pl-[30px] pl-[0px] pr-[30px] group-hover:lg:border border-transparent">
-                                <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] pl-[5px] sm:!text-[13px] !text-[12px] md:!text-base md:!font-bold text-nowrap">Ver Más</p>
-                            </a>
-                            <a class="bg-white/20 text-white hidden md:inline-flex items-center h-[40px] md:h-[50px] px-[30px] rounded-full py-3 transition-all duration-300 ease-in hover:bg-white/30">
-                                <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] px-3 !text-[13px] md:!text-base md:!font-bold text-nowrap">Ordenar</p>
-                            </a>
-                        </div>
-                    </div>
+            <div class="product-grid">
+                <div class="product-card">
+                    <span class="emoji">🐖</span>
+                    <h4>Chicharrón Pork Belly</h4>
+                    <p>Panceta curada en salmuera, confitada en manteca y terminada al mesquite hasta lograr esa piel crujiente perfecta. Glazeada con chiltepin y miel.</p>
                 </div>
-            </div>
-
-            <!-- Espaldilla Asada -->
-            <div class="group py-5 flex items-center min-h-[230px] sm:min-h-[380px] lg:min-h-[600px] md:py-20 xl:mx-0 -ml-28 md:-ml-[325px]">
-                <div class="hover:cursor-pointer product-card-bg product-card-5 flex flex-grow justify-between p-5 rounded-2xl min-h-[165px] sm:min-h-[220px] md:p-[50px] md:rounded-[40px] lg:min-h-[374px] transition-colors duration-300 ease-in flex-row">
-                    <div class="relative flex items-start flex-grow-0 flex-shrink-0 w-[260px] sm:w-[400px] md:w-[600px] justify-end mr-6">
-                        <div class="absolute top-1/2 -translate-y-1/2 lg:size-[600px] hidden lg:block md:left-1/2 md:-translate-x-1/2 -scale-x-100 bg-warm-white/20 rounded-full flex items-center justify-center text-8xl">
-                            🌮
-                        </div>
-                        <div class="absolute top-1/2 -translate-y-1/2 lg:size-[600px] lg:hidden md:left-1/2 md:-translate-x-1/2 -scale-x-100 bg-warm-white/20 rounded-full flex items-center justify-center text-6xl">
-                            🌮
-                        </div>
-                    </div>
-                    <div class="flex flex-col flex-grow gap-y-[5px] md:gap-y-6">
-                        <div class="flex flex-col gap-y-[5px] md:gap-y-0">
-                            <div class="flex justify-start pb-[10px] md:pb-[15px] items-center">
-                                <p class="font-normal text-[14px] leading-[18px] 2xl:text-[16px] 2xl:leading-[20px] hidden md:block text-white/80">
-                                    Tier 1 - Signature
-                                </p>
-                            </div>
-                            <p class="font-extrabold text-[28px] leading-[32px] lg:text-[32px] lg:leading-[36px] 2xl:text-[36px] 2xl:leading-[40px] text-white !text-[35px] md:!text-[45px] md:!leading-[60px] lg:!text-[70px] lg:!leading-none transition-colors duration-300 ease-in">
-                                Espaldilla Asada
-                            </p>
-                            <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] hidden text-white/90 pt-[15px] md:block">
-                                Pork shoulder slow-cooked sous-vide en marinada de naranja y especias, terminado a la parrilla con carbón de mesquite. Textura perfecta, sabor intenso.
-                            </p>
-                        </div>
-                        <div class="flex gap-2 sm:gap-5">
-                            <a class="text-white md:hidden inline-flex items-center gap-x-1 h-[40px] md:h-[50px] rounded-full py-3 transition-all duration-300 ease-in group-hover:lg:px-[25px] group-hover:lg:border lg:border-transparent">
-                                <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] pl-[5px] sm:!text-[13px] !text-[12px] md:!text-base md:!font-bold text-nowrap">Ver Más</p>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M10 16.75a.75.75 0 0 1-.53-1.281l3.47-3.47-3.47-3.47a.75.75 0 0 1 1.061-1.061l4 4a.75.75 0 0 1 0 1.061l-4 4a.75.75 0 0 1-.531.221"></path></svg>
-                            </a>
-                            <a class="text-white hidden md:inline-flex items-center h-[40px] md:h-[50px] rounded-full py-3 transition-all duration-300 ease-in group-hover:lg:pl-[30px] pl-[0px] pr-[30px] group-hover:lg:border border-transparent">
-                                <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] pl-[5px] sm:!text-[13px] !text-[12px] md:!text-base md:!font-bold text-nowrap">Ver Más</p>
-                            </a>
-                            <a class="bg-white/20 text-white hidden md:inline-flex items-center h-[40px] md:h-[50px] px-[30px] rounded-full py-3 transition-all duration-300 ease-in hover:bg-white/30">
-                                <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] px-3 !text-[13px] md:!text-base md:!font-bold text-nowrap">Ordenar</p>
-                            </a>
-                        </div>
-                    </div>
+                <div class="product-card">
+                    <span class="emoji">🐖</span>
+                    <h4>Espaldilla Asada</h4>
+                    <p>Paleta de cerdo marinada en cítricos y especias, cocida sous-vide y terminada a la parrilla. Textura jugosa que se mantiene en trozos grandes.</p>
+                </div>
+                <div class="product-card">
+                    <span class="emoji">🥩</span>
+                    <h4>Chambarete Asado</h4>
+                    <p>Chambarete de res cocido lentamente en marinado de naranja y especias. Tierno pero con mordida satisfactoria, terminado al carbón.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Story Section -->
-    <section id="historia" class="py-20 bg-gray-900 text-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="font-serif text-3xl sm:text-4xl font-medium mb-4 fade-in">
-                    Nuestra Historia
-                </h2>
-                <p class="text-lg text-gray-300 max-w-2xl mx-auto fade-in">
-                    Donde la tradición familiar se encuentra con la innovación culinaria
-                </p>
+    <!-- Retail Products Section -->
+    <section id="retail" class="section">
+        <h2 class="section-title">Productos <span class="accent">Retail</span></h2>
+        <p style="text-align: center; font-size: 1.2rem; margin-bottom: 3rem; color: #666;">Lleva el auténtico sabor de Brasas a tu cocina</p>
+        
+        <div class="retail-grid">
+            <div class="retail-item">
+                <h4>🧈 Manteca Ahumada</h4>
+                <p>Grasa de cerdo de alta calidad ahumada sobre mesquite. Perfecta para freír, confitar y dar sabor profundo a cualquier platillo.</p>
             </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="fade-in">
-                    <h3 class="font-serif text-2xl font-medium mb-6">Auténtico Sabor Sonorense</h3>
-                    <p class="text-gray-300 mb-6 leading-relaxed">
-                        Brasas El Gordo nació de la pasión por preservar y elevar las tradiciones culinarias de Sonora. Nuestro concepto único combina técnicas ancestrales de ahumado con métodos culinarios modernos.
-                    </p>
-                    
-                    <div class="bg-sonoran-copper p-6 mb-6 border-l-4 border-sonoran-gold">
-                        <h4 class="font-semibold text-lg mb-2">Nuestra Filosofía</h4>
-                        <p class="text-white/90">"Cada producto cuenta la historia del desierto sonorense: el fuego del mesquite, la intensidad del chiltepin y la generosidad de la tierra."</p>
-                    </div>
-                    
-                    <p class="text-gray-300 mb-6 leading-relaxed">
-                        Desde nuestros tacos signature hasta nuestros productos artesanales para llevar, cada elemento está diseñado para llevar el auténtico sabor de Sonora a tu mesa.
-                    </p>
-                </div>
-                
-                <div class="fade-in">
-                    <div class="h-96 bg-gradient-to-br from-sonoran-copper to-mesquite-brown rounded-lg flex items-center justify-center relative overflow-hidden">
-                        <div class="text-center text-white/30">
-                            <div class="text-6xl mb-4">🔥</div>
-                            <h4 class="text-xl font-semibold">Tradición + Innovación</h4>
-                            <p class="text-sm mt-2">15+ años de experiencia culinaria</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="retail-item">
+                <h4>🌶️ Aceites de Chile</h4>
+                <p>Línea signature: Chile de Árbol, Chiltepin Fire, Morita Citrus, y Mesquite Garlic. Cada uno con perfil de sabor único.</p>
             </div>
-
-            <!-- Stats -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-                <div class="text-center bg-gray-800 p-6 rounded-lg fade-in">
-                    <div class="text-3xl font-light text-sonoran-gold mb-2">15+</div>
-                    <div class="text-sm text-gray-400 uppercase tracking-wide">Años de Experiencia</div>
-                </div>
-                <div class="text-center bg-gray-800 p-6 rounded-lg fade-in">
-                    <div class="text-3xl font-light text-sonoran-gold mb-2">50k+</div>
-                    <div class="text-sm text-gray-400 uppercase tracking-wide">Clientes Satisfechos</div>
-                </div>
-                <div class="text-center bg-gray-800 p-6 rounded-lg fade-in">
-                    <div class="text-3xl font-light text-sonoran-gold mb-2">100%</div>
-                    <div class="text-sm text-gray-400 uppercase tracking-wide">Carne Premium</div>
-                </div>
+            <div class="retail-item">
+                <h4>🧂 Mezclas de Especias</h4>
+                <p>Fuego Sonorense, Asada Maestra, Cochinita Especial, y más. Blends perfectamente balanceados para carnes y verduras.</p>
+            </div>
+            <div class="retail-item">
+                <h4>🦴 Mantequilla de Tuétano</h4>
+                <p>Blend luxurioso de tuétano asado, mantequilla y cítricos. Para finishing de carnes y tortillas calientes.</p>
+            </div>
+            <div class="retail-item">
+                <h4>🌶️ Salsas Artesanales</h4>
+                <p>Verde Asada, Roja de Árbol, Chiltepin y Limón. Hechas con chiles tostados al fuego y técnicas tradicionales.</p>
+            </div>
+            <div class="retail-item">
+                <h4>🧀 Queso Blanco Blend</h4>
+                <p>Mezcla perfecta de Oaxaca, Menonita, Manchego y más. Pre-rallado y listo para derretir sin separarse.</p>
             </div>
         </div>
     </section>
 
-    <!-- Location Section -->
-    <section id="ubicacion" class="py-20 bg-gray-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="font-serif text-3xl sm:text-4xl font-medium text-gray-900 mb-4 fade-in">
-                    Visítanos
-                </h2>
-                <p class="text-lg text-gray-600 max-w-2xl mx-auto fade-in">
-                    Experimenta el auténtico sabor sonorense en nuestro concepto único
-                </p>
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <div class="section">
+            <h2 class="section-title" style="color: white;">Visítanos</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 3rem;">Donde el fuego y la tradición se encuentran</p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="icon">📍</div>
+                    <h4>Ubicación</h4>
+                    <p>Nogales, Sonora<br>En el corazón de la frontera</p>
+                </div>
+                <div class="contact-item">
+                    <div class="icon">🕒</div>
+                    <h4>Horarios</h4>
+                    <p>Lun - Dom: 8:00 AM - 10:00 PM<br>Sirviendo auténtico sabor todos los días</p>
+                </div>
+                <div class="contact-item">
+                    <div class="icon">📞</div>
+                    <h4>Contacto</h4>
+                    <p>Restaurante & Retail<br>Pedidos especiales y mayoreo</p>
+                </div>
             </div>
-
-            <div class="max-w-4xl mx-auto">
-                <div class="bg-white p-8 rounded-lg border border-gray-200 text-center mb-8 fade-in">
-                    <h3 class="text-2xl font-serif text-sonoran-copper mb-4">"Aquí empieza el sabor de Sonora"</h3>
-                    <p class="text-gray-600 leading-relaxed">
-                        Ubicados estratégicamente para ofrecer la mejor experiencia culinaria sonorense. Desde nuestros tacos artesanales hasta nuestros productos premium para llevar.
-                    </p>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white p-6 rounded-lg border border-gray-200 text-center hover:shadow-lg transition-shadow fade-in">
-                        <h4 class="font-semibold text-sonoran-copper mb-2 uppercase tracking-wide">Ubicación</h4>
-                        <p class="text-gray-700">
-                            Nogales, Sonora<br>
-                            En el corazón de la frontera<br>
-                            México
-                        </p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg border border-gray-200 text-center hover:shadow-lg transition-shadow fade-in">
-                        <h4 class="font-semibold text-sonoran-copper mb-2 uppercase tracking-wide">Concepto</h4>
-                        <p class="text-gray-700">
-                            Fast-Casual Premium<br>
-                            Dine-in • Take-out<br>
-                            Productos artesanales
-                        </p>
-                    </div>
-                    <div class="bg-white p-6 rounded-lg border border-gray-200 text-center hover:shadow-lg transition-shadow fade-in">
-                        <h4 class="font-semibold text-sonoran-copper mb-2 uppercase tracking-wide">Especialidad</h4>
-                        <p class="text-gray-700">
-                            Tacos Signature<br>
-                            Productos gourmet<br>
-                            Sabor auténtico sonorense
-                        </p>
-                    </div>
-                </div>
+            
+            <div style="margin-top: 3rem;">
+                <p style="font-size: 1.1rem; font-style: italic; color: #ff4500;">"Aquí empieza el sabor de Nogales"</p>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <div class="font-serif text-xl text-sonoran-gold mb-2">"Aquí empieza el sabor de Sonora"</div>
-                <p class="text-gray-400 mb-4">Brasas El Gordo - Auténtico sabor sonorense desde el corazón de la frontera</p>
-                <p class="text-gray-500 text-sm">&copy; 2025 Brasas El Gordo. Todos los derechos reservados.</p>
-            </div>
+    <footer class="footer">
+        <div class="section">
+            <p>&copy; 2025 Brasas El Gordo. Todos los derechos reservados.</p>
+            <p style="margin-top: 1rem; color: #ff4500;">Tacos a la Leña - Auténtico Sabor Sonorense</p>
         </div>
     </footer>
 
@@ -377,26 +545,21 @@
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    const headerOffset = 64;
-                    const elementPosition = target.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
-                }
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
             });
         });
 
-        // Scroll progress indicator
-        window.addEventListener('scroll', () => {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            document.querySelector('.scroll-indicator').style.transform = `scaleX(${scrolled / 100})`;
+        // Add scroll effect to header
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%)';
+                header.style.backdropFilter = 'blur(10px)';
+            } else {
+                header.style.background = 'linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%)';
+            }
         });
 
         // Intersection Observer for fade-in animations
@@ -405,226 +568,22 @@
             rootMargin: '0px 0px -50px 0px'
         };
 
-        const observer = new IntersectionObserver((entries) => {
+        const observer = new IntersectionObserver(function(entries) {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
                 }
             });
         }, observerOptions);
 
-        document.querySelectorAll('.fade-in').forEach(el => {
+        // Observe all sections for animations
+        document.querySelectorAll('.section, .product-card, .menu-category, .retail-item').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
             observer.observe(el);
-        });
-
-        // Mobile menu functionality
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        let mobileMenuOpen = false;
-
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenuOpen = !mobileMenuOpen;
-            
-            if (mobileMenuOpen) {
-                mobileMenu.classList.add('active');
-                mobileMenu.style.display = 'block';
-                mobileMenuButton.innerHTML = `
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                `;
-            } else {
-                mobileMenu.classList.remove('active');
-                setTimeout(() => {
-                    mobileMenu.style.display = 'none';
-                }, 300);
-                mobileMenuButton.innerHTML = `
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                `;
-            }
-        });
-
-        // Close mobile menu when clicking on a link
-        document.querySelectorAll('#mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenuOpen = false;
-                mobileMenu.classList.remove('active');
-                setTimeout(() => {
-                    mobileMenu.style.display = 'none';
-                }, 300);
-                mobileMenuButton.innerHTML = `
-                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                `;
-            });
-        });
-
-        // Enhanced header background on scroll
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('header');
-            if (window.scrollY > 100) {
-                header.style.background = 'rgba(250, 249, 247, 0.98)';
-                header.style.backdropFilter = 'blur(20px)';
-            } else {
-                header.style.background = 'rgba(250, 249, 247, 0.95)';
-                header.style.backdropFilter = 'blur(12px)';
-            }
-        });
-
-        // Initialize animations on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            mobileMenu.style.display = 'none';
-            
-            document.body.style.opacity = '0';
-            document.body.style.transition = 'opacity 0.5s ease-in-out';
-            setTimeout(() => {
-                document.body.style.opacity = '1';
-            }, 100);
-        });
-
-        // Performance optimization: Throttle scroll events
-        let ticking = false;
-        function updateOnScroll() {
-            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            const scrolled = (winScroll / height) * 100;
-            document.querySelector('.scroll-indicator').style.transform = `scaleX(${scrolled / 100})`;
-            
-            ticking = false;
-        }
-
-        window.addEventListener('scroll', () => {
-            if (!ticking) {
-                requestAnimationFrame(updateOnScroll);
-                ticking = true;
-            }
         });
     </script>
 </body>
-</html> md:h-[50px] rounded-full py-3 transition-all duration-300 ease-in group-hover:lg:px-[25px] group-hover:lg:border lg:border-transparent">
-                                <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] pl-[5px] sm:!text-[13px] !text-[12px] md:!text-base md:!font-bold text-nowrap">Ver Más</p>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M10 16.75a.75.75 0 0 1-.53-1.281l3.47-3.47-3.47-3.47a.75.75 0 0 1 1.061-1.061l4 4a.75.75 0 0 1 0 1.061l-4 4a.75.75 0 0 1-.531.221"></path></svg>
-                            </a>
-                            <a class="text-white hidden md:inline-flex items-center h-[40px] md:h-[50px] rounded-full py-3 transition-all duration-300 ease-in group-hover:lg:pl-[30px] pl-[0px] pr-[30px] group-hover:lg:border border-transparent">
-                                <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] pl-[5px] sm:!text-[13px] !text-[12px] md:!text-base md:!font-bold text-nowrap">Ver Más</p>
-                            </a>
-                            <a class="bg-white/20 text-white hidden md:inline-flex items-center h-[40px] md:h-[50px] px-[30px] rounded-full py-3 transition-all duration-300 ease-in hover:bg-white/30">
-                                <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] px-3 !text-[13px] md:!text-base md:!font-bold text-nowrap">Ordenar</p>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Mantequilla de Tuétano -->
-            <div class="group py-5 flex items-center min-h-[230px] sm:min-h-[380px] lg:min-h-[600px] md:py-20 xl:mx-0 -mr-28 md:-mr-[325px]">
-                <div class="hover:cursor-pointer product-card-bg product-card-2 flex flex-grow justify-between p-5 rounded-2xl min-h-[165px] sm:min-h-[220px] md:p-[50px] md:rounded-[40px] lg:min-h-[374px] transition-colors duration-300 ease-in flex-row-reverse">
-                    <div class="relative flex items-start flex-grow-0 flex-shrink-0 w-[260px] sm:w-[400px] md:w-[600px] justify-start ml-6">
-                        <div class="absolute top-1/2 -translate-y-1/2 lg:size-[600px] hidden lg:block md:right-1/2 md:translate-x-1/2 bg-warm-white/20 rounded-full flex items-center justify-center text-8xl">
-                            🦴
-                        </div>
-                        <div class="absolute top-1/2 -translate-y-1/2 lg:size-[600px] lg:hidden md:right-1/2 md:translate-x-1/2 bg-warm-white/20 rounded-full flex items-center justify-center text-6xl">
-                            🦴
-                        </div>
-                    </div>
-                    <div class="flex flex-col flex-grow gap-y-[5px] md:gap-y-6">
-                        <div class="flex flex-col gap-y-[5px] md:gap-y-0">
-                            <div class="flex justify-start pb-[10px] md:pb-[15px] items-center">
-                                <p class="font-normal text-[14px] leading-[18px] 2xl:text-[16px] 2xl:leading-[20px] hidden md:block text-white/80">
-                                    Tier 1 - Signature
-                                </p>
-                            </div>
-                            <p class="font-extrabold text-[28px] leading-[32px] lg:text-[32px] lg:leading-[36px] 2xl:text-[36px] 2xl:leading-[40px] text-white !text-[35px] md:!text-[45px] md:!leading-[60px] lg:!text-[70px] lg:!leading-none transition-colors duration-300 ease-in">
-                                Mantequilla de Tuétano
-                            </p>
-                            <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] hidden text-white/90 pt-[15px] md:block">
-                                Innovadora mezcla de tuétano de res asado, mantequilla premium y cítricos. Transforma cualquier taco en una experiencia gourmet.
-                            </p>
-                        </div>
-                        <div class="flex gap-2 sm:gap-5">
-                            <a class="text-white md:hidden inline-flex items-center gap-x-1 h-[40px] md:h-[50px] rounded-full py-3 transition-all duration-300 ease-in group-hover:lg:px-[25px] group-hover:lg:border lg:border-transparent">
-                                <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] pl-[5px] sm:!text-[13px] !text-[12px] md:!text-base md:!font-bold text-nowrap">Ver Más</p>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M10 16.75a.75.75 0 0 1-.53-1.281l3.47-3.47-3.47-3.47a.75.75 0 0 1 1.061-1.061l4 4a.75.75 0 0 1 0 1.061l-4 4a.75.75 0 0 1-.531.221"></path></svg>
-                            </a>
-                            <a class="text-white hidden md:inline-flex items-center h-[40px] md:h-[50px] rounded-full py-3 transition-all duration-300 ease-in group-hover:lg:pl-[30px] pl-[0px] pr-[30px] group-hover:lg:border border-transparent">
-                                <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] pl-[5px] sm:!text-[13px] !text-[12px] md:!text-base md:!font-bold text-nowrap">Ver Más</p>
-                            </a>
-                            <a class="bg-white/20 text-white hidden md:inline-flex items-center h-[40px] md:h-[50px] px-[30px] rounded-full py-3 transition-all duration-300 ease-in hover:bg-white/30">
-                                <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] px-3 !text-[13px] md:!text-base md:!font-bold text-nowrap">Ordenar</p>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Aceite de Chiltepin -->
-            <div class="group py-5 flex items-center min-h-[230px] sm:min-h-[380px] lg:min-h-[600px] md:py-20 xl:mx-0 -ml-28 md:-ml-[325px]">
-                <div class="hover:cursor-pointer product-card-bg product-card-3 flex flex-grow justify-between p-5 rounded-2xl min-h-[165px] sm:min-h-[220px] md:p-[50px] md:rounded-[40px] lg:min-h-[374px] transition-colors duration-300 ease-in flex-row">
-                    <div class="relative flex items-start flex-grow-0 flex-shrink-0 w-[260px] sm:w-[400px] md:w-[600px] justify-end mr-6">
-                        <div class="absolute top-1/2 -translate-y-1/2 lg:size-[600px] hidden lg:block md:left-1/2 md:-translate-x-1/2 -scale-x-100 bg-warm-white/20 rounded-full flex items-center justify-center text-8xl">
-                            🌶️
-                        </div>
-                        <div class="absolute top-1/2 -translate-y-1/2 lg:size-[600px] lg:hidden md:left-1/2 md:-translate-x-1/2 -scale-x-100 bg-warm-white/20 rounded-full flex items-center justify-center text-6xl">
-                            🌶️
-                        </div>
-                    </div>
-                    <div class="flex flex-col flex-grow gap-y-[5px] md:gap-y-6">
-                        <div class="flex flex-col gap-y-[5px] md:gap-y-0">
-                            <div class="flex justify-start pb-[10px] md:pb-[15px] items-center">
-                                <p class="font-normal text-[14px] leading-[18px] 2xl:text-[16px] 2xl:leading-[20px] hidden md:block text-white/80">
-                                    Tier 1 - Signature
-                                </p>
-                            </div>
-                            <p class="font-extrabold text-[28px] leading-[32px] lg:text-[32px] lg:leading-[36px] 2xl:text-[36px] 2xl:leading-[40px] text-white !text-[35px] md:!text-[45px] md:!leading-[60px] lg:!text-[70px] lg:!leading-none transition-colors duration-300 ease-in">
-                                Aceite de Chiltepin
-                            </p>
-                            <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] hidden text-white/90 pt-[15px] md:block">
-                                Chile silvestre sonorense en aceite neutro con ajo confitado y cáscara de lima. El verdadero fuego del desierto en una botella.
-                            </p>
-                        </div>
-                        <div class="flex gap-2 sm:gap-5">
-                            <a class="text-white md:hidden inline-flex items-center gap-x-1 h-[40px] md:h-[50px] rounded-full py-3 transition-all duration-300 ease-in group-hover:lg:px-[25px] group-hover:lg:border lg:border-transparent">
-                                <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] pl-[5px] sm:!text-[13px] !text-[12px] md:!text-base md:!font-bold text-nowrap">Ver Más</p>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24"><path fill="currentColor" d="M10 16.75a.75.75 0 0 1-.53-1.281l3.47-3.47-3.47-3.47a.75.75 0 0 1 1.061-1.061l4 4a.75.75 0 0 1 0 1.061l-4 4a.75.75 0 0 1-.531.221"></path></svg>
-                            </a>
-                            <a class="text-white hidden md:inline-flex items-center h-[40px] md:h-[50px] rounded-full py-3 transition-all duration-300 ease-in group-hover:lg:pl-[30px] pl-[0px] pr-[30px] group-hover:lg:border border-transparent">
-                                <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] pl-[5px] sm:!text-[13px] !text-[12px] md:!text-base md:!font-bold text-nowrap">Ver Más</p>
-                            </a>
-                            <a class="bg-white/20 text-white hidden md:inline-flex items-center h-[40px] md:h-[50px] px-[30px] rounded-full py-3 transition-all duration-300 ease-in hover:bg-white/30">
-                                <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] px-3 !text-[13px] md:!text-base md:!font-bold text-nowrap">Ordenar</p>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Frijoles con Manteca Ahumada -->
-            <div class="group py-5 flex items-center min-h-[230px] sm:min-h-[380px] lg:min-h-[600px] md:py-20 xl:mx-0 -mr-28 md:-mr-[325px]">
-                <div class="hover:cursor-pointer product-card-bg product-card-4 flex flex-grow justify-between p-5 rounded-2xl min-h-[165px] sm:min-h-[220px] md:p-[50px] md:rounded-[40px] lg:min-h-[374px] transition-colors duration-300 ease-in flex-row-reverse">
-                    <div class="relative flex items-start flex-grow-0 flex-shrink-0 w-[260px] sm:w-[400px] md:w-[600px] justify-start ml-6">
-                        <div class="absolute top-1/2 -translate-y-1/2 lg:size-[600px] hidden lg:block md:right-1/2 md:translate-x-1/2 bg-warm-white/20 rounded-full flex items-center justify-center text-8xl">
-                            🫘
-                        </div>
-                        <div class="absolute top-1/2 -translate-y-1/2 lg:size-[600px] lg:hidden md:right-1/2 md:translate-x-1/2 bg-warm-white/20 rounded-full flex items-center justify-center text-6xl">
-                            🫘
-                        </div>
-                    </div>
-                    <div class="flex flex-col flex-grow gap-y-[5px] md:gap-y-6">
-                        <div class="flex flex-col gap-y-[5px] md:gap-y-0">
-                            <div class="flex justify-start pb-[10px] md:pb-[15px] items-center">
-                                <p class="font-normal text-[14px] leading-[18px] 2xl:text-[16px] 2xl:leading-[20px] hidden md:block text-white/80">
-                                    Tier 2 - Premium
-                                </p>
-                            </div>
-                            <p class="font-extrabold text-[28px] leading-[32px] lg:text-[32px] lg:leading-[36px] 2xl:text-[36px] 2xl:leading-[40px] text-white !text-[35px] md:!text-[45px] md:!leading-[60px] lg:!text-[70px] lg:!leading-none transition-colors duration-300 ease-in">
-                                Frijoles con Manteca Ahumada
-                            </p>
-                            <p class="font-normal text-[16px] leading-[20px] 2xl:text-[18px] 2xl:leading-[22px] hidden text-white/90 pt-[15px] md:block">
-                                Frijoles refritos artesanales preparados exclusivamente con nuestra manteca ahumada. Textura rústica y sabor profundo a mesquite.
-                            </p>
-                        </div>
-                        <div class="flex gap-2 sm:gap-5">
-                            <a class="text-white md:hidden inline-flex items-center gap-x-1 h-[40px]
+</html>
