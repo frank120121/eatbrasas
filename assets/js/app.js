@@ -1,7 +1,7 @@
 /**
  * BRASAS EL GORDO - MAIN JAVASCRIPT
  * Modern, premium interactions for the website
- * File: assets/js/main.js
+ * File: assets/js/app.js
  */
 
 // ============================================
