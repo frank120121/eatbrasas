@@ -64,11 +64,15 @@
         <div class="container mx-auto px-4 lg:px-8">
             <div class="flex justify-between items-center py-4">
                 <!-- Logo -->
-                <a href="#home" class="flex items-center space-x-2 group">
-                    <span class="text-2xl lg:text-3xl font-bold text-primary group-hover:text-primary-light transition-colors">
-                        BRASAS
-                    </span>
-                    <span class="text-2xl">🔥</span>
+                <a href="#home" class="flex items-center group">
+                    <img src="/assets/images/logo/logo-icon.svg" alt="Brasas El Gordo" class="h-8 lg:h-10 w-auto transition-all duration-300 group-hover:scale-105" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <!-- Fallback for when logo doesn't load -->
+                    <div class="hidden items-center space-x-2">
+                        <span class="text-2xl lg:text-3xl font-bold text-primary group-hover:text-primary-light transition-colors">
+                            BRASAS
+                        </span>
+                        <span class="text-2xl">🔥</span>
+                    </div>
                 </a>
 
                 <!-- Desktop Navigation - Retail First -->
@@ -380,7 +384,7 @@
                 <h2 class="text-4xl lg:text-5xl font-bold mb-4">Visítanos</h2>
                 <p class="text-xl text-gray-300">Donde el fuego y la tradición se encuentran</p>
             </div>
-            
+
             <div class="grid md:grid-cols-3 gap-8 mb-12">
                 <!-- Ubicación -->
                 <div class="text-center group loading">
@@ -416,10 +420,11 @@
                     <p class="text-gray-300">Restaurante & Retail<br>Pedidos especiales y mayoreo</p>
                 </div>
             </div>
-
+            
             <div class="text-center border-t border-gray-700 pt-8 loading">
                 <p class="text-2xl font-bold text-primary italic">"Aquí empieza el sabor de Nogales"</p>
             </div>
+
         </div>
     </section>
 
@@ -437,7 +442,7 @@
                 </div>
                 <div class="text-center md:text-right">
                     <p class="text-gray-400">&copy; 2025 Brasas El Gordo. Todos los derechos reservados.</p>
-                    <p class="text-primary font-medium">Cocinaa la Leña - Auténtico Sabor Sonorense</p>
+                    <p class="text-primary font-medium">Tacos a la Leña - Auténtico Sabor Sonorense</p>
                 </div>
             </div>
         </div>
