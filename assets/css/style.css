@@ -17,8 +17,218 @@
 }
 
 /* ============================================
-   CUSTOM ANIMATIONS
+   ENHANCED NAVIGATION STYLES
    ============================================ */
+
+/* Sophisticated navbar with proper blur */
+.navbar-blur {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.1);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navbar-blur.scrolled {
+    background: rgba(0, 0, 0, 0.8);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+/* Navigation link hover effects */
+.nav-link {
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--primary-light);
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* Logo hover effects */
+.logo-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logo-hover:hover {
+    filter: brightness(1.1) drop-shadow(0 0 15px rgba(255, 69, 0, 0.4));
+    transform: scale(1.05);
+}
+
+/* ============================================
+   ENHANCED HERO TYPOGRAPHY
+   ============================================ */
+
+/* Responsive typography with precise scaling */
+@media (max-width: 640px) {
+    .hero-title {
+        font-size: 42vw;
+        line-height: 0.8;
+        letter-spacing: -0.05em;
+    }
+}
+
+@media (min-width: 641px) {
+    .hero-title {
+        font-size: 8rem;
+        line-height: 0.8;
+        letter-spacing: -0.03em;
+    }
+}
+
+@media (min-width: 1024px) {
+    .hero-title {
+        font-size: 12rem;
+        line-height: 0.8;
+        letter-spacing: -0.02em;
+    }
+}
+
+/* Enhanced gradient text */
+.gradient-text {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 50%, #ff8c42 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Enhanced text shadow */
+.text-shadow {
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   PREMIUM BUTTON STYLES
+   ============================================ */
+
+/* Primary CTA button with advanced effects */
+.btn-primary-hero {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    box-shadow: 0 10px 30px rgba(255, 69, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-primary-hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn-primary-hero:hover::before {
+    left: 100%;
+}
+
+.btn-primary-hero:hover {
+    box-shadow: 0 15px 40px rgba(255, 69, 0, 0.4);
+    transform: translateY(-2px) scale(1.05);
+}
+
+/* Secondary CTA button */
+.btn-secondary-hero {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-secondary-hero:hover {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(255, 255, 255, 1);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+/* ============================================
+   ENHANCED VIEWPORT CALCULATIONS
+   ============================================ */
+
+/* Precise hero height calculation */
+.hero-section {
+    height: calc(100vh - 88px);
+    margin-top: 88px;
+    min-height: 600px; /* Fallback for very short screens */
+}
+
+/* Responsive padding adjustments */
+@media (max-width: 768px) {
+    .hero-section {
+        height: calc(100vh - 72px);
+        margin-top: 72px;
+        min-height: 500px;
+    }
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* Font loading optimization */
+@font-face {
+    font-family: 'Inter Variable';
+    src: url('assets/fonts/Inter-Variable.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: fallback;
+}
+
+/* WebP image optimization */
+.optimized-webp {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+}
+
+/* GPU acceleration for smooth animations */
+.gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform, opacity;
+}
+
+/* ============================================
+   MODERN INTERACTION STATES
+   ============================================ */
+
+/* Enhanced focus states for accessibility */
+.focus-enhanced:focus {
+    outline: 3px solid var(--primary-light);
+    outline-offset: 2px;
+    box-shadow: 0 0 0 6px rgba(255, 69, 0, 0.2);
+}
+
+/* Smooth transitions for all interactive elements */
+.transition-premium {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   SCROLL INDICATOR ENHANCEMENT
+   ============================================ */
+
+.scroll-indicator {
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.scroll-indicator:hover {
+    opacity: 1;
+    animation: bounce 1s infinite;
+}
 @keyframes fadeInUp {
     from { 
         opacity: 0; 

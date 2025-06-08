@@ -51,7 +51,7 @@ function throttle(func, limit) {
 
 class Navigation {
     constructor() {
-        this.header = document.getElementById('header');
+        this.navbar = document.getElementById('navbar');
         this.mobileMenuBtn = document.getElementById('mobile-menu-btn');
         this.mobileMenu = document.getElementById('mobile-menu');
         this.mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
@@ -96,8 +96,8 @@ class Navigation {
     }
 
     smoothScrollToElement(element) {
-        const headerHeight = this.header.offsetHeight;
-        const elementPosition = element.offsetTop - headerHeight;
+        const navbarHeight = this.navbar.offsetHeight; // Now using 88px navbar
+        const elementPosition = element.offsetTop - navbarHeight;
         
         window.scrollTo({
             top: elementPosition,
@@ -108,19 +108,24 @@ class Navigation {
     setupHeaderScrollEffect() {
         const handleScroll = throttle(() => {
             const currentScrollY = window.scrollY;
+            const navbar = document.getElementById('navbar');
             
-            // Add blur effect when scrolled
-            if (currentScrollY > 100) {
-                this.header.classList.add('bg-gray-900/98', 'backdrop-blur-md');
+            // Enhanced blur and transparency effects
+            if (currentScrollY > 50) {
+                navbar.style.backdropFilter = 'blur(4px)';
+                navbar.style.background = 'rgba(0, 0, 0, 0.8)';
+                navbar.classList.add('shadow-lg');
             } else {
-                this.header.classList.remove('bg-gray-900/98', 'backdrop-blur-md');
+                navbar.style.backdropFilter = 'blur(4px)';
+                navbar.style.background = 'rgba(0, 0, 0, 0.1)';
+                navbar.classList.remove('shadow-lg');
             }
             
-            // Hide/show header on scroll direction
+            // Hide/show navbar on scroll direction (optional - can be removed if you want it always visible)
             if (currentScrollY > this.lastScrollY && currentScrollY > 200) {
-                this.header.style.transform = 'translateY(-100%)';
+                navbar.style.transform = 'translateY(-100%)';
             } else {
-                this.header.style.transform = 'translateY(0)';
+                navbar.style.transform = 'translateY(0)';
             }
             
             this.lastScrollY = currentScrollY;

@@ -81,26 +81,38 @@
     <!-- Mobile Menu Overlay -->
     <div id="mobile-menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden lg:hidden"></div>
     
-    <!-- Header -->
-    <header id="header" class="fixed w-full top-0 z-50 transition-all duration-300 bg-gray-900/95 backdrop-blur-sm">
+    <!-- Navigation -->
+    <nav id="navbar" class="fixed w-full top-0 z-50 transition-all duration-500 ease-out backdrop-blur bg-black/10">
         <div class="container mx-auto px-4 lg:px-8">
-            <div class="flex justify-between items-center py-4">
+            <div class="flex justify-between items-center py-6">
                 <!-- Logo -->
-                <a href="#home" class="flex items-center space-x-3 group">
-                    <img src="assets/images/logo/logo-light.svg" alt="Brasas El Gordo" class="h-10 w-auto">
-                    <span class="text-2xl animate-pulse-fire">🔥</span>
+                <a href="#home" class="flex items-center space-x-3 group logo-hover">
+                    <img src="assets/images/logo/logo-icon.svg" alt="Brasas El Gordo" class="h-12 w-auto transition-transform duration-300 group-hover:scale-110">
                 </a>
 
                 <!-- Desktop Navigation -->
-                <nav class="hidden lg:flex space-x-8">
-                    <a href="#home" class="nav-link text-white hover:text-primary transition-colors font-medium">Inicio</a>
-                    <a href="#restaurant" class="nav-link text-white hover:text-primary transition-colors font-medium">Restaurante</a>
-                    <a href="#retail" class="nav-link text-white hover:text-primary transition-colors font-medium">Productos</a>
-                    <a href="#contact" class="nav-link text-white hover:text-primary transition-colors font-medium">Contacto</a>
-                </nav>
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="#retail" class="nav-link text-white hover:text-primary-light transition-all duration-300 font-semibold text-lg relative group">
+                        Productos
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary-light transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#restaurant" class="nav-link text-white/90 hover:text-white transition-all duration-300 font-medium relative group">
+                        Menú
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#contact" class="nav-link text-white/90 hover:text-white transition-all duration-300 font-medium relative group">
+                        Contacto
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-white transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    
+                    <!-- CTA Button -->
+                    <a href="#retail" class="bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg">
+                        Comprar Ahora
+                    </a>
+                </div>
 
                 <!-- Mobile Menu Button -->
-                <button id="mobile-menu-btn" class="lg:hidden text-white hover:text-primary transition-colors">
+                <button id="mobile-menu-btn" class="lg:hidden text-white hover:text-primary-light transition-colors p-2">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                     </svg>
@@ -109,54 +121,59 @@
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="lg:hidden hidden bg-gray-900 border-t border-gray-700">
-            <div class="container mx-auto px-4 py-4 space-y-4">
-                <a href="#home" class="block text-white hover:text-primary transition-colors font-medium">Inicio</a>
-                <a href="#restaurant" class="block text-white hover:text-primary transition-colors font-medium">Restaurante</a>
-                <a href="#retail" class="block text-white hover:text-primary transition-colors font-medium">Productos</a>
-                <a href="#contact" class="block text-white hover:text-primary transition-colors font-medium">Contacto</a>
+        <div id="mobile-menu" class="lg:hidden hidden bg-black/95 backdrop-blur border-t border-white/10">
+            <div class="container mx-auto px-4 py-6 space-y-6">
+                <a href="#retail" class="block text-white hover:text-primary-light transition-colors font-semibold text-lg">Productos</a>
+                <a href="#restaurant" class="block text-white/90 hover:text-white transition-colors font-medium">Menú</a>
+                <a href="#contact" class="block text-white/90 hover:text-white transition-colors font-medium">Contacto</a>
+                <a href="#retail" class="block bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-full font-semibold transition-all duration-300 text-center mt-4">
+                    Comprar Ahora
+                </a>
             </div>
         </div>
-    </header>
+    </nav>
 
     <!-- Hero Section -->
-    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section id="home" class="relative h-screen flex items-center justify-center overflow-hidden" style="height: calc(100vh - 88px); margin-top: 88px;">
         <!-- Background Images -->
         <div class="absolute inset-0">
             <picture>
                 <source media="(max-width: 768px)" srcset="assets/images/hero/hero-mobile.webp">
                 <img src="assets/images/hero/hero-desktop.webp" alt="Tacos a la leña" class="w-full h-full object-cover">
             </picture>
-            <!-- Overlay -->
-            <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+            <!-- Sophisticated Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-black/50 to-black/70"></div>
             <!-- Flame Overlay -->
-            <img src="assets/images/hero/flame-overlay.png" alt="" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-30">
-        </div>
-        
-        <!-- Animated background elements -->
-        <div class="absolute inset-0 overflow-hidden">
-            <div class="absolute -top-1/2 -right-1/2 w-full h-full bg-primary opacity-10 rounded-full animate-float"></div>
-            <div class="absolute -bottom-1/2 -left-1/2 w-3/4 h-3/4 bg-primary-light opacity-5 rounded-full animate-float" style="animation-delay: 1s;"></div>
+            <img src="assets/images/hero/flame-overlay.png" alt="" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-20">
         </div>
 
         <!-- Content -->
-        <div class="relative z-10 text-center px-4 max-w-4xl mx-auto">
-            <div class="space-y-6 animate-fade-in-up">
-                <h1 class="text-6xl lg:text-8xl font-black text-shadow">
-                    <span class="gradient-text">BRASAS</span>
+        <div class="relative z-10 text-center px-4 max-w-6xl mx-auto">
+            <div class="space-y-8 animate-fade-in-up">
+                <!-- Main Brand -->
+                <h1 class="text-[42vw] sm:text-8xl lg:text-9xl font-black leading-none tracking-tighter">
+                    <span class="gradient-text drop-shadow-2xl">BRASAS</span>
                 </h1>
-                <h2 class="text-2xl lg:text-3xl font-bold text-white text-shadow">EL GORDO</h2>
-                <p class="text-xl lg:text-2xl text-gray-200 font-medium">Tacos a la Leña - Auténtico Sabor Sonorense</p>
-                <p class="text-lg lg:text-xl text-primary font-semibold italic">"Aquí empieza el sabor de Sonora"</p>
                 
-                <div class="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-                    <a href="#restaurant" class="group bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex items-center justify-center space-x-2">
-                        <span>Ver Menú</span>
-                        <img src="assets/images/ui/arrow-right.svg" alt="" class="w-5 h-5 group-hover:translate-x-1 transition-transform">
+                <!-- Tagline -->
+                <div class="space-y-4">
+                    <h2 class="text-3xl lg:text-4xl font-bold text-white text-shadow tracking-wide">EL GORDO</h2>
+                    <p class="text-xl lg:text-2xl text-gray-100 font-medium tracking-wide">Tacos a la Leña - Auténtico Sabor Sonorense</p>
+                    <p class="text-lg lg:text-xl text-primary-light font-semibold italic tracking-wide">"Aquí empieza el sabor de Sonora"</p>
+                </div>
+                
+                <!-- Strategic CTAs - Retail First -->
+                <div class="flex flex-col sm:flex-row gap-6 justify-center pt-12">
+                    <!-- Primary CTA - Retail Products -->
+                    <a href="#retail" class="group bg-primary hover:bg-primary-dark text-white px-10 py-5 rounded-full font-bold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-2xl flex items-center justify-center space-x-3 shadow-lg">
+                        <span>Nuestros Productos</span>
+                        <img src="assets/images/ui/arrow-right.svg" alt="" class="w-6 h-6 group-hover:translate-x-2 transition-transform">
                     </a>
-                    <a href="#retail" class="group border-2 border-white text-white hover:bg-white hover:text-gray-900 px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2">
-                        <span>Productos Retail</span>
-                        <img src="assets/images/ui/arrow-right.svg" alt="" class="w-5 h-5 group-hover:translate-x-1 transition-transform filter group-hover:invert">
+                    
+                    <!-- Secondary CTA - Menu -->
+                    <a href="#restaurant" class="group border-2 border-white/80 text-white hover:bg-white hover:text-gray-900 px-10 py-5 rounded-full font-semibold text-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-3 backdrop-blur-sm">
+                        <span>Ver Menú</span>
+                        <img src="assets/images/ui/arrow-right.svg" alt="" class="w-6 h-6 group-hover:translate-x-2 transition-transform filter group-hover:invert">
                     </a>
                 </div>
             </div>
@@ -164,7 +181,7 @@
 
         <!-- Scroll indicator -->
         <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <img src="assets/images/ui/scroll-indicator.svg" alt="Scroll down" class="w-6 h-6 text-white">
+            <img src="assets/images/ui/scroll-indicator.svg" alt="Scroll down" class="w-6 h-6 text-white opacity-70 hover:opacity-100 transition-opacity">
         </div>
     </section>
 
