@@ -4,7 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brasas El Gordo - Tacos a la Leña</title>
+    
+    <!-- Favicon and App Icons -->
+    <link rel="icon" href="assets/images/logo/favicon.ico">
+    <link rel="apple-touch-icon" href="assets/images/logo/apple-touch-icon.png">
+    
+    <!-- Preload Critical Assets -->
+    <link rel="preload" href="assets/images/logo/logo-light.svg" as="image">
+    <link rel="preload" href="assets/images/hero/hero-desktop.webp" as="image">
+    <link rel="preload" href="assets/fonts/Inter-Variable.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <!-- Stylesheets -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/main.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -74,10 +86,8 @@
         <div class="container mx-auto px-4 lg:px-8">
             <div class="flex justify-between items-center py-4">
                 <!-- Logo -->
-                <a href="#home" class="flex items-center space-x-2 group">
-                    <span class="text-2xl lg:text-3xl font-bold text-primary group-hover:text-primary-light transition-colors">
-                        BRASAS
-                    </span>
+                <a href="#home" class="flex items-center space-x-3 group">
+                    <img src="assets/images/logo/logo-light.svg" alt="Brasas El Gordo" class="h-10 w-auto">
                     <span class="text-2xl animate-pulse-fire">🔥</span>
                 </a>
 
@@ -111,9 +121,17 @@
 
     <!-- Hero Section -->
     <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <!-- Background with overlay -->
-        <div class="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-primary-dark"></div>
-        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+        <!-- Background Images -->
+        <div class="absolute inset-0">
+            <picture>
+                <source media="(max-width: 768px)" srcset="assets/images/hero/hero-mobile.webp">
+                <img src="assets/images/hero/hero-desktop.webp" alt="Tacos a la leña" class="w-full h-full object-cover">
+            </picture>
+            <!-- Overlay -->
+            <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+            <!-- Flame Overlay -->
+            <img src="assets/images/hero/flame-overlay.png" alt="" class="absolute inset-0 w-full h-full object-cover mix-blend-overlay opacity-30">
+        </div>
         
         <!-- Animated background elements -->
         <div class="absolute inset-0 overflow-hidden">
@@ -134,15 +152,11 @@
                 <div class="flex flex-col sm:flex-row gap-4 justify-center pt-8">
                     <a href="#restaurant" class="group bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex items-center justify-center space-x-2">
                         <span>Ver Menú</span>
-                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                        </svg>
+                        <img src="assets/images/ui/arrow-right.svg" alt="" class="w-5 h-5 group-hover:translate-x-1 transition-transform">
                     </a>
                     <a href="#retail" class="group border-2 border-white text-white hover:bg-white hover:text-gray-900 px-8 py-4 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 flex items-center justify-center space-x-2">
                         <span>Productos Retail</span>
-                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                        </svg>
+                        <img src="assets/images/ui/arrow-right.svg" alt="" class="w-5 h-5 group-hover:translate-x-1 transition-transform filter group-hover:invert">
                     </a>
                 </div>
             </div>
@@ -150,9 +164,7 @@
 
         <!-- Scroll indicator -->
         <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-            </svg>
+            <img src="assets/images/ui/scroll-indicator.svg" alt="Scroll down" class="w-6 h-6 text-white">
         </div>
     </section>
 
@@ -226,8 +238,8 @@
             <!-- Featured Tacos -->
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 card-hover-element">
-                    <div class="h-48 bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-6xl">
-                        🐖
+                    <div class="h-48 overflow-hidden">
+                        <img src="assets/images/products/tacos/chicharron-pork-belly.webp" alt="Chicharrón Pork Belly" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                     </div>
                     <div class="p-6">
                         <h4 class="text-xl font-bold text-gray-900 mb-3">Chicharrón Pork Belly</h4>
@@ -237,8 +249,8 @@
                 </div>
 
                 <div class="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 card-hover-element">
-                    <div class="h-48 bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-6xl">
-                        🐖
+                    <div class="h-48 overflow-hidden">
+                        <img src="assets/images/products/tacos/espaldilla-asada.webp" alt="Espaldilla Asada" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                     </div>
                     <div class="p-6">
                         <h4 class="text-xl font-bold text-gray-900 mb-3">Espaldilla Asada</h4>
@@ -248,8 +260,8 @@
                 </div>
 
                 <div class="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 card-hover-element">
-                    <div class="h-48 bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center text-6xl">
-                        🥩
+                    <div class="h-48 overflow-hidden">
+                        <img src="assets/images/products/tacos/chambarete.webp" alt="Chambarete Asado" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                     </div>
                     <div class="p-6">
                         <h4 class="text-xl font-bold text-gray-900 mb-3">Chambarete Asado</h4>
@@ -273,74 +285,62 @@
             
             <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 card-hover-element">
-                    <div class="absolute inset-0 bg-gradient-to-br from-primary to-primary-dark"></div>
-                    <div class="relative p-8 text-white text-center">
-                        <div class="text-5xl mb-4">🧈</div>
-                        <h4 class="text-2xl font-bold mb-4">Manteca Ahumada</h4>
-                        <p class="text-orange-100">Grasa de cerdo de alta calidad ahumada sobre mesquite. Perfecta para freír, confitar y dar sabor profundo a cualquier platillo.</p>
-                        <div class="mt-6">
-                            <span class="bg-white bg-opacity-20 text-white px-3 py-1 rounded-full text-sm font-medium">Signature</span>
-                        </div>
+                    <img src="assets/images/products/retail/manteca-ahumada.webp" alt="Manteca Ahumada" class="w-full h-48 object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-primary via-primary/80 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                        <h4 class="text-xl font-bold mb-2">Manteca Ahumada</h4>
+                        <p class="text-orange-100 text-sm mb-3">Grasa de cerdo de alta calidad ahumada sobre mesquite. Perfecta para freír, confitar y dar sabor profundo.</p>
+                        <span class="bg-white bg-opacity-20 text-white px-3 py-1 rounded-full text-xs font-medium">Signature</span>
                     </div>
                 </div>
 
                 <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 card-hover-element">
-                    <div class="absolute inset-0 bg-gradient-to-br from-red-500 to-red-700"></div>
-                    <div class="relative p-8 text-white text-center">
-                        <div class="text-5xl mb-4">🌶️</div>
-                        <h4 class="text-2xl font-bold mb-4">Aceites de Chile</h4>
-                        <p class="text-red-100">Línea signature: Chile de Árbol, Chiltepin Fire, Morita Citrus, y Mesquite Garlic. Cada uno con perfil de sabor único.</p>
-                        <div class="mt-6">
-                            <span class="bg-white bg-opacity-20 text-white px-3 py-1 rounded-full text-sm font-medium">Artesanal</span>
-                        </div>
+                    <img src="assets/images/products/retail/aceite-morita.webp" alt="Aceites de Chile" class="w-full h-48 object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-red-600 via-red-600/80 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                        <h4 class="text-xl font-bold mb-2">Aceites de Chile</h4>
+                        <p class="text-red-100 text-sm mb-3">Línea signature: Chile de Árbol, Chiltepin Fire, Morita Citrus, y Mesquite Garlic.</p>
+                        <span class="bg-white bg-opacity-20 text-white px-3 py-1 rounded-full text-xs font-medium">Artesanal</span>
                     </div>
                 </div>
 
                 <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 card-hover-element">
-                    <div class="absolute inset-0 bg-gradient-to-br from-yellow-600 to-orange-600"></div>
-                    <div class="relative p-8 text-white text-center">
-                        <div class="text-5xl mb-4">🧂</div>
-                        <h4 class="text-2xl font-bold mb-4">Mezclas de Especias</h4>
-                        <p class="text-yellow-100">Fuego Sonorense, Asada Maestra, Cochinita Especial, y más. Blends perfectamente balanceados para carnes y verduras.</p>
-                        <div class="mt-6">
-                            <span class="bg-white bg-opacity-20 text-white px-3 py-1 rounded-full text-sm font-medium">Premium</span>
-                        </div>
+                    <img src="assets/images/products/retail/rub-fuego-sonorense.webp" alt="Mezclas de Especias" class="w-full h-48 object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-yellow-600 via-yellow-600/80 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                        <h4 class="text-xl font-bold mb-2">Mezclas de Especias</h4>
+                        <p class="text-yellow-100 text-sm mb-3">Fuego Sonorense, Asada Maestra, Cochinita Especial, y más. Blends perfectamente balanceados.</p>
+                        <span class="bg-white bg-opacity-20 text-white px-3 py-1 rounded-full text-xs font-medium">Premium</span>
                     </div>
                 </div>
 
                 <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 card-hover-element">
-                    <div class="absolute inset-0 bg-gradient-to-br from-amber-600 to-orange-700"></div>
-                    <div class="relative p-8 text-white text-center">
-                        <div class="text-5xl mb-4">🦴</div>
-                        <h4 class="text-2xl font-bold mb-4">Mantequilla de Tuétano</h4>
-                        <p class="text-amber-100">Blend luxurioso de tuétano asado, mantequilla y cítricos. Para finishing de carnes y tortillas calientes.</p>
-                        <div class="mt-6">
-                            <span class="bg-white bg-opacity-20 text-white px-3 py-1 rounded-full text-sm font-medium">Luxury</span>
-                        </div>
+                    <img src="assets/images/products/retail/adobo-paste.webp" alt="Mantequilla de Tuétano" class="w-full h-48 object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-amber-600 via-amber-600/80 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                        <h4 class="text-xl font-bold mb-2">Adobo Paste</h4>
+                        <p class="text-amber-100 text-sm mb-3">Nuestro adobo secreto para marinadas. Blend luxurioso de especias y chiles para carnes.</p>
+                        <span class="bg-white bg-opacity-20 text-white px-3 py-1 rounded-full text-xs font-medium">Luxury</span>
                     </div>
                 </div>
 
                 <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 card-hover-element">
-                    <div class="absolute inset-0 bg-gradient-to-br from-green-600 to-emerald-700"></div>
-                    <div class="relative p-8 text-white text-center">
-                        <div class="text-5xl mb-4">🌶️</div>
-                        <h4 class="text-2xl font-bold mb-4">Salsas Artesanales</h4>
-                        <p class="text-green-100">Verde Asada, Roja de Árbol, Chiltepin y Limón. Hechas con chiles tostados al fuego y técnicas tradicionales.</p>
-                        <div class="mt-6">
-                            <span class="bg-white bg-opacity-20 text-white px-3 py-1 rounded-full text-sm font-medium">Tradicional</span>
-                        </div>
+                    <img src="assets/images/products/salsas/salsa-verde.webp" alt="Salsas Artesanales" class="w-full h-48 object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-green-600 via-green-600/80 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                        <h4 class="text-xl font-bold mb-2">Salsas Artesanales</h4>
+                        <p class="text-green-100 text-sm mb-3">Verde Asada, Roja de Árbol, Chiltepin y Limón. Hechas con chiles tostados al fuego.</p>
+                        <span class="bg-white bg-opacity-20 text-white px-3 py-1 rounded-full text-xs font-medium">Tradicional</span>
                     </div>
                 </div>
 
                 <div class="group relative overflow-hidden rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 card-hover-element">
-                    <div class="absolute inset-0 bg-gradient-to-br from-yellow-500 to-amber-600"></div>
-                    <div class="relative p-8 text-white text-center">
-                        <div class="text-5xl mb-4">🧀</div>
-                        <h4 class="text-2xl font-bold mb-4">Queso Blanco Blend</h4>
-                        <p class="text-yellow-100">Mezcla perfecta de Oaxaca, Menonita, Manchego y más. Pre-rallado y listo para derretir sin separarse.</p>
-                        <div class="mt-6">
-                            <span class="bg-white bg-opacity-20 text-white px-3 py-1 rounded-full text-sm font-medium">Especial</span>
-                        </div>
+                    <img src="assets/images/products/retail/queso-blend.webp" alt="Queso Blanco Blend" class="w-full h-48 object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-yellow-500 via-yellow-500/80 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 right-0 p-6 text-white">
+                        <h4 class="text-xl font-bold mb-2">Queso Blanco Blend</h4>
+                        <p class="text-yellow-100 text-sm mb-3">Mezcla perfecta de Oaxaca, Menonita, Manchego y más. Pre-rallado y listo para derretir.</p>
+                        <span class="bg-white bg-opacity-20 text-white px-3 py-1 rounded-full text-xs font-medium">Especial</span>
                     </div>
                 </div>
             </div>
@@ -399,7 +399,7 @@
         <div class="container mx-auto px-4 lg:px-8">
             <div class="flex flex-col md:flex-row justify-between items-center">
                 <div class="flex items-center space-x-2 mb-4 md:mb-0">
-                    <span class="text-2xl font-bold text-primary">BRASAS</span>
+                    <img src="assets/images/logo/logo-light.svg" alt="Brasas El Gordo" class="h-8 w-auto">
                     <span class="text-2xl">🔥</span>
                 </div>
                 <div class="text-center md:text-right">
@@ -410,209 +410,7 @@
         </div>
     </footer>
 
-    <script>
-        
-        // Smooth scrolling with easing
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-
-        // Header scroll effect with blur
-        let lastScrollY = window.scrollY;
-        const header = document.getElementById('header');
-        
-        window.addEventListener('scroll', () => {
-            const currentScrollY = window.scrollY;
-            
-            if (currentScrollY > 100) {
-                header.classList.add('bg-gray-900/98');
-                header.classList.add('backdrop-blur-md');
-            } else {
-                header.classList.remove('bg-gray-900/98');
-                header.classList.remove('backdrop-blur-md');
-            }
-            
-            // Hide/show header on scroll
-            if (currentScrollY > lastScrollY && currentScrollY > 200) {
-                header.style.transform = 'translateY(-100%)';
-            } else {
-                header.style.transform = 'translateY(0)';
-            }
-            
-            lastScrollY = currentScrollY;
-        });
-
-        // Mobile menu functionality
-        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-        
-        function toggleMobileMenu() {
-            mobileMenu.classList.toggle('hidden');
-            mobileMenuOverlay.classList.toggle('hidden');
-            document.body.classList.toggle('overflow-hidden');
-        }
-        
-        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-        mobileMenuOverlay.addEventListener('click', toggleMobileMenu);
-        
-        // Close mobile menu on link click
-        mobileMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', toggleMobileMenu);
-        });
-
-        // Intersection Observer for animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-
-        // Fade in animation
-        const fadeInObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('animate-fade-in-up');
-                    entry.target.style.opacity = '1';
-                }
-            });
-        }, observerOptions);
-
-        // Slide in animations
-        const slideInObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const direction = entry.target.dataset.direction;
-                    if (direction === 'left') {
-                        entry.target.classList.add('animate-slide-in-left');
-                    } else if (direction === 'right') {
-                        entry.target.classList.add('animate-slide-in-right');
-                    }
-                    entry.target.style.opacity = '1';
-                }
-            });
-        }, observerOptions);
-
-        // Card hover effects
-        const cardHoverObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.fade-in-element').forEach(el => {
-            el.style.opacity = '0';
-            fadeInObserver.observe(el);
-        });
-
-        document.querySelectorAll('.slide-in-element').forEach(el => {
-            el.style.opacity = '0';
-            slideInObserver.observe(el);
-        });
-
-        document.querySelectorAll('.card-hover-element').forEach(el => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(20px)';
-            el.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-            cardHoverObserver.observe(el);
-        });
-
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const parallaxElements = document.querySelectorAll('.animate-float');
-            
-            parallaxElements.forEach((element, index) => {
-                const speed = 0.5 + (index * 0.1);
-                element.style.transform = `translateY(${scrolled * speed}px)`;
-            });
-        });
-
-        window.addEventListener('load', () => {
-            document.body.classList.add('loaded');
-        });
-
-        function smoothScrollToElement(target) {
-            const element = document.querySelector(target);
-            if (element) {
-                const headerHeight = document.getElementById('header').offsetHeight;
-                const elementPosition = element.offsetTop - headerHeight;
-                
-                window.scrollTo({
-                    top: elementPosition,
-                    behavior: 'smooth'
-                });
-            }
-        }
-
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const target = link.getAttribute('href');
-                smoothScrollToElement(target);
-            });
-        });
-
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.nav-link');
-
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (pageYOffset >= sectionTop - 200) {
-                    current = section.getAttribute('id');
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.classList.remove('text-primary');
-                if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.add('text-primary');
-                }
-            });
-        });
-
-        // Preload critical images for better performance
-        const criticalImages = [
-            // Add your actual image URLs here when you have them
-        ];
-
-        criticalImages.forEach(src => {
-            const img = new Image();
-            img.src = src;
-        });
-
-        document.addEventListener('mousemove', (e) => {
-        });
-
-        function debounce(func, wait) {
-            let timeout;
-            return function executedFunction(...args) {
-                const later = () => {
-                    clearTimeout(timeout);
-                    func(...args);
-                };
-                clearTimeout(timeout);
-                timeout = setTimeout(later, wait);
-            };
-        }
-
-        const debouncedScroll = debounce(() => {
-        }, 10);
-
-        window.addEventListener('scroll', debouncedScroll);
-    </script>
+    <!-- Scripts -->
+    <script src="assets/js/main.js"></script>
 </body>
 </html>

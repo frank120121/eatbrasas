@@ -1,0 +1,374 @@
+/*
+ * BRASAS EL GORDO - CUSTOM STYLES
+ * Additional styles to complement Tailwind CSS
+ * File: assets/css/main.css
+ */
+
+/* ============================================
+   CSS CUSTOM PROPERTIES
+   ============================================ */
+:root {
+    --primary-color: #ff4500;
+    --primary-dark: #e63e00;
+    --primary-light: #ff6a33;
+    --text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================
+   CUSTOM ANIMATIONS
+   ============================================ */
+@keyframes fadeInUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(30px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+@keyframes slideInLeft {
+    from { 
+        opacity: 0; 
+        transform: translateX(-30px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateX(0); 
+    }
+}
+
+@keyframes slideInRight {
+    from { 
+        opacity: 0; 
+        transform: translateX(30px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateX(0); 
+    }
+}
+
+@keyframes pulseFire {
+    0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(255, 69, 0, 0.4); 
+    }
+    50% { 
+        box-shadow: 0 0 0 10px rgba(255, 69, 0, 0); 
+    }
+}
+
+@keyframes float {
+    0%, 100% { 
+        transform: translateY(0px); 
+    }
+    50% { 
+        transform: translateY(-10px); 
+    }
+}
+
+@keyframes ripple-animation {
+    to {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+.glass-effect {
+    backdrop-filter: blur(10px);
+    background: var(--glass-bg);
+}
+
+.text-shadow {
+    text-shadow: var(--text-shadow);
+}
+
+.gradient-text {
+    background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.transition-smooth {
+    transition: var(--transition-smooth);
+}
+
+/* ============================================
+   COMPONENT SPECIFIC STYLES
+   ============================================ */
+
+/* Ripple Effect for Buttons */
+.ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+    transform: scale(0);
+    animation: ripple-animation 0.6s linear;
+}
+
+/* Enhanced Focus States for Accessibility */
+.using-keyboard *:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Logo Hover Effects */
+.logo-hover {
+    transition: var(--transition-smooth);
+}
+
+.logo-hover:hover {
+    filter: brightness(1.1) drop-shadow(0 0 10px rgba(255, 69, 0, 0.3));
+}
+
+/* Image Lazy Loading */
+.lazy {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.lazy.loaded {
+    opacity: 1;
+}
+
+/* Enhanced Card Interactions */
+.card-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.3s ease;
+}
+
+.card-3d:hover {
+    transform: rotateY(5deg) rotateX(5deg);
+}
+
+/* Custom Scroll Indicator */
+.scroll-indicator {
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+}
+
+/* Background Pattern for Texture */
+.mesquite-pattern {
+    background-image: url('assets/images/ui/pattern-mesquite.svg');
+    background-repeat: repeat;
+    background-size: 100px 100px;
+    opacity: 0.1;
+}
+
+/* Smoke Effect */
+.smoke-overlay {
+    background-image: url('assets/images/ui/texture-smoke.png');
+    background-blend-mode: overlay;
+    opacity: 0.3;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN HELPERS
+   ============================================ */
+
+/* Mobile Menu Enhancements */
+@media (max-width: 768px) {
+    .mobile-menu-enter {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease-in-out;
+    }
+    
+    .mobile-menu-enter.open {
+        transform: translateX(0);
+    }
+}
+
+/* High-Resolution Displays */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .crisp-edges {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+}
+
+/* Reduced Motion for Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    
+    .animate-float,
+    .animate-pulse-fire,
+    .animate-bounce {
+        animation: none !important;
+    }
+}
+
+/* Dark Mode Support (if needed in future) */
+@media (prefers-color-scheme: dark) {
+    .auto-dark {
+        filter: invert(1) hue-rotate(180deg);
+    }
+}
+
+/* ============================================
+   PERFORMANCE OPTIMIZATIONS
+   ============================================ */
+
+/* GPU Acceleration for Smooth Animations */
+.gpu-accelerated {
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+/* Optimize Image Loading */
+.optimized-image {
+    content-visibility: auto;
+    contain-intrinsic-size: 300px 200px;
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .print-only {
+        display: block !important;
+    }
+    
+    body {
+        font-size: 12pt;
+        line-height: 1.4;
+        color: black;
+        background: white;
+    }
+}
+
+/* ============================================
+   ACCESSIBILITY ENHANCEMENTS
+   ============================================ */
+
+/* Skip to Content Link */
+.skip-link {
+    position: absolute;
+    left: -9999px;
+    z-index: 999;
+    padding: 8px 16px;
+    background: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 0 0 8px 0;
+}
+
+.skip-link:focus {
+    left: 0;
+    top: 0;
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+    .contrast-enhanced {
+        border: 2px solid;
+        filter: contrast(1.5);
+    }
+}
+
+/* Screen Reader Only Content */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ============================================
+   BROWSER-SPECIFIC FIXES
+   ============================================ */
+
+/* Safari Specific */
+@supports (-webkit-touch-callout: none) {
+    .safari-fix {
+        -webkit-transform: translateZ(0);
+    }
+}
+
+/* Firefox Specific */
+@-moz-document url-prefix() {
+    .firefox-fix {
+        scrollbar-width: thin;
+        scrollbar-color: var(--primary-color) transparent;
+    }
+}
+
+/* Chrome/Edge Specific */
+@supports (backdrop-filter: blur(10px)) {
+    .modern-blur {
+        backdrop-filter: blur(10px);
+    }
+}
+
+/* ============================================
+   LOADING STATES
+   ============================================ */
+.loading-skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-dark);
+}
+
+/* ============================================
+   SELECTION STYLES
+   ============================================ */
+::selection {
+    background: var(--primary-color);
+    color: white;
+}
+
+::-moz-selection {
+    background: var(--primary-color);
+    color: white;
+}
