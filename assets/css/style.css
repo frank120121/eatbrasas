@@ -514,6 +514,7 @@
 @supports (-webkit-touch-callout: none) {
     .safari-fix {
         -webkit-transform: translateZ(0);
+        transform: translateZ(0);
     }
 }
 
