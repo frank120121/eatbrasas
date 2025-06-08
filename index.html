@@ -9,7 +9,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     
-    <!-- Optimized Tailwind Config -->
+    <!-- Tailwind Config -->
     <script>
         tailwind.config = {
             theme: {
@@ -448,7 +448,6 @@
         </div>
     </footer>
 
-    <!-- Optimized JavaScript -->
     <script>
         // Immediate loading state
         document.documentElement.classList.add('loaded');
@@ -565,7 +564,7 @@
         document.querySelectorAll('button').forEach(button => {
             if (button.textContent.includes('Agregar')) {
                 button.addEventListener('click', function() {
-                    // Simple visual feedback
+                    //  visual feedback
                     const originalText = this.textContent;
                     const originalBg = this.className;
                     
@@ -582,7 +581,7 @@
             }
         });
 
-        // Simple loading performance optimization
+        // loading performance optimization
         window.addEventListener('load', () => {
             // Remove any remaining loading states
             document.querySelectorAll('.loading').forEach(el => {
