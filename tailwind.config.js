@@ -1,6 +1,6 @@
 // tailwind.config.js
 module.exports = {
-  content: ["./index.html", "./assets/**/*.js"], // adjust paths as needed
+  content: ["./index.html", "./assets/**/*.js"],
   theme: {
     extend: {
       colors: {
