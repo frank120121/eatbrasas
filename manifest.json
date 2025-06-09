@@ -96,14 +96,14 @@
   
   "screenshots": [
     {
-      "src": "/assets/images/screenshots/mobile-home.png",
+      "src": "/assets/images/hero/hero-mobile.webp",
       "sizes": "390x844",
       "type": "image/png",
       "form_factor": "narrow",
       "label": "Página principal en móvil"
     },
     {
-      "src": "/assets/images/screenshots/desktop-home.png",
+      "src": "/assets/images/hero/hero-desktop.webp",
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
