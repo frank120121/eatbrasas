@@ -87,7 +87,7 @@
         @apply translate-x-0;
     }
 
-    /* Hero section */
+    /* Hero section - Adjusted for better fold visibility */
     .hero-background {
         @apply absolute inset-0 z-0;
     }
@@ -106,12 +106,12 @@
 
     .hero-title-main {
         @apply font-black text-white leading-tight mb-4;
-        font-size: clamp(3rem, 8vw, 6rem);
+        font-size: clamp(2rem, 6vw, 4rem); /* Reduced from 8vw, 6rem */
     }
 
     .hero-title-accent {
         @apply font-black text-orange-500 leading-none;
-        font-size: clamp(4rem, 10vw, 8rem);
+        font-size: clamp(3rem, 8vw, 6rem); /* Reduced from 10vw, 8rem */
     }
 
     .hero-subtitle {
@@ -157,26 +157,127 @@
         animation: spin 1s linear infinite;
     }
 
+    /* Above the fold container - contains header, home, and loyalty */
+    .above-fold-container {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    /* Header within above-fold container */
+    .above-fold-header {
+        flex-shrink: 0;
+        height: 4rem; /* 64px - matches h-16 */
+    }
+
+    /* Main content area (home + loyalty) */
+    .above-fold-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Home section - takes up most of the space */
+    .home-section {
+        flex: 2;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    /* Loyalty section - compact at bottom */
+    .loyalty-section-compact {
+        flex-shrink: 0;
+        background: white;
+        padding: 1rem 0;
+        border-top: 1px solid #e5e7eb;
+    }
+
     /* Section spacing */
     .section-padding {
         @apply py-20 lg:py-32;
     }
 
-    /* Loyalty banner responsive */
+    /* Specific class for products section - normal padding, not full viewport */
+    .products-section {
+        @apply py-20 lg:py-32 bg-white;
+    }
+
+    /* New styles for full viewport height sections */
+    .full-viewport-section {
+        height: 100vh;
+    }
+
+    /* Loyalty section - Full viewport height */
+    .loyalty-section {
+        @apply bg-white full-viewport-section flex items-center;
+    }
+
+    /* Loyalty banner responsive - BASE STYLES */
     .loyalty-content {
-        @apply flex items-center justify-center gap-8 text-center lg:text-left;
+        @apply flex flex-wrap items-center justify-center;
+        gap: 0;
+        padding: 0.75rem 0; /* Reduced padding for compact design */
     }
 
     .loyalty-icon {
-        @apply w-24 h-24 flex-shrink-0;
+        @apply w-16 h-16 flex-shrink-0 hidden; /* Hidden by default (mobile), smaller for compact design */
+        margin: 5px;
     }
 
     .loyalty-text {
-        @apply text-2xl font-black text-brown mb-6;
+        @apply text-base font-black text-brown leading-tight text-center; /* Reduced from text-lg */
+        margin: 0 10px 10px;
+        max-width: 100%;
     }
 
     .loyalty-buttons {
-        @apply flex items-center gap-4;
+        @apply flex items-center justify-center;
+        margin-left: 10px;
+        margin-bottom: 10px;
+        gap: 5px;
+        flex-wrap: nowrap; /* Force items to stay on same line */
+    }
+
+    /* CTA Button (CREAR UNA CUENTA) - smaller for compact design */
+    .loyalty-buttons button:first-child {
+        @apply bg-brown hover:bg-brown-dark text-white font-bold transition-all duration-300 hover:scale-105 uppercase tracking-wide rounded-2xl;
+        padding: 0 6px;
+        min-width: auto;
+        min-height: 40px;
+        font-size: 0.875rem;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    /* OR text - smaller for compact design */
+    .loyalty-buttons span {
+        @apply text-brown font-medium;
+        font-size: 14px;
+        min-width: auto;
+        text-align: center;
+        margin: 0 4px;
+        flex-shrink: 0;
+    }
+
+    /* Sign in text link (INICIAR SESIÓN) - smaller for compact design */
+    .loyalty-buttons button:last-child {
+        @apply bg-transparent text-brown font-medium hover:text-brown-dark uppercase tracking-wide underline decoration-2 underline-offset-4 hover:decoration-brown-dark transition-all duration-300;
+        padding: 0;
+        cursor: pointer;
+        user-select: none;
+        min-width: auto;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    .sticky-header {
+        position: sticky;
+        top: 0;
+        z-index: 50;
     }
 }
 
@@ -259,29 +360,13 @@
         @apply text-lg py-4 border-b border-gray-100;
     }
 
-    .loyalty-content {
-        @apply flex-col gap-6;
-    }
-
+    /* Loyalty banner mobile - icon stays hidden, text centered */
     .loyalty-icon {
-        @apply w-16 h-16;
+        @apply hidden;
     }
 
     .loyalty-text {
-        @apply text-lg max-w-xs leading-tight;
-    }
-
-    .loyalty-buttons {
-        @apply flex-col w-full gap-3;
-    }
-
-    .loyalty-buttons button {
-        @apply w-full max-w-xs px-6 py-4 text-sm rounded-2xl;
-    }
-
-    /* Hide "O" text on mobile */
-    .loyalty-content span:not(.font-black) {
-        @apply hidden;
+        margin-bottom: 10px;
     }
 
     /* Cart drawer full width on mobile */
@@ -290,22 +375,32 @@
     }
 }
 
+/* ===== DESKTOP RESPONSIVE ===== */
 @media (min-width: 769px) {
     .loyalty-content {
-        @apply flex-row text-left;
+        @apply flex-nowrap text-left;
+        margin: 0;
+    }
+
+    .loyalty-icon {
+        @apply flex; /* Show icon on desktop */
+        height: 50px; /* Reduced from 62px for compact design */
+        margin: 5px;
+    }
+
+    .loyalty-text {
+        @apply text-left text-xl; /* Reduced from text-2xl */
+        margin-left: 15px;
+        margin-bottom: 0;
     }
 
     .loyalty-buttons {
-        @apply flex-row;
+        margin-left: 15px;
+        margin-bottom: 0;
     }
 
-    .loyalty-buttons button {
-        @apply w-auto px-8 py-3;
-    }
-
-    /* Show "O" text on desktop */
-    .loyalty-content span {
-        @apply block;
+    .loyalty-buttons button:last-child {
+        margin-left: 10px;
     }
 
     /* Cart drawer fixed width on desktop */

@@ -838,7 +838,7 @@ video {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
-/* Hero section */
+/* Hero section - Adjusted for better fold visibility */
 
 .hero-background {
   position: absolute;
@@ -872,28 +872,14 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
 
-@media (max-width: 768px) {
-  .loyalty-content span:not(.hero-badge) {
-    display: none;
-  }
-}
-
 .hero-title-main {
   margin-bottom: 1rem;
   font-weight: 900;
   line-height: 1.25;
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
-}
-
-@media (max-width: 768px) {
-  .loyalty-content span:not(.hero-title-main) {
-    display: none;
-  }
-}
-
-.hero-title-main {
-  font-size: clamp(3rem, 8vw, 6rem);
+  font-size: clamp(2rem, 6vw, 4rem);
+  /* Reduced from 8vw, 6rem */
 }
 
 .hero-title-accent {
@@ -901,16 +887,8 @@ video {
   line-height: 1;
   --tw-text-opacity: 1;
   color: rgb(249 115 22 / var(--tw-text-opacity, 1));
-}
-
-@media (max-width: 768px) {
-  .loyalty-content span:not(.hero-title-accent) {
-    display: none;
-  }
-}
-
-.hero-title-accent {
-  font-size: clamp(4rem, 10vw, 8rem);
+  font-size: clamp(3rem, 8vw, 6rem);
+  /* Reduced from 10vw, 8rem */
 }
 
 .hero-subtitle {
@@ -1044,6 +1022,51 @@ video {
   opacity: 0.7;
 }
 
+/* Above the fold container - contains header, home, and loyalty */
+
+.above-fold-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Header within above-fold container */
+
+.above-fold-header {
+  flex-shrink: 0;
+  height: 4rem;
+  /* 64px - matches h-16 */
+}
+
+/* Main content area (home + loyalty) */
+
+.above-fold-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Home section - takes up most of the space */
+
+.home-section {
+  flex: 2;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Loyalty section - compact at bottom */
+
+.loyalty-section-compact {
+  flex-shrink: 0;
+  background: white;
+  padding: 1rem 0;
+  border-top: 1px solid #e5e7eb;
+}
+
 /* Section spacing */
 
 .section-padding {
@@ -1058,47 +1081,167 @@ video {
   }
 }
 
-/* Loyalty banner responsive */
+/* Specific class for products section - normal padding, not full viewport */
 
-.loyalty-content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-  text-align: center;
+.products-section {
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+  padding-top: 5rem;
+  padding-bottom: 5rem;
 }
 
 @media (min-width: 1024px) {
-  .loyalty-content {
-    text-align: left;
+  .products-section {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
   }
+}
+
+/* New styles for full viewport height sections */
+
+.full-viewport-section {
+  height: 100vh;
+}
+
+/* Loyalty section - Full viewport height */
+
+.loyalty-section {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
+}
+
+/* Loyalty banner responsive - BASE STYLES */
+
+.loyalty-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 0.75rem 0;
+  /* Reduced padding for compact design */
 }
 
 .loyalty-icon {
-  height: 6rem;
-  width: 6rem;
+  display: none;
+  height: 4rem;
+  width: 4rem;
   flex-shrink: 0;
+  /* Hidden by default (mobile), smaller for compact design */
+  margin: 5px;
 }
 
 .loyalty-text {
-  margin-bottom: 1.5rem;
-  font-size: 1.5rem;
-  line-height: 2rem;
+  text-align: center;
+  font-size: 1rem;
+  line-height: 1.5rem;
   font-weight: 900;
+  line-height: 1.25;
   --tw-text-opacity: 1;
   color: rgb(139 69 19 / var(--tw-text-opacity, 1));
-}
-
-@media (max-width: 768px) {
-  .loyalty-content span:not(.loyalty-text) {
-    display: none;
-  }
+  /* Reduced from text-lg */
+  margin: 0 10px 10px;
+  max-width: 100%;
 }
 
 .loyalty-buttons {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: center;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  gap: 5px;
+  flex-wrap: nowrap;
+  /* Force items to stay on same line */
+}
+
+/* CTA Button (CREAR UNA CUENTA) - smaller for compact design */
+
+.loyalty-buttons button:first-child {
+  border-radius: 1rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(139 69 19 / var(--tw-bg-opacity, 1));
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+.loyalty-buttons button:first-child:hover {
+  --tw-scale-x: 1.05;
+  --tw-scale-y: 1.05;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  --tw-bg-opacity: 1;
+  background-color: rgb(109 54 16 / var(--tw-bg-opacity, 1));
+}
+
+.loyalty-buttons button:first-child {
+  padding: 0 6px;
+  min-width: auto;
+  min-height: 40px;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* OR text - smaller for compact design */
+
+.loyalty-buttons span {
+  font-weight: 500;
+  --tw-text-opacity: 1;
+  color: rgb(139 69 19 / var(--tw-text-opacity, 1));
+  font-size: 14px;
+  min-width: auto;
+  text-align: center;
+  margin: 0 4px;
+  flex-shrink: 0;
+}
+
+/* Sign in text link (INICIAR SESIÓN) - smaller for compact design */
+
+.loyalty-buttons button:last-child {
+  background-color: transparent;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  --tw-text-opacity: 1;
+  color: rgb(139 69 19 / var(--tw-text-opacity, 1));
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 300ms;
+}
+
+.loyalty-buttons button:last-child:hover {
+  --tw-text-opacity: 1;
+  color: rgb(109 54 16 / var(--tw-text-opacity, 1));
+  text-decoration-color: #6d3610;
+}
+
+.loyalty-buttons button:last-child {
+  padding: 0;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  min-width: auto;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
 .pointer-events-none {
@@ -1125,12 +1268,24 @@ video {
   position: relative;
 }
 
+.sticky {
+  position: sticky;
+}
+
 .inset-0 {
   inset: 0px;
 }
 
+.-right-12 {
+  right: -3rem;
+}
+
 .-right-2 {
   right: -0.5rem;
+}
+
+.-right-8 {
+  right: -2rem;
 }
 
 .-top-2 {
@@ -1143,6 +1298,10 @@ video {
 
 .top-0 {
   top: 0px;
+}
+
+.top-1 {
+  top: 0.25rem;
 }
 
 .top-16 {
@@ -1414,12 +1573,21 @@ video {
   flex-shrink: 1;
 }
 
+.flex-shrink-0 {
+  flex-shrink: 0;
+}
+
 .border-collapse {
   border-collapse: collapse;
 }
 
 .-translate-y-0 {
   --tw-translate-y: -0px;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.-translate-y-1 {
+  --tw-translate-y: -0.25rem;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -1470,6 +1638,14 @@ video {
 
 .flex-col {
   flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.flex-nowrap {
+  flex-wrap: nowrap;
 }
 
 .items-start {
@@ -2016,6 +2192,11 @@ video {
   padding-bottom: 0.75rem;
 }
 
+.py-32 {
+  padding-top: 8rem;
+  padding-bottom: 8rem;
+}
+
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -2029,6 +2210,14 @@ video {
 .py-6 {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
+}
+
+.pb-20 {
+  padding-bottom: 5rem;
+}
+
+.pb-32 {
+  padding-bottom: 8rem;
 }
 
 .pt-8 {
@@ -2072,6 +2261,11 @@ video {
   line-height: 1;
 }
 
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
 .text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -2098,6 +2292,10 @@ video {
 
 .font-bold {
   font-weight: 700;
+}
+
+.font-medium {
+  font-weight: 500;
 }
 
 .font-semibold {
@@ -2195,6 +2393,14 @@ video {
 
 .underline {
   text-decoration-line: underline;
+}
+
+.decoration-2 {
+  text-decoration-thickness: 2px;
+}
+
+.underline-offset-4 {
+  text-underline-offset: 4px;
 }
 
 .opacity-0 {
@@ -2417,45 +2623,14 @@ video {
     line-height: 1.75rem;
   }
 
-  .loyalty-content {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
+  /* Loyalty banner mobile - icon stays hidden, text centered */
 
   .loyalty-icon {
-    height: 4rem;
-    width: 4rem;
+    display: none;
   }
 
   .loyalty-text {
-    max-width: 20rem;
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-    line-height: 1.25;
-  }
-
-  .loyalty-buttons {
-    width: 100%;
-    flex-direction: column;
-    gap: 0.75rem;
-  }
-
-  .loyalty-buttons button {
-    width: 100%;
-    max-width: 20rem;
-    border-radius: 1rem;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-  }
-
-  /* Hide "O" text on mobile */
-
-  .loyalty-content span:not(.font-black) {
-    display: none;
+    margin-bottom: 10px;
   }
 
   /* Cart drawer full width on mobile */
@@ -2466,28 +2641,39 @@ video {
   }
 }
 
+/* ===== DESKTOP RESPONSIVE ===== */
+
 @media (min-width: 769px) {
   .loyalty-content {
-    flex-direction: row;
+    flex-wrap: nowrap;
     text-align: left;
+    margin: 0;
+  }
+
+  .loyalty-icon {
+    display: flex;
+    /* Show icon on desktop */
+    height: 50px;
+    /* Reduced from 62px for compact design */
+    margin: 5px;
+  }
+
+  .loyalty-text {
+    text-align: left;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    /* Reduced from text-2xl */
+    margin-left: 15px;
+    margin-bottom: 0;
   }
 
   .loyalty-buttons {
-    flex-direction: row;
+    margin-left: 15px;
+    margin-bottom: 0;
   }
 
-  .loyalty-buttons button {
-    width: auto;
-    padding-left: 2rem;
-    padding-right: 2rem;
-    padding-top: 0.75rem;
-    padding-bottom: 0.75rem;
-  }
-
-  /* Show "O" text on desktop */
-
-  .loyalty-content span {
-    display: block;
+  .loyalty-buttons button:last-child {
+    margin-left: 10px;
   }
 
   /* Cart drawer fixed width on desktop */
@@ -2564,9 +2750,9 @@ video {
   background-color: rgb(254 242 242 / var(--tw-bg-opacity, 1));
 }
 
-.hover\:bg-yellow-700:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(161 98 7 / var(--tw-bg-opacity, 1));
+.hover\:text-brown-dark:hover {
+  --tw-text-opacity: 1;
+  color: rgb(109 54 16 / var(--tw-text-opacity, 1));
 }
 
 .hover\:text-gray-600:hover {
@@ -2587,6 +2773,10 @@ video {
 .hover\:text-red-600:hover {
   --tw-text-opacity: 1;
   color: rgb(220 38 38 / var(--tw-text-opacity, 1));
+}
+
+.hover\:decoration-brown-dark:hover {
+  text-decoration-color: #6d3610;
 }
 
 .hover\:shadow-md:hover {
@@ -2653,10 +2843,6 @@ video {
 }
 
 @media (min-width: 1024px) {
-  .lg\:block {
-    display: block;
-  }
-
   .lg\:flex {
     display: flex;
   }
@@ -2690,18 +2876,18 @@ video {
     padding-right: 2rem;
   }
 
-  .lg\:py-16 {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
+  .lg\:py-32 {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
   }
 
   .lg\:text-left {
     text-align: left;
   }
 
-  .lg\:text-3xl {
-    font-size: 1.875rem;
-    line-height: 2.25rem;
+  .lg\:text-2xl {
+    font-size: 1.5rem;
+    line-height: 2rem;
   }
 
   .lg\:text-4xl {

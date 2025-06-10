@@ -29,111 +29,205 @@
     <link rel="stylesheet" href="assets/css/main.css">
 </head>
 <body class="font-body bg-white overflow-x-hidden">
-    <!-- Header -->
-    <header class="fixed w-full top-0 z-50 bg-white transition-all duration-300">
-        <div class="max-w-7xl mx-auto">
-            <div class="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
+    
+    <!-- ABOVE THE FOLD CONTAINER - Exactly 100vh -->
+    <div class="above-fold-container">
+        
+        <!-- Header -->
+        <header class="above-fold-header fixed w-full top-0 z-50 bg-white transition-all duration-300">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
 
-                <div class="flex items-center space-x-4 lg:hidden">
-                    <a href="#home" class="flex items-center">
-                        <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center hover:bg-primary-dark hover:scale-105 transition-all duration-200">
-                            <span class="text-white font-bold text-xl">B</span>
-                        </div>
-                    </a>
-
-                    <button class="text-gray-700 mobile-menu-toggle p-2" aria-label="Abrir menú de navegación" aria-expanded="false">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                        </svg>
-                    </button>
-                </div>
-
-                <div class="flex items-center space-x-4 lg:hidden">
-                    <div class="location-picker">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24.17">
-                            <path fill-rule="evenodd" d="M12 0a7.875 7.875 0 0 1 6.831 11.795L12.09 24.17 5.164 11.794a7.88 7.88 0 0 1-1.039-3.919A7.875 7.875 0 0 1 12 0zm0 11.794a3.92 3.92 0 1 0 0-7.838 3.92 3.92 0 0 0 0 7.838z"/>
-                        </svg>
-                        <div class="text-sm hidden sm:block">
-                            <div class="font-bold text-sm">Pickup From</div>
-                            <div class="text-gray-600 text-sm">Nogales, Sonora</div>
-                        </div>
-                    </div>
-
-                    <div class="relative">
-                        <a href="#cart-summary" id="mobile-cart-icon-link" class="cart-icon flex items-center justify-center w-10 h-10" aria-label="Ver carrito de compras">
-                            <svg class="w-8 h-8" viewBox="0 0 48 48" fill="currentColor">
-                                <path d="M7 9a1 1 0 1 1-2 0V4a4 4 0 1 1 8 0v5a1 1 0 0 1-2 0V4a2 2 0 1 0-4 0v5zM2 7v19h14V7H2zm0-2h14a2 2 0 0 1 2 2v19a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" transform="translate(15 10)"/>
-                            </svg>
-                            <span id="mobile-cart-item-count" class="bg-primary text-white text-xs font-bold rounded-full px-2 py-0.5 absolute -top-2 -right-2 hidden">0</span>
+                    <div class="flex items-center space-x-4 lg:hidden">
+                        <a href="#home" class="flex items-center">
+                            <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center hover:bg-primary-dark hover:scale-105 transition-all duration-200">
+                                <span class="text-white font-bold text-xl">B</span>
+                            </div>
                         </a>
-                    </div>
-                </div>
 
-
-                <div class="hidden lg:flex items-center space-x-4">
-                    <a href="#home" class="flex items-center">
-                        <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center hover:bg-primary-dark hover:scale-105 transition-all duration-200">
-                            <span class="text-white font-bold text-xl">B</span>
-                        </div>
-                    </a>
-                </div>
-
-                <nav class="hidden lg:flex items-center space-x-8">
-                    <a href="#menu" class="nav-link active">MENU</a>
-                    <a href="#contacto" class="nav-link">EVENTOS</a>
-                    <a href="#rewards" class="nav-link">REWARDS</a>
-                </nav>
-
-                <div class="hidden lg:flex items-center space-x-6">
-                    <div class="location-picker">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24.17">
-                            <path fill-rule="evenodd" d="M12 0a7.875 7.875 0 0 1 6.831 11.795L12.09 24.17 5.164 11.794a7.88 7.88 0 0 1-1.039-3.919A7.875 7.875 0 0 1 12 0zm0 11.794a3.92 3.92 0 1 0 0-7.838 3.92 3.92 0 0 0 0 7.838z"/>
-                        </svg>
-                        <div class="text-sm">
-                            <div class="font-bold text-sm">Pickup From</div>
-                            <div class="text-gray-600 text-sm">Nogales, Sonora</div>
-                        </div>
-                    </div>
-
-                    <div class="user-actions">
-                        <div class="w-12 h-12 flex items-center justify-center">
-                            <svg class="w-8 h-8" viewBox="0 0 48 48" fill="currentColor">
-                                <path d="M24 22a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm8.746 9.396C31.666 30.26 28 28 23.998 28c-4.003 0-7.674 2.262-8.747 5.394-.637 1.86-.016 2.606 1.328 2.606h14.836c1.353 0 1.972-.744 1.331-2.604zm1.93-.092c1.1 3.497-.813 4.696-2.56 4.696H15.877c-1.734 0-3.65-1.2-2.557-4.697C14.675 28.967 19.203 26 23.998 26c4.796 0 9.316 2.967 10.679 7.304z"/>
-                            </svg>
-                        </div>
-                        <span class="text-sm font-bold uppercase tracking-wide whitespace-nowrap">SIGN IN / JOIN</span>
-                    </div>
-
-                    <div class="relative ml-6">
-                        <a href="#cart-summary" id="cart-icon-link" class="cart-icon flex items-center justify-center w-12 h-12" aria-label="Ver carrito de compras">
-                            <svg class="w-8 h-8" viewBox="0 0 48 48" fill="currentColor">
-                                <path d="M7 9a1 1 0 1 1-2 0V4a4 4 0 1 1 8 0v5a1 1 0 0 1-2 0V4a2 2 0 1 0-4 0v5zM2 7v19h14V7H2zm0-2h14a2 2 0 0 1 2 2v19a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" transform="translate(15 10)"/>
-                            </svg>
-                            <span id="cart-item-count" class="bg-primary text-white text-xs font-bold rounded-full px-2 py-0.5 absolute -top-2 -right-2 hidden">0</span>
-                        </a>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="mobile-menu fixed inset-0 bg-white z-40 lg:hidden">
-                <div class="flex flex-col h-full">
-                    <div class="flex justify-end p-4">
-                        <button class="mobile-menu-toggle text-gray-700 p-2" aria-label="Cerrar menú de navegación">
+                        <button class="text-gray-700 mobile-menu-toggle p-2" aria-label="Abrir menú de navegación" aria-expanded="false">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                             </svg>
                         </button>
                     </div>
-                    <nav class="flex-1 px-6 py-4 space-y-6">
-                        <a href="#menu" class="nav-link block py-3 text-lg font-bold">MENU</a>
-                        <a href="#catering" class="nav-link block py-3 text-lg font-bold">EVENTOS</a>
-                        <a href="#rewards" class="nav-link block py-3 text-lg font-bold">REWARDS</a>
+
+                    <div class="flex items-center space-x-4 lg:hidden">
+                        <div class="location-picker">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24.17">
+                                <path fill-rule="evenodd" d="M12 0a7.875 7.875 0 0 1 6.831 11.795L12.09 24.17 5.164 11.794a7.88 7.88 0 0 1-1.039-3.919A7.875 7.875 0 0 1 12 0zm0 11.794a3.92 3.92 0 1 0 0-7.838 3.92 3.92 0 0 0 0 7.838z"/>
+                            </svg>
+                            <div class="text-sm hidden sm:block">
+                                <div class="font-bold text-sm">Pickup From</div>
+                                <div class="text-gray-600 text-sm">Nogales, Sonora</div>
+                            </div>
+                        </div>
+
+                        <div class="relative">
+                            <a href="#cart-summary" id="mobile-cart-icon-link" class="cart-icon flex items-center justify-center w-10 h-10" aria-label="Ver carrito de compras">
+                                <svg class="w-8 h-8" viewBox="0 0 48 48" fill="currentColor">
+                                    <path d="M7 9a1 1 0 1 1-2 0V4a4 4 0 1 1 8 0v5a1 1 0 0 1-2 0V4a2 2 0 1 0-4 0v5zM2 7v19h14V7H2zm0-2h14a2 2 0 0 1 2 2v19a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" transform="translate(15 10)"/>
+                                </svg>
+                                <span id="mobile-cart-item-count" class="bg-primary text-white text-xs font-bold rounded-full px-2 py-0.5 absolute -top-2 -right-2 hidden">0</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="hidden lg:flex items-center space-x-4">
+                        <a href="#home" class="flex items-center">
+                            <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center hover:bg-primary-dark hover:scale-105 transition-all duration-200">
+                                <span class="text-white font-bold text-xl">B</span>
+                            </div>
+                        </a>
+                    </div>
+
+                    <nav class="hidden lg:flex items-center space-x-8">
+                        <a href="#menu" class="nav-link active">MENU</a>
+                        <a href="#contacto" class="nav-link">EVENTOS</a>
+                        <a href="#rewards" class="nav-link">REWARDS</a>
                     </nav>
+
+                    <div class="hidden lg:flex items-center space-x-6">
+                        <div class="location-picker">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24.17">
+                                <path fill-rule="evenodd" d="M12 0a7.875 7.875 0 0 1 6.831 11.795L12.09 24.17 5.164 11.794a7.88 7.88 0 0 1-1.039-3.919A7.875 7.875 0 0 1 12 0zm0 11.794a3.92 3.92 0 1 0 0-7.838 3.92 3.92 0 0 0 0 7.838z"/>
+                            </svg>
+                            <div class="text-sm">
+                                <div class="font-bold text-sm">Pickup From</div>
+                                <div class="text-gray-600 text-sm">Nogales, Sonora</div>
+                            </div>
+                        </div>
+
+                        <div class="user-actions">
+                            <div class="w-12 h-12 flex items-center justify-center">
+                                <svg class="w-8 h-8" viewBox="0 0 48 48" fill="currentColor">
+                                    <path d="M24 22a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2a7 7 0 1 1 0-14 7 7 0 0 1 0 14zm8.746 9.396C31.666 30.26 28 28 23.998 28c-4.003 0-7.674 2.262-8.747 5.394-.637 1.86-.016 2.606 1.328 2.606h14.836c1.353 0 1.972-.744 1.331-2.604zm1.93-.092c1.1 3.497-.813 4.696-2.56 4.696H15.877c-1.734 0-3.65-1.2-2.557-4.697C14.675 28.967 19.203 26 23.998 26c4.796 0 9.316 2.967 10.679 7.304z"/>
+                                </svg>
+                            </div>
+                            <span class="text-sm font-bold uppercase tracking-wide whitespace-nowrap">SIGN IN / JOIN</span>
+                        </div>
+
+                        <div class="relative ml-6">
+                            <a href="#cart-summary" id="cart-icon-link" class="cart-icon flex items-center justify-center w-12 h-12" aria-label="Ver carrito de compras">
+                                <svg class="w-8 h-8" viewBox="0 0 48 48" fill="currentColor">
+                                    <path d="M7 9a1 1 0 1 1-2 0V4a4 4 0 1 1 8 0v5a1 1 0 0 1-2 0V4a2 2 0 1 0-4 0v5zM2 7v19h14V7H2zm0-2h14a2 2 0 0 1 2 2v19a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z" transform="translate(15 10)"/>
+                                </svg>
+                                <span id="cart-item-count" class="bg-primary text-white text-xs font-bold rounded-full px-2 py-0.5 absolute -top-2 -right-2 hidden">0</span>
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="mobile-menu fixed inset-0 bg-white z-40 lg:hidden">
+                    <div class="flex flex-col h-full">
+                        <div class="flex justify-end p-4">
+                            <button class="mobile-menu-toggle text-gray-700 p-2" aria-label="Cerrar menú de navegación">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <nav class="flex-1 px-6 py-4 space-y-6">
+                            <a href="#menu" class="nav-link block py-3 text-lg font-bold">MENU</a>
+                            <a href="#catering" class="nav-link block py-3 text-lg font-bold">EVENTOS</a>
+                            <a href="#rewards" class="nav-link block py-3 text-lg font-bold">REWARDS</a>
+                        </nav>
+                    </div>
                 </div>
             </div>
-        </div>
-    </header>
+        </header>
+
+        <!-- Main content area (home + loyalty) -->
+        <div class="above-fold-content">
+            
+            <!-- Home section - takes up most of the space -->
+            <section id="home" class="home-section">
+                <!-- Hero Background Video -->
+                <div class="hero-background">
+                    <!-- Desktop Video -->
+                    <video class="bg-video hidden md:block" autoplay muted playsinline loop>
+                        <source src="https://via.placeholder.com/2500x520/1a1a1a/ffffff.mp4" type="video/mp4">
+                    </video>
+                    
+                    <!-- Mobile Video -->
+                    <video class="bg-video block md:hidden" autoplay muted playsinline loop>
+                        <source src="https://via.placeholder.com/525x826/1a1a1a/ffffff.mp4" type="video/mp4">
+                    </video>
+                    
+                    <!-- Fallback -->
+                    <div class="absolute inset-0 gradient-bg"></div>
+                </div>
+                
+                <!-- Hero Overlay -->
+                <div class="hero-overlay"></div>
+                
+                <!-- Hero Content -->
+                <div class="hero-content w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col items-center text-center lg:text-left lg:items-start max-w-4xl">
+                        <!-- Hero Badge -->
+                        <div class="hero-badge mb-6">
+                            <span class="font-black">NUEVO</span>
+                        </div>
+                        
+                        <!-- Main Title -->
+                        <div class="space-y-2 mb-6">
+                            <h1 class="hero-title-main">BRASAS EL GORDO</h1>
+                            <h2 class="hero-title-accent">PORK BELLY</h2>
+                        </div>
+                        
+                        <!-- Subtitle -->
+                        <p class="hero-subtitle text-lg md:text-xl">SABOR AUTÉNTICO CON UN TOQUE DE TRADICIÓN</p>
+                        
+                        <!-- Description -->
+                        <p class="hero-description text-lg md:text-xl">
+                            Carne de res fresca marinada con chiles sonorenses y cocinada sobre brasas de mezquite. Solo por tiempo limitado.
+                        </p>
+                        
+                        <!-- CTA Buttons -->
+                        <div class="flex flex-col sm:flex-row gap-4 mt-8">
+                            <a href="#productos" class="btn rounded-lg shine">
+                                ORDENAR CHICHARRÓN ESPECIAL
+                            </a>
+                            <a href="#menu" class="btn-secondary rounded-lg">
+                               COMPRAR PRODUCTOS PARA CASA
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Loyalty section - compact at bottom -->
+            <section class="loyalty-section-compact">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                    <div class="loyalty-content">
+                        <!-- Icon -->
+                        <div class="loyalty-icon">
+                            <div class="w-full h-full bg-primary rounded-lg flex items-center justify-center">
+                                <span class="text-white font-bold text-xl lg:text-2xl">B</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Text -->
+                        <div class="flex-1 max-w-2xl">
+                            <h2 class="loyalty-text">
+                                ÚNETE A BRASAS REWARDS. RECIBE BRASAS GRATIS.
+                            </h2>
+                        </div>
+                        
+                        <!-- Buttons -->
+                        <div class="loyalty-buttons">
+                            <button>CREAR CUENTA</button>
+                            <span>OR</span>
+                            <button>INICIAR SESIÓN</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div> <!-- End of above-fold-content -->
+        
+    </div> <!-- End of above-fold-container -->
 
     <!-- Cart overlay and drawer -->
     <div id="cart-overlay" class="fixed inset-0 bg-black/50 z-60 hidden transition-opacity duration-300 ease-out">
@@ -212,91 +306,83 @@
 
     <div id="toast-container" class="fixed top-20 right-4 z-70 space-y-3"></div>
 
-    <!-- Hero Section -->
-    <section id="home" class="relative flex items-center justify-center min-h-screen max-h-screen overflow-hidden">
-        <!-- Hero Background Video -->
-        <div class="hero-background">
-            <!-- Desktop Video -->
-            <video class="bg-video hidden md:block" autoplay muted playsinline loop>
-                <source src="https://via.placeholder.com/2500x520/1a1a1a/ffffff.mp4" type="video/mp4">
-            </video>
-            
-            <!-- Mobile Video -->
-            <video class="bg-video block md:hidden" autoplay muted playsinline loop>
-                <source src="https://via.placeholder.com/525x826/1a1a1a/ffffff.mp4" type="video/mp4">
-            </video>
-            
-            <!-- Fallback -->
-            <div class="absolute inset-0 gradient-bg"></div>
-        </div>
-        
-        <!-- Hero Overlay -->
-        <div class="hero-overlay"></div>
-        
-        <!-- Hero Content -->
-        <div class="hero-content w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col items-center text-center lg:text-left lg:items-start max-w-4xl">
-                <!-- Hero Badge -->
-                <div class="hero-badge mb-6">
-                    <span class="font-black">NUEVO</span>
-                </div>
-                
-                <!-- Main Title -->
-                <div class="space-y-2 mb-6">
-                    <h1 class="hero-title-main">BRASAS EL GORDO</h1>
-                    <h2 class="hero-title-accent">PORK BELLY</h2>
-                </div>
-                
-                <!-- Subtitle -->
-                <p class="hero-subtitle text-lg md:text-xl">SABOR AUTÉNTICO CON UN TOQUE DE TRADICIÓN</p>
-                
-                <!-- Description -->
-                <p class="hero-description text-lg md:text-xl">
-                    Carne de res fresca marinada con chiles sonorenses y cocinada sobre brasas de mezquite. Solo por tiempo limitado.
+    <!-- Productos Section -->
+    <section id="productos" class="products-section">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-20 fade-in">
+                <span class="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4">
+                    NNUESTROS PRODUCTOS
+                </span>
+                <h2 class="text-5xl lg:text-6xl font-black text-gray-900 mb-6">
+                    Lleva el <span class="text-gradient">Sabor</span> a Casa
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                    Productos elaborados con las técnicas tradicionales que nos han distinguido por generaciones
                 </p>
-                
-                <!-- CTA Buttons -->
-                <div class="flex flex-col sm:flex-row gap-4 mt-8">
-                    <a href="#productos" class="btn rounded-lg shine">
-                        EXPLORAR PRODUCTOS
-                    </a>
-                    <a href="#menu" class="btn-secondary rounded-lg">
-                        VER MENÚ
-                    </a>
-                </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Loyalty Banner -->
-    <section class="bg-white py-12 lg:py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="loyalty-content">
-                <!-- Icon -->
-                <div class="loyalty-icon">
-                    <div class="w-full h-full bg-primary rounded-lg flex items-center justify-center">
-                        <span class="text-white font-bold text-2xl lg:text-3xl">B</span>
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="product-card p-8 hover-lift fade-in group" data-title="Manteca Ahumada" data-description="Grasa de cerdo ahumada sobre mesquite auténtico. El secreto para sabores profundos y auténticos." data-price="$120">
+                    <div class="relative mb-6">
+                        <div class="w-20 h-20 bg-gradient-to-br from-orange-400 to-primary rounded-3xl flex items-center justify-center mb-4">
+                            <span class="text-3xl">🧈</span>
+                        </div>
+                        <span class="absolute -top-2 -right-2 bg-primary text-white px-3 py-1 rounded-full text-xs font-bold">
+                            SIGNATURE
+                        </span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Manteca Ahumada</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        Grasa de cerdo ahumada sobre mesquite auténtico. El secreto para sabores profundos y auténticos.
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-3xl font-bold text-primary">$120</span>
+                        <button class="add-to-cart-btn group-hover:scale-105" data-original-text="Agregar">
+                            Agregar
+                        </button>
                     </div>
                 </div>
-                
-                <!-- Text -->
-                <div class="flex-1 max-w-2xl">
-                    <h2 class="loyalty-text">
-                        ÚNETE A BRASAS REWARDS. DESBLOQUEA BRASAS GRATIS.
-                    </h2>
+
+                <div class="product-card p-8 hover-lift fade-in group" data-title="Aceites de Chile" data-description="Chile de Árbol, Chiltepin Fire, Morita Citrus. Cada uno con perfil de sabor único." data-price="$95">
+                    <div class="relative mb-6">
+                        <div class="w-20 h-20 bg-gradient-to-br from-red-500 to-red-700 rounded-3xl flex items-center justify-center mb-4">
+                            <span class="text-3xl">🌶️</span>
+                        </div>
+                        <span class="absolute -top-2 -right-2 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+                            ARTESANAL
+                        </span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Aceites de Chile</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        Chile de Árbol, Chiltepin Fire, Morita Citrus. Cada uno con perfil de sabor único.
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-3xl font-bold text-primary">$95</span>
+                        <button class="add-to-cart-btn group-hover:scale-105" data-original-text="Agregar">
+                            Agregar
+                        </button>
+                    </div>
                 </div>
-                
-                <!-- Buttons -->
-                <div class="loyalty-buttons">
-                    <button class="bg-brown hover:bg-brown-dark text-white font-bold px-6 lg:px-8 py-3 rounded-2xl transition-all duration-300 hover:scale-105 shine uppercase tracking-wide text-sm">
-                        CREAR UNA CUENTA
-                    </button>
-                    
-                    <span class="text-brown font-bold text-sm hidden lg:block">O</span>
-                    
-                    <button class="bg-yellow-600 hover:bg-yellow-700 text-white font-bold px-6 lg:px-8 py-3 rounded-2xl transition-all duration-300 hover:scale-105 uppercase tracking-wide text-sm">
-                        INICIAR SESIÓN
-                    </button>
+
+                <div class="product-card p-8 hover-lift fade-in group" data-title="Mezclas de Especias" data-description="Fuego Sonorense, Asada Maestra, Cochinita Especial. Blends perfectamente balanceados." data-price="$85">
+                    <div class="relative mb-6">
+                        <div class="w-20 h-20 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-3xl flex items-center justify-center mb-4">
+                            <span class="text-3xl">🧂</span>
+                        </div>
+                        <span class="absolute -top-2 -right-2 bg-yellow-600 text-white px-3 py-1 rounded-full text-xs font-bold">
+                            PREMIUM
+                        </span>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Mezclas de Especias</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        Fuego Sonorense, Asada Maestra, Cochinita Especial. Blends perfectamente balanceados.
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-3xl font-bold text-primary">$85</span>
+                        <button class="add-to-cart-btn group-hover:scale-105" data-original-text="Agregar">
+                            Agregar
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -447,93 +533,11 @@
                         Obtén un descuento del 15% en tu primera compra de productos retail
                     </p>
                     <a href="#contacto" class="inline-flex items-center bg-primary hover:bg-primary-dark text-white px-10 py-5 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 shine space-x-3">
-                        <span>Contactar para Pedidos</span>
+                        <span>Nuestros Productos</span>
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                         </svg>
                     </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Productos Section -->
-    <section id="productos" class="section-padding bg-white">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="text-center mb-20 fade-in">
-                <span class="inline-block px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4">
-                    PRODUCTOS PREMIUM
-                </span>
-                <h2 class="text-5xl lg:text-6xl font-black text-gray-900 mb-6">
-                    Lleva el <span class="text-gradient">Sabor</span> a Casa
-                </h2>
-                <p class="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                    Productos artesanales elaborados con las técnicas tradicionales que nos han distinguido por generaciones
-                </p>
-            </div>
-
-            <div class="grid lg:grid-cols-3 gap-8">
-                <div class="product-card p-8 hover-lift fade-in group" data-title="Manteca Ahumada" data-description="Grasa de cerdo ahumada sobre mesquite auténtico. El secreto para sabores profundos y auténticos." data-price="$120">
-                    <div class="relative mb-6">
-                        <div class="w-20 h-20 bg-gradient-to-br from-orange-400 to-primary rounded-3xl flex items-center justify-center mb-4">
-                            <span class="text-3xl">🧈</span>
-                        </div>
-                        <span class="absolute -top-2 -right-2 bg-primary text-white px-3 py-1 rounded-full text-xs font-bold">
-                            SIGNATURE
-                        </span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Manteca Ahumada</h3>
-                    <p class="text-gray-600 mb-6 leading-relaxed">
-                        Grasa de cerdo ahumada sobre mesquite auténtico. El secreto para sabores profundos y auténticos.
-                    </p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-3xl font-bold text-primary">$120</span>
-                        <button class="add-to-cart-btn group-hover:scale-105" data-original-text="Agregar">
-                            Agregar
-                        </button>
-                    </div>
-                </div>
-
-                <div class="product-card p-8 hover-lift fade-in group" data-title="Aceites de Chile" data-description="Chile de Árbol, Chiltepin Fire, Morita Citrus. Cada uno con perfil de sabor único." data-price="$95">
-                    <div class="relative mb-6">
-                        <div class="w-20 h-20 bg-gradient-to-br from-red-500 to-red-700 rounded-3xl flex items-center justify-center mb-4">
-                            <span class="text-3xl">🌶️</span>
-                        </div>
-                        <span class="absolute -top-2 -right-2 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold">
-                            ARTESANAL
-                        </span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Aceites de Chile</h3>
-                    <p class="text-gray-600 mb-6 leading-relaxed">
-                        Chile de Árbol, Chiltepin Fire, Morita Citrus. Cada uno con perfil de sabor único.
-                    </p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-3xl font-bold text-primary">$95</span>
-                        <button class="add-to-cart-btn group-hover:scale-105" data-original-text="Agregar">
-                            Agregar
-                        </button>
-                    </div>
-                </div>
-
-                <div class="product-card p-8 hover-lift fade-in group" data-title="Mezclas de Especias" data-description="Fuego Sonorense, Asada Maestra, Cochinita Especial. Blends perfectamente balanceados." data-price="$85">
-                    <div class="relative mb-6">
-                        <div class="w-20 h-20 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-3xl flex items-center justify-center mb-4">
-                            <span class="text-3xl">🧂</span>
-                        </div>
-                        <span class="absolute -top-2 -right-2 bg-yellow-600 text-white px-3 py-1 rounded-full text-xs font-bold">
-                            PREMIUM
-                        </span>
-                    </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-3">Mezclas de Especias</h3>
-                    <p class="text-gray-600 mb-6 leading-relaxed">
-                        Fuego Sonorense, Asada Maestra, Cochinita Especial. Blends perfectamente balanceados.
-                    </p>
-                    <div class="flex items-center justify-between">
-                        <span class="text-3xl font-bold text-primary">$85</span>
-                        <button class="add-to-cart-btn group-hover:scale-105" data-original-text="Agregar">
-                            Agregar
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -674,7 +678,7 @@
         </div>
         <div class="mt-12 text-center text-gray-500 text-sm border-t border-gray-800 pt-8">
             <p>&copy; <span id="current-year">2024</span> Brasas El Gordo. Todos los derechos reservados.</p>
-            <p class="mt-2">Desarrollado con ❤️ por tu servidor</p>
+            <p class="mt-2">Desarrollado con ❤️ por equipo BRASAS</p>
         </div>
     </footer>
 
