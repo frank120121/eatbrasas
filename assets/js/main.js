@@ -468,7 +468,139 @@
         }, 250));
     }
 
-    // --- Feature Initialization Functions ---
+    // --- Enhanced Header and Mobile Menu Functions ---
+
+    /**
+     * Initializes the enhanced header with scroll effects and proper mobile menu
+     */
+    const initEnhancedHeader = () => {
+        const header = document.querySelector('header');
+        if (!header) return;
+
+        const handleScroll = () => {
+            if (window.scrollY > 50) {
+                header.classList.add('header-scrolled');
+            } else {
+                header.classList.remove('header-scrolled');
+            }
+        };
+
+        window.addEventListener('scroll', debounce(handleScroll, 10));
+        handleScroll(); // Call once on load
+    };
+
+    /**
+     * Initializes the enhanced mobile menu functionality
+     */
+    const initEnhancedMobileMenu = () => {
+        const mobileMenuToggles = document.querySelectorAll('.mobile-menu-toggle');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        
+        if (!mobileMenu || mobileMenuToggles.length === 0) return;
+
+        // Function to toggle menu state
+        const toggleMenu = () => {
+            const isOpen = mobileMenu.classList.contains('show');
+            
+            if (isOpen) {
+                mobileMenu.classList.remove('show');
+                document.body.style.overflow = '';
+                mobileMenuToggles.forEach(toggle => {
+                    toggle.setAttribute('aria-expanded', 'false');
+                });
+            } else {
+                mobileMenu.classList.add('show');
+                document.body.style.overflow = 'hidden';
+                mobileMenuToggles.forEach(toggle => {
+                    toggle.setAttribute('aria-expanded', 'true');
+                });
+            }
+        };
+
+        // Add click handlers to all toggle buttons
+        mobileMenuToggles.forEach(toggle => {
+            toggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleMenu();
+            });
+        });
+
+        // Close menu when clicking on navigation links
+        const menuLinks = mobileMenu.querySelectorAll('a[href^="#"]');
+        menuLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('show');
+                document.body.style.overflow = '';
+                mobileMenuToggles.forEach(toggle => {
+                    toggle.setAttribute('aria-expanded', 'false');
+                });
+            });
+        });
+
+        // Close menu on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('show')) {
+                mobileMenu.classList.remove('show');
+                document.body.style.overflow = '';
+                mobileMenuToggles.forEach(toggle => {
+                    toggle.setAttribute('aria-expanded', 'false');
+                });
+            }
+        });
+    };
+
+    /**
+     * Initializes smooth scrolling for anchor links
+     */
+    const initSmoothScrolling = () => {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 80; // Account for fixed header
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    };
+
+    /**
+     * Initializes video background functionality
+     */
+    const initVideoBackground = () => {
+        const videos = document.querySelectorAll('video[autoplay]');
+        
+        videos.forEach(video => {
+            // Ensure video plays
+            video.play().catch(e => {
+                console.log('Video autoplay prevented:', e);
+            });
+            
+            // Handle video load errors
+            video.addEventListener('error', () => {
+                console.log('Video failed to load, showing fallback background');
+                video.style.display = 'none';
+                // Show fallback background
+                const fallback = video.parentElement.querySelector('.video-fallback');
+                if (fallback) {
+                    fallback.style.display = 'block';
+                }
+            });
+
+            // Ensure video is muted for autoplay
+            video.muted = true;
+            video.setAttribute('muted', '');
+        });
+    };
+
+    // --- Original Feature Initialization Functions ---
 
     /**
      * Initializes the mobile navigation toggle functionality.
@@ -612,7 +744,7 @@
                 });
             }, {
                 root: null,
-                rootMargin: '0px',
+                rootMargin: '0px 0px -50px 0px',
                 threshold: 0.1
             });
 
@@ -643,11 +775,17 @@
      * Executes all initialization functions once the DOM is fully loaded.
      */
     document.addEventListener('DOMContentLoaded', () => {
-        // Initialize core site features
+        // Initialize enhanced features (these will override the original ones)
+        initEnhancedHeader();
+        initEnhancedMobileMenu();
+        initSmoothScrolling();
+        initVideoBackground();
+
+        // Initialize original core site features (keeping as fallback)
         initMobileNav();
         initNavbarScroll();
         initFadeInAnimations();
-        initFooterYear(); // For the footer copyright year
+        initFooterYear();
 
         // Load cart from local storage and update display immediately
         loadCartFromLocalStorage();
@@ -673,16 +811,18 @@
 
                         // --- Start: New "Agregado" Button Feedback Logic ---
                         const clickedButton = event.target;
+                        const originalText = clickedButton.dataset.originalText || clickedButton.textContent;
+                        
                         clickedButton.textContent = 'Agregado';
                         clickedButton.classList.add('added'); // Add a class for styling (e.g., green background)
                         clickedButton.disabled = true; // Disable the button to prevent multiple clicks
 
                         // Revert button text and state after a short delay
                         setTimeout(() => {
-                            clickedButton.textContent = clickedButton.dataset.originalText || 'Agregar';
+                            clickedButton.textContent = originalText;
                             clickedButton.classList.remove('added');
                             clickedButton.disabled = false;
-                        }, 2000); // Revert after 2 seconds
+                        }, 500); // Revert after 2 seconds
                         // --- End: New "Agregado" Button Feedback Logic ---
 
                     } else {
