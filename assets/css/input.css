@@ -294,12 +294,13 @@
 
     /* Home section - takes up most of the space */
     .home-section {
-        flex: 2;
+        flex: 1;
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
         overflow: hidden;
+        min-height: 0; /* Allow section to shrink below content size */
     }
 
     /* Loyalty section - compact at bottom */
@@ -308,7 +309,8 @@
         background: white;
         border-top: 1px solid #e5e7eb;
         border-bottom: 1px solid #e5e7eb;
-        min-height: 80px; /* Ensure minimum height */
+        min-height: 60px; /* Reduced minimum height for landscape */
+        max-height: 100px; /* Prevent it from getting too tall */
         padding-bottom: env(safe-area-inset-bottom, 0px); /* Account for mobile browser UI */
     }
 
@@ -349,6 +351,8 @@
         margin: 0 10px 10px;
         max-width: 100%;
         order: 1; /* Always show first on mobile */
+        font-size: 0.875rem; /* Smaller text for better fit */
+        line-height: 1.2;
     }
 
     .loyalty-buttons {
@@ -363,10 +367,10 @@
     /* CTA Button (CREAR UNA CUENTA) - smaller for compact design */
     .loyalty-buttons button:first-child {
         @apply bg-brown hover:bg-brown-dark text-white font-bold transition-all duration-300 hover:scale-105 uppercase tracking-wide focus:outline-none focus:ring-2 focus:ring-brown focus:ring-opacity-50 focus:ring-offset-2 rounded-3xl;
-        padding: 0 6px;
+        padding: 4px 8px; /* Even smaller padding */
         min-width: auto;
-        min-height: 40px;
-        font-size: 0.875rem;
+        min-height: 32px; /* Reduced height */
+        font-size: 0.75rem; /* Smaller font */
         white-space: nowrap;
         flex-shrink: 0;
     }
@@ -374,7 +378,7 @@
     /* OR text - smaller for compact design */
     .loyalty-buttons span {
         @apply text-brown font-medium;
-        font-size: 14px;
+        font-size: 12px; /* Smaller font */
         min-width: auto;
         text-align: center;
         margin: 0 4px;
@@ -388,7 +392,7 @@
         cursor: pointer;
         user-select: none;
         min-width: auto;
-        font-size: 14px;
+        font-size: 12px; /* Smaller font */
         flex-shrink: 0;
     }
 
@@ -509,8 +513,8 @@
 
     /* Force vertical layout on mobile */
     .loyalty-content {
-        @apply flex-col space-y-3;
-        padding: 1rem 0;
+        @apply flex-col space-y-2;
+        padding: 0.5rem 0; /* Reduced padding */
         margin: 0;
     }
 
@@ -521,14 +525,32 @@
 
     .loyalty-text {
         @apply w-full text-center;
-        margin: 0 0 0.75rem 0;
+        margin: 0 0 0.5rem 0; /* Reduced margin */
         order: 1;
+        font-size: 0.75rem; /* Even smaller on mobile */
+        line-height: 1.1;
     }
 
     .loyalty-buttons {
         @apply w-full justify-center;
         margin: 0;
         order: 2;
+        gap: 4px; /* Smaller gap */
+    }
+
+    /* Further reduce button sizes on mobile */
+    .loyalty-buttons button:first-child {
+        min-height: 28px;
+        font-size: 0.7rem;
+        padding: 2px 6px;
+    }
+
+    .loyalty-buttons span {
+        font-size: 10px;
+    }
+
+    .loyalty-buttons button:last-child {
+        font-size: 10px;
     }
 
     /* Cart drawer full width on mobile */
@@ -548,6 +570,61 @@
         height: 100vh;
         height: 100dvh; /* Dynamic viewport height */
         padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
+}
+
+/* ===== LANDSCAPE MOBILE ADJUSTMENTS ===== */
+@media (max-width: 768px) and (orientation: landscape) {
+    /* Make loyalty section even more compact in landscape */
+    .loyalty-section-compact {
+        min-height: 50px;
+        max-height: 70px;
+    }
+
+    .loyalty-content {
+        padding: 0.25rem 0;
+        gap: 0;
+    }
+
+    .loyalty-text {
+        font-size: 0.7rem;
+        line-height: 1;
+        margin: 0 0 0.25rem 0;
+    }
+
+    .loyalty-buttons button:first-child {
+        min-height: 24px;
+        font-size: 0.65rem;
+        padding: 1px 4px;
+    }
+
+    .loyalty-buttons span {
+        font-size: 9px;
+    }
+
+    .loyalty-buttons button:last-child {
+        font-size: 9px;
+    }
+
+    /* Adjust hero content for landscape */
+    .hero-content {
+        @apply px-8;
+    }
+
+    .hero-title-main {
+        font-size: clamp(1.5rem, 5vw, 2.5rem);
+    }
+
+    .hero-title-accent {
+        font-size: clamp(2rem, 6vw, 3.5rem);
+    }
+
+    .hero-description {
+        @apply text-sm leading-relaxed;
+    }
+
+    .btn, .btn-secondary {
+        @apply px-4 py-2 text-xs;
     }
 }
 

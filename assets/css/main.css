@@ -1367,12 +1367,14 @@ video {
 /* Home section - takes up most of the space */
 
 .home-section {
-  flex: 2;
+  flex: 1;
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  min-height: 0;
+  /* Allow section to shrink below content size */
 }
 
 /* Loyalty section - compact at bottom */
@@ -1382,8 +1384,10 @@ video {
   background: white;
   border-top: 1px solid #e5e7eb;
   border-bottom: 1px solid #e5e7eb;
-  min-height: 80px;
-  /* Ensure minimum height */
+  min-height: 60px;
+  /* Reduced minimum height for landscape */
+  max-height: 100px;
+  /* Prevent it from getting too tall */
   padding-bottom: env(safe-area-inset-bottom, 0px);
   /* Account for mobile browser UI */
 }
@@ -1455,16 +1459,17 @@ video {
 
 .loyalty-text {
   text-align: center;
-  font-size: 1rem;
   line-height: 1.5rem;
   font-weight: 900;
-  line-height: 1.25;
   --tw-text-opacity: 1;
   color: rgb(139 69 19 / var(--tw-text-opacity, 1));
   margin: 0 10px 10px;
   max-width: 100%;
   order: 1;
   /* Always show first on mobile */
+  font-size: 0.875rem;
+  /* Smaller text for better fit */
+  line-height: 1.2;
 }
 
 .loyalty-buttons {
@@ -1515,10 +1520,13 @@ video {
 }
 
 .loyalty-buttons button:first-child {
-  padding: 0 6px;
+  padding: 4px 8px;
+  /* Even smaller padding */
   min-width: auto;
-  min-height: 40px;
-  font-size: 0.875rem;
+  min-height: 32px;
+  /* Reduced height */
+  font-size: 0.75rem;
+  /* Smaller font */
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -1529,7 +1537,8 @@ video {
   font-weight: 500;
   --tw-text-opacity: 1;
   color: rgb(139 69 19 / var(--tw-text-opacity, 1));
-  font-size: 14px;
+  font-size: 12px;
+  /* Smaller font */
   min-width: auto;
   text-align: center;
   margin: 0 4px;
@@ -1577,7 +1586,8 @@ video {
      -moz-user-select: none;
           user-select: none;
   min-width: auto;
-  font-size: 14px;
+  font-size: 12px;
+  /* Smaller font */
   flex-shrink: 0;
 }
 
@@ -1987,6 +1997,10 @@ video {
 
 .flex-shrink-0 {
   flex-shrink: 0;
+}
+
+.shrink {
+  flex-shrink: 1;
 }
 
 .border-collapse {
@@ -3102,12 +3116,13 @@ video {
 
   .loyalty-content > :not([hidden]) ~ :not([hidden]) {
     --tw-space-y-reverse: 0;
-    margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));
-    margin-bottom: calc(0.75rem * var(--tw-space-y-reverse));
+    margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
   }
 
   .loyalty-content {
-    padding: 1rem 0;
+    padding: 0.5rem 0;
+    /* Reduced padding */
     margin: 0;
   }
 
@@ -3120,8 +3135,12 @@ video {
   .loyalty-text {
     width: 100%;
     text-align: center;
-    margin: 0 0 0.75rem 0;
+    margin: 0 0 0.5rem 0;
+    /* Reduced margin */
     order: 1;
+    font-size: 0.75rem;
+    /* Even smaller on mobile */
+    line-height: 1.1;
   }
 
   .loyalty-buttons {
@@ -3129,6 +3148,24 @@ video {
     justify-content: center;
     margin: 0;
     order: 2;
+    gap: 4px;
+    /* Smaller gap */
+  }
+
+  /* Further reduce button sizes on mobile */
+
+  .loyalty-buttons button:first-child {
+    min-height: 28px;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+  }
+
+  .loyalty-buttons span {
+    font-size: 10px;
+  }
+
+  .loyalty-buttons button:last-child {
+    font-size: 10px;
   }
 
   /* Cart drawer full width on mobile */
@@ -3154,6 +3191,72 @@ video {
     height: 100dvh;
     /* Dynamic viewport height */
     padding-bottom: env(safe-area-inset-bottom, 20px);
+  }
+}
+
+/* ===== LANDSCAPE MOBILE ADJUSTMENTS ===== */
+
+@media (max-width: 768px) and (orientation: landscape) {
+  /* Make loyalty section even more compact in landscape */
+
+  .loyalty-section-compact {
+    min-height: 50px;
+    max-height: 70px;
+  }
+
+  .loyalty-content {
+    padding: 0.25rem 0;
+    gap: 0;
+  }
+
+  .loyalty-text {
+    font-size: 0.7rem;
+    line-height: 1;
+    margin: 0 0 0.25rem 0;
+  }
+
+  .loyalty-buttons button:first-child {
+    min-height: 24px;
+    font-size: 0.65rem;
+    padding: 1px 4px;
+  }
+
+  .loyalty-buttons span {
+    font-size: 9px;
+  }
+
+  .loyalty-buttons button:last-child {
+    font-size: 9px;
+  }
+
+  /* Adjust hero content for landscape */
+
+  .hero-content {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .hero-title-main {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+  }
+
+  .hero-title-accent {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+  }
+
+  .hero-description {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    line-height: 1.625;
+  }
+
+  .btn, .btn-secondary {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
   }
 }
 
