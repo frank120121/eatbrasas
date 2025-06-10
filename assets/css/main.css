@@ -1341,6 +1341,8 @@ video {
 
 .above-fold-container {
   height: 100vh;
+  height: 100dvh;
+  /* Use dynamic viewport height for mobile browsers */
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -1380,6 +1382,10 @@ video {
   background: white;
   border-top: 1px solid #e5e7eb;
   border-bottom: 1px solid #e5e7eb;
+  min-height: 80px;
+  /* Ensure minimum height */
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  /* Account for mobile browser UI */
 }
 
 /* Section spacing */
@@ -1432,7 +1438,7 @@ video {
 
 .loyalty-content {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0;
@@ -1457,6 +1463,8 @@ video {
   color: rgb(139 69 19 / var(--tw-text-opacity, 1));
   margin: 0 10px 10px;
   max-width: 100%;
+  order: 1;
+  /* Always show first on mobile */
 }
 
 .loyalty-buttons {
@@ -1467,6 +1475,8 @@ video {
   margin-bottom: 10px;
   gap: 5px;
   flex-wrap: nowrap;
+  order: 2;
+  /* Always show second on mobile */
 }
 
 /* CTA Button (CREAR UNA CUENTA) - smaller for compact design */
@@ -3084,14 +3094,41 @@ video {
     line-height: 1.75rem;
   }
 
-  /* Loyalty banner mobile - icon stays hidden, text centered */
+  /* Force vertical layout on mobile */
+
+  .loyalty-content {
+    flex-direction: column;
+  }
+
+  .loyalty-content > :not([hidden]) ~ :not([hidden]) {
+    --tw-space-y-reverse: 0;
+    margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));
+    margin-bottom: calc(0.75rem * var(--tw-space-y-reverse));
+  }
+
+  .loyalty-content {
+    padding: 1rem 0;
+    margin: 0;
+  }
+
+  /* Loyalty banner mobile - icon stays hidden, text centered and on top */
 
   .loyalty-icon {
     display: none;
   }
 
   .loyalty-text {
-    margin-bottom: 10px;
+    width: 100%;
+    text-align: center;
+    margin: 0 0 0.75rem 0;
+    order: 1;
+  }
+
+  .loyalty-buttons {
+    width: 100%;
+    justify-content: center;
+    margin: 0;
+    order: 2;
   }
 
   /* Cart drawer full width on mobile */
@@ -3109,34 +3146,50 @@ video {
     min-height: 44px;
     min-width: 44px;
   }
+
+  /* Fix mobile browser UI overlap */
+
+  .above-fold-container {
+    height: 100vh;
+    height: 100dvh;
+    /* Dynamic viewport height */
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+  }
 }
 
 /* ===== DESKTOP RESPONSIVE ===== */
 
 @media (min-width: 769px) {
   .loyalty-content {
+    flex-direction: row;
     flex-wrap: nowrap;
+    align-items: center;
     text-align: left;
     margin: 0;
+    gap: 0;
   }
 
   .loyalty-icon {
     display: flex;
     height: 50px;
     margin: 5px;
+    order: 1;
   }
 
   .loyalty-text {
+    flex: 1 1 0%;
     text-align: left;
     font-size: 1.25rem;
     line-height: 1.75rem;
     margin-left: 15px;
     margin-bottom: 0;
+    order: 2;
   }
 
   .loyalty-buttons {
     margin-left: 15px;
     margin-bottom: 0;
+    order: 3;
   }
 
   .loyalty-buttons button:last-child {

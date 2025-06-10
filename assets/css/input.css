@@ -273,6 +273,7 @@
     /* Above the fold container - contains header, home, and loyalty */
     .above-fold-container {
         height: 100vh;
+        height: 100dvh; /* Use dynamic viewport height for mobile browsers */
         display: flex;
         flex-direction: column;
         overflow: hidden;
@@ -307,6 +308,8 @@
         background: white;
         border-top: 1px solid #e5e7eb;
         border-bottom: 1px solid #e5e7eb;
+        min-height: 80px; /* Ensure minimum height */
+        padding-bottom: env(safe-area-inset-bottom, 0px); /* Account for mobile browser UI */
     }
 
     /* Section spacing */
@@ -331,7 +334,7 @@
 
     /* Loyalty banner responsive - BASE STYLES */
     .loyalty-content {
-        @apply flex flex-wrap items-center justify-center;
+        @apply flex flex-col items-center justify-center;
         gap: 0;
         padding: 0.75rem 0;
     }
@@ -345,6 +348,7 @@
         @apply text-base font-black text-brown leading-tight text-center;
         margin: 0 10px 10px;
         max-width: 100%;
+        order: 1; /* Always show first on mobile */
     }
 
     .loyalty-buttons {
@@ -353,6 +357,7 @@
         margin-bottom: 10px;
         gap: 5px;
         flex-wrap: nowrap;
+        order: 2; /* Always show second on mobile */
     }
 
     /* CTA Button (CREAR UNA CUENTA) - smaller for compact design */
@@ -502,13 +507,28 @@
         @apply text-lg py-4 border-b border-gray-100;
     }
 
-    /* Loyalty banner mobile - icon stays hidden, text centered */
+    /* Force vertical layout on mobile */
+    .loyalty-content {
+        @apply flex-col space-y-3;
+        padding: 1rem 0;
+        margin: 0;
+    }
+
+    /* Loyalty banner mobile - icon stays hidden, text centered and on top */
     .loyalty-icon {
         @apply hidden;
     }
 
     .loyalty-text {
-        margin-bottom: 10px;
+        @apply w-full text-center;
+        margin: 0 0 0.75rem 0;
+        order: 1;
+    }
+
+    .loyalty-buttons {
+        @apply w-full justify-center;
+        margin: 0;
+        order: 2;
     }
 
     /* Cart drawer full width on mobile */
@@ -522,30 +542,41 @@
     .remove-item-btn {
         @apply min-h-[44px] min-w-[44px];
     }
+
+    /* Fix mobile browser UI overlap */
+    .above-fold-container {
+        height: 100vh;
+        height: 100dvh; /* Dynamic viewport height */
+        padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
 }
 
 /* ===== DESKTOP RESPONSIVE ===== */
 @media (min-width: 769px) {
     .loyalty-content {
-        @apply flex-nowrap text-left;
+        @apply flex-row flex-nowrap text-left items-center;
         margin: 0;
+        gap: 0;
     }
 
     .loyalty-icon {
         @apply flex;
         height: 50px;
         margin: 5px;
+        order: 1;
     }
 
     .loyalty-text {
-        @apply text-left text-xl;
+        @apply text-left text-xl flex-1;
         margin-left: 15px;
         margin-bottom: 0;
+        order: 2;
     }
 
     .loyalty-buttons {
         margin-left: 15px;
         margin-bottom: 0;
+        order: 3;
     }
 
     .loyalty-buttons button:last-child {
