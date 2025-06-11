@@ -4,728 +4,681 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ===== CSS CUSTOM PROPERTIES ===== */
+/* ===== BASE LAYER - Accessibility & Fundamentals ===== */
 @layer base {
-    :root {
-        --color-primary: #ad2118;
-        --color-primary-dark: #8a1a13;
-        --color-primary-light: #c52d22;
-        --color-brown: #8B4513;
-        --color-brown-dark: #6d3610;
-        --animation-duration: 300ms;
-        --animation-duration-slow: 700ms;
-        --border-radius-card: 1.5rem;
-        --border-radius-lg: 1rem;
-        --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    }
-
-    /* Accessibility: Respect user's motion preferences */
-    @media (prefers-reduced-motion: reduce) {
-        *,
-        *::before,
-        *::after {
-            animation-duration: 0.01ms !important;
-            animation-iteration-count: 1 !important;
-            transition-duration: 0.01ms !important;
-        }
-        
-        .fade-in,
-        .hover-lift,
-        .shine {
-            @apply transition-none;
-        }
+  /* Accessibility: Respect user's motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
     }
     
-    /* High contrast mode support */
-    @media (prefers-contrast: high) {
-        .btn {
-            @apply border-2 border-current;
-        }
-        
-        .product-card {
-            @apply border-2 border-gray-800;
-        }
-        
-        .text-gradient {
-            @apply text-primary bg-none;
-        }
+    .fade-in,
+    .hover-lift,
+    .shine {
+      @apply transition-none;
     }
+  }
+  
+  /* High contrast mode support */
+  @media (prefers-contrast: high) {
+    .btn {
+      @apply border-2 border-current;
+    }
+    
+    .product-card {
+      @apply border-2 border-gray-800;
+    }
+    
+    .text-gradient {
+      @apply text-primary bg-none;
+    }
+  }
 
-    /* Screen reader only utility */
-    .sr-only {
-        position: absolute;
-        width: 1px;
-        height: 1px;
-        padding: 0;
-        margin: -1px;
-        overflow: hidden;
-        clip: rect(0, 0, 0, 0);
-        white-space: nowrap;
-        border: 0;
-    }
+  /* Screen reader utilities */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
 
-    .sr-only.focus:focus {
-        position: static;
-        width: auto;
-        height: auto;
-        padding: 0.5rem 1rem;
-        margin: 0;
-        overflow: visible;
-        clip: auto;
-        white-space: normal;
-        @apply bg-primary text-white font-bold z-50;
-    }
+  .sr-only:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    padding: 0.5rem 1rem;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+    @apply bg-primary text-white font-bold z-50;
+  }
 }
 
-/* ===== COMPONENT CLASSES ===== */
+/* ===== COMPONENT LAYER - Reusable Components ===== */
 @layer components {
-    /* Navigation */
-    .nav-link {
-        @apply text-gray-700 font-bold text-sm uppercase tracking-wider transition-colors duration-300 hover:text-primary focus:text-primary focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-2 rounded-md px-2 py-1;
-    }
-    .nav-link.active {
-        @apply text-primary;
-    }
+  /* Base Navigation */
+  .nav-link {
+    @apply text-gray-700 font-bold text-sm uppercase tracking-wider;
+    @apply px-2 py-1 rounded-md transition-colors duration-300;
+    @apply hover:text-primary focus:text-primary;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-2;
+  }
 
-    /* Buttons */
-    .btn {
-        @apply bg-primary text-white font-bold uppercase tracking-wider px-12 py-4 transition-all duration-300 hover:bg-primary-dark hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-2 rounded-md;
-    }
+  .nav-link.active {
+    @apply text-primary;
+  }
 
-    .btn-secondary {
-        @apply bg-transparent border-2 border-brown text-brown font-bold uppercase tracking-wider px-8 py-3 transition-all duration-300 hover:bg-brown hover:text-white focus:outline-none focus:ring-2 focus:ring-brown focus:ring-opacity-50 focus:ring-offset-2;
-    }
+  /* Base Button Styles */
+  .btn {
+    @apply bg-primary text-white font-bold uppercase tracking-wider;
+    @apply px-12 py-4 rounded-md transition-all duration-300;
+    @apply hover:bg-primary-dark hover:-translate-y-0.5;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-2;
+  }
 
-    /* Skip link for accessibility */
-    .skip-link {
-        @apply sr-only focus:not-sr-only fixed top-4 left-4 bg-primary text-white px-4 py-2 rounded-md font-bold z-50 transition-all duration-200;
-    }
+  .btn-secondary {
+    @apply bg-transparent border-2 border-brown text-brown font-bold uppercase tracking-wider;
+    @apply px-8 py-3 rounded-md transition-all duration-300;
+    @apply hover:bg-brown hover:text-white;
+    @apply focus:outline-none focus:ring-2 focus:ring-brown focus:ring-opacity-50 focus:ring-offset-2;
+  }
 
-    /* Cards */
-    .hover-lift {
-        @apply transition-all duration-300 hover:-translate-y-2;
-        box-shadow: var(--shadow-card);
-    }
-    
-    .hover-lift:hover {
-        box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15), 0 10px 20px -5px rgba(0, 0, 0, 0.1);
-    }
+  /* Skip link for accessibility */
+  .skip-link {
+    @apply sr-only focus:not-sr-only fixed top-4 left-4 bg-primary text-white;
+    @apply px-4 py-2 rounded-md font-bold z-50 transition-all duration-200;
+  }
 
-    .product-card {
-        @apply bg-white shadow-lg rounded-3xl;
-        transition: all var(--animation-duration) ease-out;
-    }
+  /* Card Components */
+  .hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-2;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+  
+  .hover-lift:hover {
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15), 0 10px 20px -5px rgba(0, 0, 0, 0.1);
+  }
 
-    /* Text effects */
-    .text-gradient {
-        @apply bg-gradient-to-r from-orange-500 to-orange-300 bg-clip-text text-transparent;
-    }
+  .product-card {
+    @apply bg-white shadow-lg rounded-3xl transition-all duration-300;
+  }
 
-    /* Animations */
-    .fade-in {
-        @apply opacity-0 translate-y-8;
-        transition: all var(--animation-duration-slow) ease-out;
-    }
-    .fade-in.visible {
-        @apply opacity-100 translate-y-0;
-    }
+  /* Text Effects */
+  .text-gradient {
+    @apply bg-gradient-to-r from-orange-500 to-orange-300 bg-clip-text text-transparent;
+  }
 
-    .shine {
-        @apply relative overflow-hidden;
-    }
-    .shine::before {
-        content: '';
-        @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent;
-        left: -100%;
-        transition: left 500ms ease-in-out;
-    }
-    .shine:hover::before {
-        left: 100%;
-    }
+  /* Animation Classes */
+  .fade-in {
+    @apply opacity-0 translate-y-8 transition-all duration-700;
+  }
+  
+  .fade-in.visible {
+    @apply opacity-100 translate-y-0;
+  }
 
-    /* Glass effects */
-    .glass {
-        @apply bg-white/10 backdrop-blur-sm border border-white/10;
-    }
+  .shine {
+    @apply relative overflow-hidden;
+  }
+  
+  .shine::before {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent;
+    left: -100%;
+    transition: left 500ms ease-in-out;
+  }
+  
+  .shine:hover::before {
+    left: 100%;
+  }
 
-    .glass-dark {
-        @apply bg-black/30 backdrop-blur-xl border border-white/10;
-    }
+  /* Glass Effects */
+  .glass {
+    @apply bg-white/10 backdrop-blur-sm border border-white/10;
+  }
 
-    /* Header styles */
-    .header-scrolled {
-        @apply bg-white/95 backdrop-blur-xl shadow-lg border-b border-gray-200;
-    }
+  .glass-dark {
+    @apply bg-black/30 backdrop-blur-xl border border-white/10;
+  }
 
-    .location-picker, .user-actions {
-        @apply flex items-center gap-2 text-brown px-2 py-1 rounded-lg cursor-pointer transition-all duration-300 hover:text-primary hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-1;
-    }
+  /* Header Styles */
+  .header-scrolled {
+    @apply bg-white/95 backdrop-blur-xl shadow-lg border-b border-gray-200;
+  }
 
-    .cart-icon {
-        @apply text-brown p-2 rounded-lg transition-all duration-300 hover:text-primary hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-1;
-    }
+  .location-picker, .user-actions {
+    @apply flex items-center gap-2 text-brown px-2 py-1 rounded-lg cursor-pointer;
+    @apply transition-all duration-300 hover:text-primary hover:bg-gray-50;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-1;
+  }
 
-    /* Mobile menu */
-    .mobile-menu {
-        @apply transform translate-x-full transition-transform duration-300 ease-in-out;
-    }
-    .mobile-menu.show {
-        @apply translate-x-0;
-    }
+  .cart-icon {
+    @apply text-brown p-2 rounded-lg transition-all duration-300;
+    @apply hover:text-primary hover:bg-gray-50;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-1;
+  }
 
-    /* Hero section - Adjusted for better fold visibility */
-    .hero-background {
-        @apply absolute inset-0 z-0;
-    }
+  /* Mobile Menu */
+  .mobile-menu {
+    @apply transform translate-x-full transition-transform duration-300 ease-in-out;
+  }
+  
+  .mobile-menu.show {
+    @apply translate-x-0;
+  }
 
-    .hero-overlay {
-        @apply absolute inset-0 bg-black/40 z-10;
-    }
+  /* Hero Section Components */
+  .hero-background {
+    @apply absolute inset-0 z-0;
+  }
 
-    .hero-content {
-        @apply relative z-20;
-    }
+  .hero-overlay {
+    @apply absolute inset-0 bg-black/40 z-10;
+  }
 
-    .hero-badge {
-        @apply border-4 border-white px-6 py-2 font-black text-white inline-block;
-    }
+  .hero-content {
+    @apply relative z-20;
+  }
 
-    .hero-title-main {
-        @apply font-black text-white leading-tight mb-4;
-        font-size: clamp(2rem, 6vw, 4rem);
-    }
+  .hero-badge {
+    @apply border-4 border-white px-6 py-2 font-black text-white inline-block;
+  }
 
-    .hero-title-accent {
-        @apply font-black text-orange-500 leading-none;
-        font-size: clamp(3rem, 8vw, 6rem);
-    }
+  .hero-title-main {
+    @apply font-black text-white leading-tight mb-4;
+    font-size: clamp(2rem, 6vw, 4rem);
+  }
 
-    .hero-subtitle {
-        @apply font-bold text-white tracking-widest mb-6;
-    }
+  .hero-title-accent {
+    @apply font-black text-orange-500 leading-none;
+    font-size: clamp(3rem, 8vw, 6rem);
+  }
 
-    .hero-description {
-        @apply text-white leading-relaxed mb-8 max-w-2xl;
-    }
+  .hero-subtitle {
+    @apply font-bold text-white tracking-widest mb-6;
+  }
 
-    /* Cart styles - Enhanced */
-    .cart-item {
-        @apply bg-white border border-gray-200 p-4 transition-all duration-300 hover:shadow-md hover:-translate-y-0.5 rounded-3xl;
-    }
+  .hero-description {
+    @apply text-white leading-relaxed mb-8 max-w-2xl;
+  }
 
-    .cart-item-removing {
-        @apply opacity-0 translate-x-full transition-all duration-300;
-    }
+  /* Cart Components */
+  .cart-item {
+    @apply bg-white border border-gray-200 p-4 rounded-3xl;
+    @apply transition-all duration-300 hover:shadow-md hover:-translate-y-0.5;
+  }
 
-    .cart-item-error {
-        @apply border-red-300 bg-red-50;
-    }
+  .cart-item-removing {
+    @apply opacity-0 translate-x-full transition-all duration-300;
+  }
 
-    .quantity-btn {
-        @apply w-8 h-8 rounded-full flex items-center justify-center font-bold transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-1;
-    }
+  .cart-item-error {
+    @apply border-red-300 bg-red-50;
+  }
 
-    .remove-item-btn {
-        @apply p-2 rounded-lg transition-all duration-300 hover:bg-red-50 hover:text-red-600 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 focus:ring-offset-1;
-    }
+  .quantity-btn {
+    @apply w-8 h-8 rounded-full flex items-center justify-center font-bold;
+    @apply transition-all duration-300 hover:scale-110;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-1;
+  }
 
-    .add-to-cart-btn {
-        @apply bg-gray-900 text-white font-semibold px-6 py-3 transition-all duration-300 hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-opacity-50 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed rounded-3xl;
-    }
-    .add-to-cart-btn.added {
-        @apply bg-green-500 text-white;
-    }
-    .add-to-cart-btn.loading {
-        @apply bg-gray-400 cursor-not-allowed;
-    }
+  .remove-item-btn {
+    @apply p-2 rounded-lg transition-all duration-300;
+    @apply hover:bg-red-50 hover:text-red-600 hover:scale-105;
+    @apply focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 focus:ring-offset-1;
+  }
 
-    /* Loading states */
-    .cart-updating {
-        @apply pointer-events-none opacity-70;
-    }
+  .add-to-cart-btn {
+    @apply bg-gray-900 text-white font-semibold px-6 py-3 rounded-3xl;
+    @apply transition-all duration-300 hover:bg-orange-500;
+    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-opacity-50 focus:ring-offset-2;
+    @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  
+  .add-to-cart-btn.added {
+    @apply bg-green-500 text-white;
+  }
+  
+  .add-to-cart-btn.loading {
+    @apply bg-gray-400 cursor-not-allowed;
+  }
 
-    .cart-loading::after {
-        content: '';
-        @apply inline-block w-4 h-4 border-2 border-gray-300 border-t-orange-500 rounded-full ml-2;
-        animation: spin 1s linear infinite;
-    }
+  /* Loading States */
+  .cart-updating {
+    @apply pointer-events-none opacity-70;
+  }
 
-    /* Toast notifications */
-    .toast {
-        @apply p-4 rounded-xl shadow-lg text-white text-sm opacity-0 transform translate-y-20 transition-all duration-300 ease-out max-w-sm;
-    }
-    .toast.show {
-        @apply opacity-100 translate-y-0;
-    }
-    .toast.success {
-        @apply bg-green-600;
-    }
-    .toast.error {
-        @apply bg-red-600;
-    }
-    .toast.info {
-        @apply bg-blue-600;
-    }
-    .toast.warning {
-        @apply bg-yellow-600;
-    }
+  .cart-loading::after {
+    content: '';
+    @apply inline-block w-4 h-4 border-2 border-gray-300 border-t-orange-500 rounded-full ml-2;
+    animation: spin 1s linear infinite;
+  }
 
-    /* Above the fold container - contains header, home, and loyalty */
-    .above-fold-container {
-        height: 100vh;
-        height: 100dvh; /* Use dynamic viewport height for mobile browsers */
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-        position: relative; /* Ensure proper stacking */
-    }
+  /* Toast Notifications */
+  .toast {
+    @apply p-4 rounded-xl shadow-lg text-white text-sm max-w-sm;
+    @apply opacity-0 transform translate-y-20 transition-all duration-300 ease-out;
+  }
+  
+  .toast.show {
+    @apply opacity-100 translate-y-0;
+  }
+  
+  .toast.success { @apply bg-green-600; }
+  .toast.error { @apply bg-red-600; }
+  .toast.info { @apply bg-blue-600; }
+  .toast.warning { @apply bg-yellow-600; }
 
-    /* Header within above-fold container */
-    .above-fold-header {
-        flex-shrink: 0;
-        height: 4rem; /* 64px - matches h-16 */
-        position: relative; /* Change from fixed to relative */
-        z-index: 50;
-    }
+  /* Layout Components - Above the Fold */
+  .above-fold-container {
+    height: 100vh;
+    height: 100dvh; /* Dynamic viewport height for mobile */
+    @apply flex flex-col overflow-hidden relative;
+  }
 
-    /* Main content area (home + loyalty) */
-    .above-fold-content {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        min-height: 0; /* Allow content to shrink */
-    }
+  .above-fold-header {
+    @apply flex-shrink-0 h-16 relative z-50;
+  }
 
-    /* Home section - takes up most of the space */
-    .home-section {
-        flex: 1;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        min-height: 0; /* Allow section to shrink */
-    }
+  .above-fold-content {
+    @apply flex flex-col flex-1 min-h-0;
+  }
 
-    /* Loyalty section - compact at bottom */
-    .loyalty-section-compact {
-        flex-shrink: 0;
-        background: white;
-        border-top: 1px solid #e5e7eb;
-        border-bottom: 1px solid #e5e7eb;
-        height: 4rem; /* Same as header - 64px */
-        min-height: 4rem;
-        max-height: 4rem;
-        display: flex;
-        align-items: center;
-        padding-bottom: env(safe-area-inset-bottom, 0px);
-    }
+  .home-section {
+    @apply flex-1 relative flex items-center justify-center overflow-hidden min-h-0;
+  }
 
-    /* Section spacing */
-    .section-padding {
-        @apply py-20 lg:py-32;
-    }
+  .loyalty-section-compact {
+    @apply flex-shrink-0 bg-white border-t border-b border-gray-200;
+    @apply h-16 min-h-16 max-h-16 flex items-center;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
 
-    /* Specific class for products section - normal padding, not full viewport */
-    .products-section {
-        @apply py-20 lg:py-32 bg-white;
-    }
+  /* Section Spacing */
+  .section-padding {
+    @apply py-20 lg:py-32;
+  }
 
-    /* New styles for full viewport height sections */
-    .full-viewport-section {
-        height: 100vh;
-    }
+  .products-section {
+    @apply py-20 lg:py-32 bg-white;
+  }
 
-    /* Loyalty section - Full viewport height */
-    .loyalty-section {
-        @apply bg-white full-viewport-section flex items-center;
-    }
+  .full-viewport-section {
+    height: 100vh;
+  }
 
-    /* Loyalty banner responsive - BASE STYLES */
-    .loyalty-content {
-        @apply flex items-center justify-center w-full h-full;
-        gap: 0;
-        padding: 0;
-    }
+  .loyalty-section {
+    @apply bg-white full-viewport-section flex items-center;
+  }
 
-    .loyalty-icon {
-        @apply w-12 h-12 flex-shrink-0 hidden;
-        margin: 0 8px 0 0;
-    }
+  /* Loyalty Banner Components */
+  .loyalty-content {
+    @apply flex items-center justify-center w-full h-full;
+    gap: 0;
+    padding: 0;
+  }
 
-    .loyalty-text {
-        @apply text-sm font-black text-brown leading-tight text-center flex-1;
-        margin: 0;
-        order: 1;
-    }
+  .loyalty-icon {
+    @apply w-12 h-12 flex-shrink-0 hidden;
+    margin: 0 8px 0 0;
+  }
 
-    .loyalty-buttons {
-        @apply flex items-center justify-center flex-shrink-0;
-        margin: 0;
-        gap: 8px;
-        order: 2;
-    }
+  .loyalty-text {
+    @apply text-sm font-black text-brown leading-tight text-center flex-1;
+    margin: 0;
+    order: 1;
+  }
 
-    /* CTA Button (CREAR UNA CUENTA) - compact design */
-    .loyalty-buttons button:first-child {
-        @apply bg-brown hover:bg-brown-dark text-white font-bold transition-all duration-300 hover:scale-105 uppercase tracking-wide focus:outline-none focus:ring-2 focus:ring-brown focus:ring-opacity-50 focus:ring-offset-2 rounded-2xl;
-        padding: 6px 12px;
-        min-width: auto;
-        min-height: 32px;
-        font-size: 0.75rem;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
+  .loyalty-buttons {
+    @apply flex items-center justify-center flex-shrink-0;
+    margin: 0;
+    gap: 8px;
+    order: 2;
+  }
 
-    /* OR text - compact design */
-    .loyalty-buttons span {
-        @apply text-brown font-medium;
-        font-size: 0.75rem;
-        min-width: auto;
-        text-align: center;
-        margin: 0;
-        flex-shrink: 0;
-    }
+  /* CTA Button (CREAR UNA CUENTA) */
+  .loyalty-buttons button:first-child {
+    @apply bg-brown hover:bg-brown-dark text-white font-bold rounded-2xl;
+    @apply transition-all duration-300 hover:scale-105 uppercase tracking-wide;
+    @apply focus:outline-none focus:ring-2 focus:ring-brown focus:ring-opacity-50 focus:ring-offset-2;
+    padding: 6px 12px;
+    min-width: auto;
+    min-height: 32px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
 
-    /* Sign in text link (INICIAR SESIÓN) - compact design */
-    .loyalty-buttons button:last-child {
-        @apply bg-transparent text-brown font-medium hover:text-brown-dark uppercase tracking-wide underline decoration-2 underline-offset-4 hover:decoration-brown-dark transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-brown focus:ring-opacity-50 focus:ring-offset-2;
-        padding: 0;
-        cursor: pointer;
-        user-select: none;
-        min-width: auto;
-        font-size: 0.75rem;
-        flex-shrink: 0;
-    }
+  /* OR text */
+  .loyalty-buttons span {
+    @apply text-brown font-medium;
+    font-size: 0.75rem;
+    min-width: auto;
+    text-align: center;
+    margin: 0;
+    flex-shrink: 0;
+  }
 
-    .sticky-header {
-        position: sticky;
-        top: 0;
-        z-index: 50;
-    }
+  /* Sign in link (INICIAR SESIÓN) */
+  .loyalty-buttons button:last-child {
+    @apply bg-transparent text-brown font-medium hover:text-brown-dark;
+    @apply uppercase tracking-wide underline decoration-2 underline-offset-4;
+    @apply hover:decoration-brown-dark transition-all duration-300;
+    @apply focus:outline-none focus:ring-2 focus:ring-brown focus:ring-opacity-50 focus:ring-offset-2;
+    padding: 0;
+    cursor: pointer;
+    user-select: none;
+    min-width: auto;
+    font-size: 0.75rem;
+    flex-shrink: 0;
+  }
 
-    /* Enhanced error states */
-    .form-error {
-        @apply border-red-500 bg-red-50 focus:ring-red-500;
-    }
+  .sticky-header {
+    @apply sticky top-0 z-50;
+  }
 
-    .error-message {
-        @apply text-red-600 text-sm mt-1 font-medium;
-    }
+  /* Form Components */
+  .form-error {
+    @apply border-red-500 bg-red-50 focus:ring-red-500;
+  }
 
-    /* Loading spinner */
-    .spinner {
-        @apply inline-block w-4 h-4 border-2 border-gray-300 border-t-primary rounded-full;
-        animation: spin 1s linear infinite;
-    }
+  .error-message {
+    @apply text-red-600 text-sm mt-1 font-medium;
+  }
+
+  /* Loading Spinner */
+  .spinner {
+    @apply inline-block w-4 h-4 border-2 border-gray-300 border-t-primary rounded-full;
+    animation: spin 1s linear infinite;
+  }
 }
 
 /* ===== UTILITY OVERRIDES ===== */
 @layer utilities {
-    /* Custom gradient background */
-    .gradient-bg {
-        background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-    }
+  /* Custom gradient background */
+  .gradient-bg {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  }
 
-    /* Video styling */
-    .bg-video {
-        @apply w-full h-full object-cover;
-    }
+  /* Video styling */
+  .bg-video {
+    @apply w-full h-full object-cover;
+  }
 
-    /* Z-index management */
-    .z-header {
-        z-index: 50;
-    }
+  /* Z-index management */
+  .z-header { z-index: 50; }
+  .z-cart { z-index: 60; }
+  .z-toast { z-index: 70; }
 
-    .z-cart {
-        z-index: 60;
-    }
+  /* Focus utilities */
+  .focus-visible {
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-2;
+  }
 
-    .z-toast {
-        z-index: 70;
-    }
+  /* Animation utilities */
+  .animate-pulse-slow {
+    animation: pulse 3s ease-in-out infinite;
+  }
 
-    /* Focus utilities */
-    .focus-visible {
-        @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-2;
-    }
-
-    /* Animation utilities */
-    .animate-pulse-slow {
-        animation: pulse 3s ease-in-out infinite;
-    }
-
-    .animate-bounce-subtle {
-        animation: bounce-subtle 2s ease-in-out infinite;
-    }
+  .animate-bounce-subtle {
+    animation: bounce-subtle 2s ease-in-out infinite;
+  }
 }
 
-/* ===== CART OVERLAY AND DRAWER FIXES ===== */
+/* ===== CART OVERLAY AND DRAWER ===== */
 #cart-overlay {
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
+  pointer-events: none;
 }
 
 #cart-overlay.show {
-    opacity: 1;
-    visibility: visible;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 #cart-drawer {
-    transform: translateX(100%);
-    transition: transform 0.3s ease-out;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-out;
 }
 
 #cart-drawer.show {
-    transform: translateX(0);
+  transform: translateX(0);
 }
 
-/* Ensure proper stacking and visibility */
-#cart-overlay {
-    pointer-events: none;
-}
-
-#cart-overlay.show {
-    pointer-events: auto;
-}
-
-/* ===== MOBILE RESPONSIVE ADJUSTMENTS ===== */
+/* ===== RESPONSIVE BREAKPOINTS ===== */
 @media (max-width: 768px) {
-    .hero-badge {
-        @apply text-lg px-4 py-1;
-        border-width: 3px;
-    }
+  .hero-badge {
+    @apply text-lg px-4 py-1;
+    border-width: 3px;
+  }
 
-    .hero-subtitle {
-        @apply text-sm tracking-wide;
-    }
+  .hero-subtitle {
+    @apply text-sm tracking-wide;
+  }
 
-    .hero-description {
-        @apply text-sm;
-    }
+  .hero-description {
+    @apply text-sm;
+  }
 
-    .btn, .btn-secondary {
-        @apply px-6 py-3 text-sm;
-    }
+  .btn, .btn-secondary {
+    @apply px-6 py-3 text-sm;
+  }
 
-    .nav-link {
-        @apply text-lg py-4 border-b border-gray-100;
-    }
+  .nav-link {
+    @apply text-lg py-4 border-b border-gray-100;
+  }
 
-    /* Mobile loyalty layout - stack vertically */
-    .loyalty-content {
-        @apply flex-col;
-        padding: 0.5rem 0;
-        gap: 0.5rem;
-    }
+  /* Mobile loyalty layout - stack vertically */
+  .loyalty-content {
+    @apply flex-col;
+    padding: 0.5rem 0;
+    gap: 0.5rem;
+  }
 
-    /* Loyalty banner mobile - icon stays hidden, text centered and on top */
-    .loyalty-icon {
-        @apply hidden;
-    }
+  .loyalty-icon {
+    @apply hidden;
+  }
 
-    .loyalty-text {
-        @apply w-full text-center;
-        margin: 0;
-        order: 1;
-        font-size: 0.75rem;
-        line-height: 1.1;
-    }
+  .loyalty-text {
+    @apply w-full text-center;
+    margin: 0;
+    order: 1;
+    font-size: 0.75rem;
+    line-height: 1.1;
+  }
 
-    .loyalty-buttons {
-        @apply w-full justify-center;
-        margin: 0;
-        order: 2;
-        gap: 6px;
-    }
+  .loyalty-buttons {
+    @apply w-full justify-center;
+    margin: 0;
+    order: 2;
+    gap: 6px;
+  }
 
-    /* Adjust loyalty section height for mobile */
-    .loyalty-section-compact {
-        height: auto;
-        min-height: 4rem;
-        max-height: 5rem;
-        padding: 0.5rem 0;
-    }
+  /* Adjust loyalty section height for mobile */
+  .loyalty-section-compact {
+    height: auto;
+    min-height: 4rem;
+    max-height: 5rem;
+    padding: 0.5rem 0;
+  }
 
-    /* Cart drawer full width on mobile */
-    #cart-drawer {
-        @apply w-full max-w-full;
-    }
+  /* Cart drawer full width on mobile */
+  #cart-drawer {
+    @apply w-full max-w-full;
+  }
 
-    /* Improve touch targets on mobile */
-    .add-to-cart-btn,
-    .quantity-btn,
-    .remove-item-btn {
-        @apply min-h-[44px] min-w-[44px];
-    }
+  /* Improve touch targets on mobile */
+  .add-to-cart-btn,
+  .quantity-btn,
+  .remove-item-btn {
+    @apply min-h-[44px] min-w-[44px];
+  }
 }
 
 /* ===== LANDSCAPE MOBILE ADJUSTMENTS ===== */
 @media (max-width: 768px) and (orientation: landscape) {
-    /* Keep loyalty section visible and same height as header */
-    .loyalty-section-compact {
-        height: 4rem;
-        min-height: 4rem;
-        max-height: 4rem;
-        padding: 0;
-    }
+  .loyalty-section-compact {
+    @apply h-16 min-h-16 max-h-16 p-0;
+  }
 
-    /* Force horizontal layout in landscape to save space */
-    .loyalty-content {
-        @apply flex-row items-center;
-        padding: 0 1rem;
-        gap: 1rem;
-    }
+  /* Force horizontal layout in landscape to save space */
+  .loyalty-content {
+    @apply flex-row items-center px-4;
+    gap: 1rem;
+  }
 
-    .loyalty-text {
-        @apply text-left flex-1;
-        font-size: 0.7rem;
-        line-height: 1;
-        margin: 0;
-    }
+  .loyalty-text {
+    @apply text-left flex-1;
+    font-size: 0.7rem;
+    line-height: 1;
+    margin: 0;
+  }
 
-    .loyalty-buttons {
-        @apply flex-shrink-0;
-        gap: 6px;
-    }
+  .loyalty-buttons {
+    @apply flex-shrink-0;
+    gap: 6px;
+  }
 
-    .loyalty-buttons button:first-child {
-        padding: 4px 8px;
-        min-height: 28px;
-        font-size: 0.65rem;
-    }
+  .loyalty-buttons button:first-child {
+    padding: 4px 8px;
+    min-height: 28px;
+    font-size: 0.65rem;
+  }
 
-    .loyalty-buttons span {
-        font-size: 0.65rem;
-    }
+  .loyalty-buttons span {
+    font-size: 0.65rem;
+  }
 
-    .loyalty-buttons button:last-child {
-        font-size: 0.65rem;
-    }
+  .loyalty-buttons button:last-child {
+    font-size: 0.65rem;
+  }
 
-    /* Ensure above-fold container uses full viewport */
-    .above-fold-container {
-        height: 100vh;
-        height: 100dvh;
-    }
+  /* Ensure above-fold container uses full viewport */
+  .above-fold-container {
+    height: 100vh;
+    height: 100dvh;
+  }
 
-    /* Compact hero content for landscape */
-    .hero-title-main {
-        font-size: clamp(1.5rem, 5vw, 2.5rem);
-    }
+  /* Compact hero content for landscape */
+  .hero-title-main {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+  }
 
-    .hero-title-accent {
-        font-size: clamp(2rem, 6vw, 3.5rem);
-    }
+  .hero-title-accent {
+    font-size: clamp(2rem, 6vw, 3.5rem);
+  }
 
-    .hero-description {
-        @apply text-sm leading-tight;
-    }
+  .hero-description {
+    @apply text-sm leading-tight;
+  }
 
-    .btn, .btn-secondary {
-        @apply px-4 py-2 text-xs;
-    }
+  .btn, .btn-secondary {
+    @apply px-4 py-2 text-xs;
+  }
 }
 
 /* ===== DESKTOP RESPONSIVE ===== */
 @media (min-width: 769px) {
-    .loyalty-content {
-        @apply flex-row items-center;
-        margin: 0;
-        padding: 0 2rem;
-        gap: 1rem;
-    }
+  .loyalty-content {
+    @apply flex-row items-center px-8;
+    gap: 1rem;
+  }
 
-    .loyalty-icon {
-        @apply flex;
-        width: 40px;
-        height: 40px;
-        margin: 0;
-        order: 1;
-    }
+  .loyalty-icon {
+    @apply flex;
+    width: 40px;
+    height: 40px;
+    margin: 0;
+    order: 1;
+  }
 
-    .loyalty-text {
-        @apply text-left text-lg flex-1;
-        margin: 0;
-        order: 2;
-    }
+  .loyalty-text {
+    @apply text-left text-lg flex-1;
+    margin: 0;
+    order: 2;
+  }
 
-    .loyalty-buttons {
-        margin: 0;
-        order: 3;
-        gap: 0.5rem;
-    }
+  .loyalty-buttons {
+    margin: 0;
+    order: 3;
+    gap: 0.5rem;
+  }
 
-    .loyalty-buttons button:last-child {
-        margin-left: 0;
-    }
+  .loyalty-buttons button:last-child {
+    margin-left: 0;
+  }
 
-    /* Cart drawer fixed width on desktop */
-    #cart-drawer {
-        @apply max-w-md;
-    }
+  /* Cart drawer fixed width on desktop */
+  #cart-drawer {
+    @apply max-w-md;
+  }
 }
 
 /* ===== HEADER RESPONSIVE ===== */
 @media (min-width: 1024px) {
-    .location-picker, .user-actions {
-        @apply min-h-12;
-    }
+  .location-picker, .user-actions {
+    @apply min-h-12;
+  }
 }
 
 @media (max-width: 1024px) {
-    .mobile-menu {
-        @apply top-16;
-        height: calc(100vh - 4rem);
-    }
+  .mobile-menu {
+    @apply top-16;
+    height: calc(100vh - 4rem);
+  }
 }
 
-/* ===== CUSTOM ANIMATIONS ===== */
+/* ===== ANIMATIONS ===== */
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+  to { transform: rotate(360deg); }
 }
 
 @keyframes bounce-subtle {
-    0%, 20%, 50%, 80%, 100% {
-        transform: translateY(0);
-    }
-    40% {
-        transform: translateY(-5px);
-    }
-    60% {
-        transform: translateY(-3px);
-    }
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-5px); }
+  60% { transform: translateY(-3px); }
 }
 
 @keyframes fade-in-up {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ===== PRINT STYLES ===== */
 @media print {
-    .mobile-menu,
-    .cart-icon,
-    .loyalty-section-compact,
-    #cart-overlay,
-    #toast-container {
-        @apply hidden;
-    }
-    
-    .hero-background video {
-        @apply hidden;
-    }
-    
-    body {
-        @apply text-black bg-white;
-    }
+  .mobile-menu,
+  .cart-icon,
+  .loyalty-section-compact,
+  #cart-overlay,
+  #toast-container {
+    @apply hidden;
+  }
+  
+  .hero-background video {
+    @apply hidden;
+  }
+  
+  body {
+    @apply text-black bg-white;
+  }
 }
