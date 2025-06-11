@@ -8,31 +8,31 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Updated primary colors to match your brand
+        // Primary colors to match brand
         primary: {
-          DEFAULT: '#ad2118',      // Your main brand red
+          DEFAULT: '#ad2118',
           dark: '#8a1a13',         // Darker variant for hovers
           light: '#c52d22'         // Lighter variant if needed
         },
         // Secondary colors
         brown: {
-          DEFAULT: '#8B4513',      // Your accent brown
+          DEFAULT: '#8B4513',      // brown accent
           light: '#a0521a',
           dark: '#6d3610'
         },
         // Background colors
-        'warm-gray': '#f8f8f8',    // Updated to match your CSS
+        'warm-gray': '#f8f8f8',
         dark: {
-          DEFAULT: '#0f0f0f',      // Keep your existing dark
-          secondary: '#1a1a1a'     // Match your dark-secondary
+          DEFAULT: '#0f0f0f',
+          secondary: '#1a1a1a'
         },
-        accent: '#ffb366'           // Keep if you use this orange accent
+        accent: '#ffb366'           // orange accent
       },
       fontFamily: {
-        // Updated to match your Google Fonts
+        // Google Fonts
         display: ['Inter', 'sans-serif'],
         body: ['Inter', 'sans-serif'],
-        nunito: ['Nunito', 'sans-serif']  // Added Nunito from your HTML
+        nunito: ['Nunito', 'sans-serif'] 
       },
       spacing: {
         '18': '4.5rem',
@@ -51,7 +51,7 @@ module.exports = {
       backdropBlur: {
         xs: '2px'
       },
-      // Add animation configurations
+      // animation configurations
       animation: {
         'float': 'float 6s ease-in-out infinite',
         'shine': 'shine 0.5s ease-in-out',
@@ -77,7 +77,7 @@ module.exports = {
           }
         }
       },
-      // Add z-index utilities
+      // z-index utilities
       zIndex: {
         '60': '60',
         '70': '70'

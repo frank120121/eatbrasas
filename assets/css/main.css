@@ -1342,7 +1342,7 @@ video {
 .above-fold-container {
   height: 100vh;
   height: 100dvh;
-  /* Use dynamic viewport height for mobile browsers */
+  /* dynamic viewport height for mobile browsers */
   display: flex;
   flex-direction: column;
   overflow: hidden;
