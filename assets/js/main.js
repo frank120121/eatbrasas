@@ -14,8 +14,6 @@
     // --- Configuration Constants ---
     const CONFIG = {
         CART: {
-            MOBILE_ITEM_LIMIT: 3,
-            DESKTOP_ITEM_LIMIT: 5,
             STORAGE_KEY: 'brasasElGordoCart',
             MAX_QUANTITY: 99
         },
@@ -333,20 +331,6 @@
     // --- Cart Popup Functions ---
 
     /**
-     * Checks if device is mobile based on screen width
-     */
-    function isMobileDevice() {
-        return window.innerWidth <= 768;
-    }
-
-    /**
-     * Gets the appropriate item limit based on device type
-     */
-    function getCartItemLimit() {
-        return isMobileDevice() ? CONFIG.CART.MOBILE_ITEM_LIMIT : CONFIG.CART.DESKTOP_ITEM_LIMIT;
-    }
-
-    /**
      * Opens the cart popup with smooth animation
      */
     function openCartPopup() {
@@ -443,8 +427,10 @@
         `;
     }
 
+    // Updated functions to show all cart items in the drawer
+
     /**
-     * Updates the cart display in the popup
+     * Updates the cart display in the popup - MODIFIED to show all items
      */
     function updateCartDisplay() {
         const emptyMessage = document.getElementById('empty-cart-message');
@@ -462,7 +448,6 @@
         try {
             const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
             const totalPrice = cart.reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
-            const itemLimit = getCartItemLimit();
 
             cartHeaderCount.textContent = totalItems;
 
@@ -479,17 +464,11 @@
                 itemsContainer.setAttribute('role', 'list');
                 itemsContainer.setAttribute('aria-label', `Artículos del carrito, ${cart.length} elementos`);
 
-                const itemsToShow = cart.slice(0, itemLimit);
-                itemsContainer.innerHTML = itemsToShow.map((item, index) => createCartItemHTML(item, index)).join('');
+                // CHANGE: Show ALL items instead of limiting based on device
+                itemsContainer.innerHTML = cart.map((item, index) => createCartItemHTML(item, index)).join('');
 
-                if (cart.length > itemLimit) {
-                    showMoreContainer.classList.remove('hidden');
-                    const hiddenCount = cart.length - itemLimit;
-                    const linkText = `Ver ${hiddenCount} artículo${hiddenCount > 1 ? 's' : ''} más en checkout →`;
-                    showMoreContainer.querySelector('a').textContent = linkText;
-                } else {
-                    showMoreContainer.classList.add('hidden');
-                }
+                // CHANGE: Always hide the "show more" container since we're showing all items
+                showMoreContainer.classList.add('hidden');
 
                 cartTotal.textContent = `$${totalPrice.toFixed(0)}`;
                 cartTotal.setAttribute('aria-label', `Total del carrito: ${totalPrice.toFixed(0)} pesos`);
