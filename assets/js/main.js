@@ -25,6 +25,11 @@
         SCROLL: {
             THRESHOLD: 50,
             DEBOUNCE_DELAY: 10
+        },
+        BUSINESS: {
+            OPEN_TIME: 10.75, // 10:45 AM
+            CLOSE_TIME: 22,   // 10:00 PM
+            ADDRESS: 'Av. Álvaro Obregón 2437, Sonora, 84094 Heroica Nogales, Son'
         }
     };
 
@@ -328,6 +333,378 @@
         }
     }
 
+    // --- Location & Contact Functions ---
+
+    /**
+     * Copies the business address to clipboard with fallback support
+     */
+    function copyAddress(event) {
+        const address = CONFIG.BUSINESS.ADDRESS;
+        
+        if (navigator.clipboard && window.isSecureContext) {
+            // Use modern clipboard API
+            navigator.clipboard.writeText(address).then(() => {
+                showCopySuccess(event);
+            }).catch(() => {
+                fallbackCopyText(address, event);
+            });
+        } else {
+            // Fallback for older browsers
+            fallbackCopyText(address, event);
+        }
+    }
+
+    /**
+     * Fallback method for copying text in older browsers
+     */
+    function fallbackCopyText(text, event) {
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        try {
+            document.execCommand('copy');
+            showCopySuccess(event);
+        } catch (err) {
+            console.error('Copy failed:', err);
+            showToast('No se pudo copiar la dirección', 'error');
+        } finally {
+            textArea.remove();
+        }
+    }
+
+    /**
+     * Shows visual feedback when address is successfully copied
+     */
+    function showCopySuccess(event) {
+        // Create a temporary success message
+        const button = event ? event.target.closest('button') : null;
+        
+        if (button) {
+            const originalContent = button.innerHTML;
+            
+            button.innerHTML = `
+                <svg class="w-4 h-4 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                </svg>
+                <span>¡Copiado!</span>
+            `;
+            
+            button.classList.add('text-green-600');
+            
+            setTimeout(() => {
+                button.innerHTML = originalContent;
+                button.classList.remove('text-green-600');
+            }, 2000);
+        }
+
+        showToast('¡Dirección copiada al portapapeles!', 'success');
+    }
+
+    /**
+     * Updates the business status indicator based on current time
+     */
+    function updateBusinessStatus() {
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+        const currentTime = currentHour + (currentMinute / 60);
+        
+        const statusContainer = document.getElementById('business-status');
+        const statusIndicator = document.getElementById('status-indicator');
+        const statusText = document.getElementById('status-text');
+        
+        if (!statusContainer || !statusIndicator || !statusText) {
+            return; // Elements not found
+        }
+        
+        const isOpen = currentTime >= CONFIG.BUSINESS.OPEN_TIME && currentTime < CONFIG.BUSINESS.CLOSE_TIME;
+        
+        if (isOpen) {
+            // Open
+            statusContainer.className = 'mt-4 flex items-center space-x-3 bg-green-50 px-4 py-3 rounded-xl';
+            statusIndicator.className = 'w-3 h-3 bg-green-500 rounded-full animate-pulse';
+            statusText.className = 'text-green-700 font-semibold text-sm';
+            statusText.textContent = 'Abierto ahora';
+        } else {
+            // Closed
+            statusContainer.className = 'mt-4 flex items-center space-x-3 bg-red-50 px-4 py-3 rounded-xl';
+            statusIndicator.className = 'w-3 h-3 bg-red-500 rounded-full';
+            statusText.className = 'text-red-700 font-semibold text-sm';
+            
+            // Calculate next opening time
+            const nextOpen = new Date();
+            if (currentTime >= CONFIG.BUSINESS.CLOSE_TIME) {
+                // After closing time, open tomorrow
+                nextOpen.setDate(nextOpen.getDate() + 1);
+            }
+            nextOpen.setHours(10, 45, 0, 0);
+            
+            const hoursUntilOpen = Math.ceil((nextOpen - now) / (1000 * 60 * 60));
+            
+            if (hoursUntilOpen <= 12) {
+                statusText.textContent = `Cerrado - Abre en ${hoursUntilOpen}h`;
+            } else {
+                statusText.textContent = 'Cerrado - Abre mañana a las 10:45 AM';
+            }
+        }
+    }
+
+    /**
+     * Alias for backward compatibility
+     */
+    function checkBusinessStatus() {
+        updateBusinessStatus();
+    }
+
+    /**
+     * Initializes location and contact functionality
+     */
+    function initLocationAndContact() {
+        try {
+            // Initialize business status
+            updateBusinessStatus();
+            
+            // Update status every minute
+            setInterval(updateBusinessStatus, 60000);
+
+            // Add copy address button listeners
+            const copyAddressButtons = document.querySelectorAll('button[onclick="copyAddress()"]');
+            copyAddressButtons.forEach(button => {
+                // Remove inline onclick and add event listener
+                button.removeAttribute('onclick');
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    copyAddress(event);
+                });
+            });
+
+            // Add check business status button listeners
+            const checkStatusButtons = document.querySelectorAll('button[onclick="checkBusinessStatus()"]');
+            checkStatusButtons.forEach(button => {
+                // Remove inline onclick and add event listener
+                button.removeAttribute('onclick');
+                button.addEventListener('click', checkBusinessStatus);
+            });
+
+            console.log('✅ Location and contact functionality initialized');
+        } catch (error) {
+            console.error('❌ Error initializing location/contact functions:', error);
+            showToast('Error al inicializar funciones de ubicación', 'error');
+        }
+    }
+
+    // --- Enhanced Image Loading Functions ---
+    
+    /**
+     * Enhanced image loading with better error handling and fallbacks
+     */
+    function initImageLoading() {
+        console.log('🖼️ Initializing enhanced image loading...');
+        
+        const images = document.querySelectorAll('img[loading="lazy"]');
+        console.log(`Found ${images.length} lazy-loaded images`);
+        
+        if (images.length === 0) {
+            console.log('No lazy-loaded images found');
+            return;
+        }
+
+        let processedImages = 0;
+
+        images.forEach((img, index) => {
+            const categorySection = img.closest('.menu-category');
+            const categoryName = categorySection ? categorySection.id : 'unknown';
+            
+            // Function to mark image as loaded
+            const markAsLoaded = () => {
+                if (!img.classList.contains('loaded')) {
+                    img.classList.add('loaded');
+                    processedImages++;
+                    console.log(`✅ Image ${index + 1}/${images.length} loaded (${categoryName}): ${img.src.substring(0, 50)}...`);
+                }
+            };
+
+            // Check if image is already complete (cached or fast loading)
+            if (img.complete && img.naturalWidth > 0) {
+                markAsLoaded();
+                return;
+            }
+
+            // Set up load event listener
+            img.addEventListener('load', markAsLoaded, { once: true });
+
+            // Set up error event listener
+            img.addEventListener('error', function() {
+                console.warn(`❌ Image failed to load (${categoryName}):`, this.src);
+                
+                // Mark as loaded anyway to prevent invisible state
+                markAsLoaded();
+                
+                // Set fallback image
+                this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="300" viewBox="0 0 400 300"%3E%3Crect width="400" height="300" fill="%23f3f4f6"/%3E%3Ctext x="200" y="150" text-anchor="middle" fill="%236b7280" font-family="Arial" font-size="16"%3EImagen no disponible%3C/text%3E%3C/svg%3E';
+            }, { once: true });
+            
+            // Force trigger load event if image was loaded before listener was attached
+            if (img.complete) {
+                img.dispatchEvent(new Event('load'));
+            }
+        });
+        
+        // Fallback: After 2 seconds, make sure all images are visible
+        setTimeout(() => {
+            const stillHiddenImages = document.querySelectorAll('img[loading="lazy"]:not(.loaded)');
+            if (stillHiddenImages.length > 0) {
+                console.log(`⚠️ Forcing visibility for ${stillHiddenImages.length} remaining images`);
+                stillHiddenImages.forEach((img, index) => {
+                    img.classList.add('loaded');
+                    const categorySection = img.closest('.menu-category');
+                    const categoryName = categorySection ? categorySection.id : 'unknown';
+                    console.log(`🔧 Force-loaded image in ${categoryName}: ${img.src.substring(0, 50)}...`);
+                });
+            }
+            
+            console.log(`📊 Image loading complete: ${processedImages}/${images.length} images processed`);
+        }, 2000);
+
+        // Additional fallback: Force load images in problematic categories
+        const problematicCategories = ['carnes-asadas', 'tacos-quesadillas'];
+        problematicCategories.forEach(categoryId => {
+            const categorySection = document.getElementById(categoryId);
+            if (categorySection) {
+                const categoryImages = categorySection.querySelectorAll('img[loading="lazy"]');
+                console.log(`🔍 Found ${categoryImages.length} images in ${categoryId}`);
+                
+                categoryImages.forEach((img, index) => {
+                    // Double-check these images after a short delay
+                    setTimeout(() => {
+                        if (!img.classList.contains('loaded')) {
+                            console.log(`🚨 Force-fixing image ${index + 1} in ${categoryId}`);
+                            img.classList.add('loaded');
+                        }
+                    }, 1000 + index * 100); // Stagger the fixes
+                });
+            }
+        });
+    }
+
+    // --- Menu Navigation Functions ---
+    
+    /**
+     * Initializes mobile-first menu navigation functionality
+     */
+    function initMenuNavigation() {
+        try {
+            const categoryNavButtons = document.querySelectorAll('.category-nav-btn');
+            const menuCategories = document.querySelectorAll('.menu-category');
+
+            if (categoryNavButtons.length === 0 || menuCategories.length === 0) {
+                console.log('Menu navigation elements not found - skipping menu initialization');
+                return;
+            }
+
+            // Smooth scroll to category with offset for sticky nav
+            function scrollToCategory(categoryId) {
+                const targetElement = document.getElementById(categoryId);
+                if (targetElement) {
+                    const headerOffset = 140; // Account for sticky nav height
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+
+            // Update active navigation button
+            function updateActiveNavButton(activeCategoryId) {
+                categoryNavButtons.forEach(btn => {
+                    btn.classList.remove('active', 'text-primary', 'bg-primary/10');
+                    btn.classList.add('text-gray-600');
+                    btn.setAttribute('aria-selected', 'false');
+                });
+
+                const activeBtn = document.querySelector(`[data-category="${activeCategoryId}"]`);
+                if (activeBtn) {
+                    activeBtn.classList.add('active', 'text-primary', 'bg-primary/10');
+                    activeBtn.classList.remove('text-gray-600');
+                    activeBtn.setAttribute('aria-selected', 'true');
+                }
+            }
+
+            // Handle navigation button clicks
+            categoryNavButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const categoryId = this.dataset.category;
+                    scrollToCategory(categoryId);
+                    updateActiveNavButton(categoryId);
+                });
+            });
+
+            // Intersection Observer for automatic nav updates while scrolling
+            if ('IntersectionObserver' in window) {
+                const observerOptions = {
+                    root: null,
+                    rootMargin: '-150px 0px -50% 0px', // Trigger when category is near top
+                    threshold: 0
+                };
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const categoryId = entry.target.dataset.category;
+                            updateActiveNavButton(categoryId);
+                        }
+                    });
+                }, observerOptions);
+
+                menuCategories.forEach(category => {
+                    observer.observe(category);
+                });
+            }
+
+            // Enhanced touch feedback for mobile
+            const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+            addToCartButtons.forEach(button => {
+                // Add haptic feedback for supported devices
+                button.addEventListener('click', function() {
+                    if ('vibrate' in navigator) {
+                        navigator.vibrate(50); // Subtle haptic feedback
+                    }
+                });
+
+                // Touch start/end for immediate visual feedback
+                button.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.95)';
+                });
+
+                button.addEventListener('touchend', function() {
+                    this.style.transform = '';
+                });
+            });
+
+            // Initialize with first category active if not scrolled
+            if (window.pageYOffset < 100) {
+                const firstCategory = menuCategories[0];
+                if (firstCategory) {
+                    updateActiveNavButton(firstCategory.dataset.category);
+                }
+            }
+
+            console.log('✅ Menu navigation initialized');
+        } catch (error) {
+            console.error('❌ Error initializing menu navigation:', error);
+            showToast('Error al inicializar navegación del menú', 'error');
+        }
+    }
+
     // --- Cart Popup Functions ---
 
     /**
@@ -427,8 +804,6 @@
         `;
     }
 
-    // Updated functions to show all cart items in the drawer
-
     /**
      * Updates the cart display in the popup - MODIFIED to show all items
      */
@@ -470,7 +845,7 @@
                 // CHANGE: Always hide the "show more" container since we're showing all items
                 showMoreContainer.classList.add('hidden');
 
-                cartTotal.textContent = `$${totalPrice.toFixed(0)}`;
+                cartTotal.textContent = `${totalPrice.toFixed(0)}`;
                 cartTotal.setAttribute('aria-label', `Total del carrito: ${totalPrice.toFixed(0)} pesos`);
             }
         } catch (error) {
@@ -932,6 +1307,15 @@
             initCartPopup();
             initAddToCartButtons();
 
+            // Initialize location & contact functionality
+            initLocationAndContact();
+            
+            // Initialize menu navigation
+            initMenuNavigation();
+            
+            // Initialize enhanced image loading (NEW - moved here for better timing)
+            initImageLoading();
+
             console.log('✅ Main JavaScript initialized and ready.');
             
         } catch (error) {
@@ -975,9 +1359,17 @@
             cart: cart,
             addItem: addItemToCart,
             showToast: showToast,
-            config: CONFIG
+            config: CONFIG,
+            copyAddress: copyAddress,
+            updateBusinessStatus: updateBusinessStatus,
+            initImageLoading: initImageLoading // Add for debugging
         };
         console.log('🔧 Debug tools available at window.BrasasDebug');
     }
+
+    // --- Expose necessary functions globally for backward compatibility ---
+    window.copyAddress = copyAddress;
+    window.checkBusinessStatus = checkBusinessStatus;
+    window.updateBusinessStatus = updateBusinessStatus;
 
 })(); // End of IIFE

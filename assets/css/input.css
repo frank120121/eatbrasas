@@ -177,6 +177,55 @@
     @apply translate-x-0;
   }
 
+  /* ===== MENU COMPONENTS ===== */
+
+  /* Custom scrollbar hiding for horizontal nav */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Menu category navigation */
+  .category-nav-btn {
+    @apply flex-shrink-0 px-4 py-3 text-sm font-semibold text-gray-600 rounded-xl;
+    @apply transition-all duration-300 hover:text-primary hover:bg-primary/5;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-1;
+  }
+
+  .category-nav-btn.active {
+    @apply text-primary bg-primary/10;
+  }
+
+  /* Menu category sections */
+  .menu-category {
+    @apply scroll-mt-36; /* Offset for sticky navigation */
+  }
+
+  /* Enhanced mobile touch targets */
+  @media (max-width: 768px) {
+    .add-to-cart-btn {
+      min-height: 44px; /* iOS recommended touch target */
+      @apply px-5 py-3;
+    }
+
+    .category-nav-btn {
+      min-height: 44px;
+      @apply px-4 py-3;
+    }
+  }
+
+  /* Smooth image loading - CRITICAL FOR IMAGE VISIBILITY */
+  img[loading="lazy"] {
+    @apply opacity-0 transition-opacity duration-300;
+  }
+
+  img[loading="lazy"].loaded {
+    @apply opacity-100;
+  }
+
   /* Hero Section Components */
   .hero-background {
     @apply absolute inset-0 z-0;
