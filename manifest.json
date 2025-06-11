@@ -1,24 +1,117 @@
 {
-    "description": "Mexican Food Pickup & Delivery",
-    "short_name": "Chipotle - Fresh Food Fast",
-    "name": "Chipotle - Fresh Food Fast",
-    "related_applications": [
-        {
-            "platform": "play",
-            "id": "com.chipotle.ordering"
-        }
-    ],
-    "prefer_related_applications": true,
-    "icons": [
-        {
-            "src": "/content/dam/chipotle/icons-and-animations/chipotle-pepper-icon/pepper-general.png",
-            "type": "images/png",
-            "sizes": "192x192"
-        },
-        {
-            "src": "/content/dam/chipotle/icons-and-animations/chipotle-pepper-icon/pepper-general.png",
-            "type": "images/png",
-            "sizes": "512x512"
-        }
-    ]
+  "name": "Brasas El Gordo - Tacos a la Leña",
+  "short_name": "Brasas El Gordo",
+  "description": "Tacos premium y carnes a la leña desde Nogales, Sonora. Ordena, gana puntos y disfruta del sabor auténtico.",
+  "lang": "es-MX",
+  "start_url": "/?utm_source=web_app_manifest",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#ad2118",
+  "background_color": "#ffffff",
+  "dir": "ltr",
+  "categories": ["food", "restaurant", "shopping"],
+
+  "icons": [
+    {
+      "src": "/assets/images/logo/favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/images/logo/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/images/logo/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/images/logo/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+
+  "shortcuts": [
+    {
+      "name": "Menú de tacos",
+      "short_name": "Tacos",
+      "description": "Ver todos los tacos a la leña",
+      "url": "/#menu",
+      "icons": [{ 
+        "src": "/assets/images/logo/favicon-32x32.png", 
+        "sizes": "32x32",
+        "type": "image/png"
+      }]
+    },
+    {
+      "name": "Productos para casa",
+      "short_name": "Productos",
+      "description": "Manteca ahumada, aceites y especias premium",
+      "url": "/#productos",
+      "icons": [{ 
+        "src": "/assets/images/logo/favicon-32x32.png", 
+        "sizes": "32x32",
+        "type": "image/png"
+      }]
+    },
+    {
+      "name": "Ver carrito",
+      "short_name": "Carrito",
+      "description": "Tu carrito de compras",
+      "url": "/#carrito",
+      "icons": [{ 
+        "src": "/assets/images/logo/favicon-32x32.png", 
+        "sizes": "32x32",
+        "type": "image/png"
+      }]
+    },
+    {
+      "name": "Programa de lealtad",
+      "short_name": "Rewards",
+      "description": "Únete a Brasas Rewards y gana puntos",
+      "url": "/#rewards",
+      "icons": [{ 
+        "src": "/assets/images/logo/favicon-32x32.png", 
+        "sizes": "32x32",
+        "type": "image/png"
+      }]
+    }
+  ],
+
+  "screenshots": [
+    {
+      "src": "/assets/images/screenshots/desktop-hero.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Vista principal de Brasas El Gordo en desktop"
+    },
+    {
+      "src": "/assets/images/screenshots/mobile-menu.png",
+      "sizes": "360x640",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Menú de tacos en dispositivo móvil"
+    }
+  ],
+
+  "related_applications": [],
+  "prefer_related_applications": false,
+
+  "protocol_handlers": [
+    {
+      "protocol": "mailto",
+      "url": "/contact?email=%s"
+    },
+    {
+      "protocol": "tel",
+      "url": "/contact?phone=%s"
+    }
+  ]
 }

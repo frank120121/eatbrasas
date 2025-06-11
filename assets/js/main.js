@@ -2,16 +2,14 @@
 
 /**
  * Main application script for Brasas El Gordo website.
- * Encapsulated in an IIFE (Immediately Invoked Function Expression)
- * to avoid polluting the global scope and ensure all code runs
- * once the DOM is fully loaded.
+ * Encapsulated in an IIFE to avoid polluting the global scope.
  */
 (function() {
     'use strict';
 
     // --- Global Cart State ---
-    let cart = []; // Initialize an empty array for the cart
-    let cartObserver = null; // For performance optimization
+    let cart = [];
+    let cartObserver = null;
 
     // --- Configuration Constants ---
     const CONFIG = {
@@ -23,7 +21,7 @@
         },
         ANIMATIONS: {
             TOAST_DURATION: 3000,
-            BUTTON_FEEDBACK_DURATION: 500,
+            BUTTON_FEEDBACK_DURATION: 1200,
             CART_ANIMATION_DURATION: 300
         },
         SCROLL: {
@@ -35,11 +33,7 @@
     // --- Utility Functions ---
 
     /**
-     * Debounces a function call, ensuring it's only called after a certain delay
-     * since the last time it was invoked. Useful for performance-critical events like scrolling.
-     * @param {function} func - The function to debounce.
-     * @param {number} delay - The delay in milliseconds.
-     * @returns {function} The debounced function.
+     * Debounces a function call
      */
     const debounce = (func, delay) => {
         let timeout;
@@ -51,10 +45,21 @@
     };
 
     /**
+     * Throttle function for performance-critical events
+     */
+    const throttle = (func, limit) => {
+        let inThrottle;
+        return function(...args) {
+            if (!inThrottle) {
+                func.apply(this, args);
+                inThrottle = true;
+                setTimeout(() => inThrottle = false, limit);
+            }
+        };
+    };
+
+    /**
      * Validates cart item data structure
-     * @param {Object} item - Cart item to validate
-     * @returns {boolean} True if valid
-     * @throws {Error} If validation fails
      */
     function validateCartItem(item) {
         if (!item || typeof item !== 'object') {
@@ -81,9 +86,6 @@
 
     /**
      * Safely parses JSON with error handling
-     * @param {string} jsonString - JSON string to parse
-     * @param {*} fallback - Fallback value if parsing fails
-     * @returns {*} Parsed object or fallback
      */
     function safeJSONParse(jsonString, fallback = []) {
         try {
@@ -96,8 +98,6 @@
 
     /**
      * Safely stringifies object with error handling
-     * @param {*} obj - Object to stringify
-     * @returns {string|null} JSON string or null if failed
      */
     function safeJSONStringify(obj) {
         try {
@@ -132,7 +132,7 @@
                 updateCartCountDisplay();
                 
                 if (validatedCart.length !== parsedCart.length) {
-                    saveCartToLocalStorage(); // Save cleaned cart
+                    saveCartToLocalStorage();
                     showToast('Se limpiaron algunos artículos inválidos del carrito', 'info');
                 }
             }
@@ -140,7 +140,6 @@
             console.error("Error loading cart from localStorage:", error);
             cart = [];
             
-            // Try to clear corrupted data
             try {
                 localStorage.removeItem(CONFIG.CART.STORAGE_KEY);
             } catch (clearError) {
@@ -167,7 +166,6 @@
             
             if (error.name === 'QuotaExceededError') {
                 showToast('Almacenamiento lleno. No se pudo guardar el carrito.', 'error');
-                // Try to clear some space
                 try {
                     localStorage.removeItem(CONFIG.CART.STORAGE_KEY);
                     localStorage.setItem(CONFIG.CART.STORAGE_KEY, safeJSONStringify(cart.slice(0, 5)));
@@ -182,14 +180,12 @@
     }
 
     /**
-     * Updates the displayed number of items in the cart icon in the UI.
-     * Shows/hides the counter based on whether there are items in the cart.
+     * Updates the displayed number of items in the cart icon
      */
     function updateCartCountDisplay() {
         const cartItemCountSpan = document.getElementById('cart-item-count');
         const mobileCartItemCountSpan = document.getElementById('mobile-cart-item-count');
         
-        // Calculate total quantity of all items in the cart
         const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
         
         // Update desktop cart counter
@@ -226,7 +222,6 @@
 
     /**
      * Announces cart updates to screen readers
-     * @param {number} totalItems - Total number of items in cart
      */
     function announceCartUpdate(totalItems) {
         const announcement = document.getElementById('cart-sr-announcement');
@@ -237,9 +232,6 @@
 
     /**
      * Creates and shows a toast notification
-     * @param {string} message - The message to display
-     * @param {string} [type='success'] - The type of toast
-     * @param {number} [duration] - Custom duration in milliseconds
      */
     function showToast(message, type = 'success', duration = CONFIG.ANIMATIONS.TOAST_DURATION) {
         const toastContainer = document.getElementById('toast-container');
@@ -252,16 +244,28 @@
         toast.className = `toast ${type}`;
         toast.setAttribute('role', 'alert');
         toast.setAttribute('aria-live', 'polite');
-        toast.textContent = message;
         
-        toastContainer.prepend(toast);
+        // Add icon based on type
+        const icons = {
+            success: '✓',
+            error: '✕',
+            warning: '⚠',
+            info: 'ℹ'
+        };
+        
+        toast.innerHTML = `
+            <span class="toast-icon" aria-hidden="true" style="margin-right: 8px;">${icons[type] || icons.info}</span>
+            <span class="toast-message">${escapeHtml(message)}</span>
+        `;
+        
+        toastContainer.appendChild(toast);
 
         // Animate in
         requestAnimationFrame(() => {
             toast.classList.add('show');
         });
 
-        // Animate out and remove
+        // Auto-dismiss
         setTimeout(() => {
             toast.classList.remove('show');
             toast.addEventListener('transitionend', () => {
@@ -270,19 +274,28 @@
                 }
             }, { once: true });
             
-            // Fallback removal in case transitionend doesn't fire
+            // Fallback removal
             setTimeout(() => {
                 if (toast.parentNode) {
                     toast.remove();
                 }
             }, 500);
         }, duration);
+
+        return toast;
+    }
+
+    /**
+     * Escapes HTML characters to prevent XSS
+     */
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
     /**
      * Adds an item to the cart or increments its quantity if it already exists.
-     * @param {object} item - The product item to add ({ title, price, description }).
-     * @returns {boolean} Success status
      */
     function addItemToCart(item) {
         try {
@@ -291,7 +304,6 @@
             const existingItemIndex = cart.findIndex(cartItem => cartItem.title === item.title);
 
             if (existingItemIndex > -1) {
-                // Item exists, increment quantity (with max limit)
                 const currentQuantity = cart[existingItemIndex].quantity || 0;
                 if (currentQuantity >= CONFIG.CART.MAX_QUANTITY) {
                     showToast(`Cantidad máxima alcanzada para ${item.title}`, 'warning');
@@ -299,7 +311,6 @@
                 }
                 cart[existingItemIndex].quantity = currentQuantity + 1;
             } else {
-                // Item does not exist, add as new with quantity 1
                 cart.push({ ...item, quantity: 1 });
             }
 
@@ -323,7 +334,6 @@
 
     /**
      * Checks if device is mobile based on screen width
-     * @returns {boolean} True if mobile device
      */
     function isMobileDevice() {
         return window.innerWidth <= 768;
@@ -331,7 +341,6 @@
 
     /**
      * Gets the appropriate item limit based on device type
-     * @returns {number} Item limit for current device
      */
     function getCartItemLimit() {
         return isMobileDevice() ? CONFIG.CART.MOBILE_ITEM_LIMIT : CONFIG.CART.DESKTOP_ITEM_LIMIT;
@@ -345,19 +354,15 @@
         const drawer = document.getElementById('cart-drawer');
         
         if (overlay && drawer) {
-            // Show overlay
             overlay.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
             
-            // Focus management for accessibility
             const firstFocusableElement = drawer.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
             
-            // Trigger animations
             requestAnimationFrame(() => {
                 overlay.classList.add('show');
                 drawer.classList.add('show');
                 
-                // Focus first element after animation
                 setTimeout(() => {
                     if (firstFocusableElement) {
                         firstFocusableElement.focus();
@@ -377,11 +382,9 @@
         const drawer = document.getElementById('cart-drawer');
         
         if (overlay && drawer) {
-            // Remove show classes
             overlay.classList.remove('show');
             drawer.classList.remove('show');
             
-            // Hide overlay after animation
             setTimeout(() => {
                 overlay.classList.add('hidden');
                 document.body.style.overflow = '';
@@ -390,10 +393,7 @@
     }
 
     /**
-     * Creates HTML for a single cart item with enhanced accessibility
-     * @param {Object} item - Cart item object
-     * @param {number} index - Item index in cart array
-     * @returns {string} HTML string for cart item
+     * Creates HTML for a single cart item
      */
     function createCartItemHTML(item, index) {
         const itemTotal = (item.price * item.quantity).toFixed(0);
@@ -404,11 +404,10 @@
                     <div class="flex-1 min-w-0">
                         <h4 class="font-semibold text-gray-900 truncate">${escapeHtml(item.title)}</h4>
                         <p class="text-sm text-gray-500 truncate">${escapeHtml(item.description || '')}</p>
-                        <p class="text-lg font-bold text-primary mt-1">${item.price} × ${item.quantity} = ${itemTotal}</p>
+                        <p class="text-lg font-bold text-primary mt-1">$${item.price} × ${item.quantity} = $${itemTotal}</p>
                     </div>
                     
                     <div class="flex items-center space-x-3 ml-4">
-                        <!-- Quantity controls -->
                         <div class="flex items-center space-x-2" role="group" aria-label="Controles de cantidad para ${escapeHtml(item.title)}">
                             <button class="quantity-btn bg-gray-200 hover:bg-gray-300 text-gray-700" 
                                     data-action="decrease" data-index="${index}"
@@ -431,7 +430,6 @@
                             </button>
                         </div>
                         
-                        <!-- Remove button -->
                         <button class="remove-item-btn text-gray-400 hover:text-red-600" 
                                 data-action="remove" data-index="${index}"
                                 aria-label="Eliminar ${escapeHtml(item.title)} del carrito">
@@ -446,18 +444,7 @@
     }
 
     /**
-     * Escapes HTML characters to prevent XSS
-     * @param {string} text - Text to escape
-     * @returns {string} Escaped text
-     */
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
-    /**
-     * Updates the cart display in the popup with enhanced error handling
+     * Updates the cart display in the popup
      */
     function updateCartDisplay() {
         const emptyMessage = document.getElementById('empty-cart-message');
@@ -477,30 +464,24 @@
             const totalPrice = cart.reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
             const itemLimit = getCartItemLimit();
 
-            // Update header count
             cartHeaderCount.textContent = totalItems;
 
             if (cart.length === 0) {
-                // Show empty state
                 emptyMessage.classList.remove('hidden');
                 itemsContainer.classList.add('hidden');
                 cartFooter.classList.add('hidden');
                 showMoreContainer.classList.add('hidden');
             } else {
-                // Show cart items
                 emptyMessage.classList.add('hidden');
                 itemsContainer.classList.remove('hidden');
                 cartFooter.classList.remove('hidden');
 
-                // Set role for screen readers
                 itemsContainer.setAttribute('role', 'list');
                 itemsContainer.setAttribute('aria-label', `Artículos del carrito, ${cart.length} elementos`);
 
-                // Generate cart items HTML
                 const itemsToShow = cart.slice(0, itemLimit);
                 itemsContainer.innerHTML = itemsToShow.map((item, index) => createCartItemHTML(item, index)).join('');
 
-                // Show "See more" link if there are more items
                 if (cart.length > itemLimit) {
                     showMoreContainer.classList.remove('hidden');
                     const hiddenCount = cart.length - itemLimit;
@@ -510,8 +491,7 @@
                     showMoreContainer.classList.add('hidden');
                 }
 
-                // Update total
-                cartTotal.textContent = `${totalPrice.toFixed(0)}`;
+                cartTotal.textContent = `$${totalPrice.toFixed(0)}`;
                 cartTotal.setAttribute('aria-label', `Total del carrito: ${totalPrice.toFixed(0)} pesos`);
             }
         } catch (error) {
@@ -521,9 +501,7 @@
     }
 
     /**
-     * Updates the quantity of a cart item with validation
-     * @param {number} index - Index of item in cart array
-     * @param {number} change - Change in quantity (+1 or -1)
+     * Updates the quantity of a cart item
      */
     function updateCartItemQuantity(index, change) {
         if (index < 0 || index >= cart.length) {
@@ -554,8 +532,7 @@
     }
 
     /**
-     * Removes an item from the cart with animation and confirmation
-     * @param {number} index - Index of item to remove
+     * Removes an item from the cart
      */
     function removeCartItem(index) {
         if (index < 0 || index >= cart.length) {
@@ -576,39 +553,40 @@
         };
 
         if (itemElement) {
-            // Add removing animation
             itemElement.classList.add('cart-item-removing');
-            
-            // Remove from cart after animation
             setTimeout(performRemoval, CONFIG.ANIMATIONS.CART_ANIMATION_DURATION);
         } else {
-            // Fallback if element not found
             performRemoval();
         }
     }
 
     /**
-     * Initializes cart popup event listeners with enhanced error handling
+     * Initializes cart popup event listeners
      */
     function initCartPopup() {
         try {
             // Cart icon click handlers
-            const cartIconLink = document.getElementById('cart-icon-link');
-            const mobileCartIconLink = document.getElementById('mobile-cart-icon-link');
+            const cartIconBtn = document.getElementById('cart-btn');
+            const mobileCartIconBtn = document.getElementById('mobile-cart-btn');
             const closeCartBtn = document.getElementById('close-cart-btn');
             const overlay = document.getElementById('cart-overlay');
             const continueShoppingBtn = document.getElementById('continue-shopping-btn');
             const continueShoppingFooterBtn = document.getElementById('continue-shopping-footer-btn');
 
             // Open cart popup
-            [cartIconLink, mobileCartIconLink].forEach(element => {
-                if (element) {
-                    element.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        openCartPopup();
-                    });
-                }
-            });
+            if (cartIconBtn) {
+                cartIconBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    openCartPopup();
+                });
+            }
+
+            if (mobileCartIconBtn) {
+                mobileCartIconBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    openCartPopup();
+                });
+            }
 
             // Close cart popup
             if (closeCartBtn) {
@@ -625,11 +603,13 @@
             }
 
             // Continue shopping buttons
-            [continueShoppingBtn, continueShoppingFooterBtn].forEach(button => {
-                if (button) {
-                    button.addEventListener('click', closeCartPopup);
-                }
-            });
+            if (continueShoppingBtn) {
+                continueShoppingBtn.addEventListener('click', closeCartPopup);
+            }
+
+            if (continueShoppingFooterBtn) {
+                continueShoppingFooterBtn.addEventListener('click', closeCartPopup);
+            }
 
             // Cart item interactions using event delegation
             const cartItemsContainer = document.getElementById('cart-items-container');
@@ -646,7 +626,6 @@
                         return;
                     }
 
-                    // Add loading state
                     button.disabled = true;
                     button.classList.add('loading');
 
@@ -665,7 +644,6 @@
                                 console.warn('Unknown cart action:', action);
                         }
                     } finally {
-                        // Remove loading state
                         setTimeout(() => {
                             button.disabled = false;
                             button.classList.remove('loading');
@@ -684,7 +662,7 @@
                 }
             });
 
-            // Update display on window resize (debounced)
+            // Update display on window resize
             window.addEventListener('resize', debounce(() => {
                 const cartOverlay = document.getElementById('cart-overlay');
                 if (cartOverlay && !cartOverlay.classList.contains('hidden')) {
@@ -692,42 +670,16 @@
                 }
             }, 250));
 
-            // Initialize intersection observer for performance
-            initCartObserver();
-
         } catch (error) {
             console.error('Error initializing cart popup:', error);
             showToast('Error al inicializar el carrito', 'error');
         }
     }
 
-    /**
-     * Initializes intersection observer for cart performance optimization
-     */
-    function initCartObserver() {
-        if ('IntersectionObserver' in window) {
-            const cartDrawer = document.getElementById('cart-drawer');
-            if (cartDrawer) {
-                cartObserver = new IntersectionObserver((entries) => {
-                    entries.forEach(entry => {
-                        if (entry.isIntersecting) {
-                            updateCartDisplay();
-                        }
-                    });
-                }, {
-                    root: null,
-                    threshold: 0.1
-                });
-
-                cartObserver.observe(cartDrawer);
-            }
-        }
-    }
-
-    // --- Enhanced Header and Mobile Menu Functions ---
+    // --- Header and Mobile Menu Functions ---
 
     /**
-     * Initializes the enhanced header with scroll effects and proper mobile menu
+     * Initializes the header with scroll effects
      */
     const initEnhancedHeader = () => {
         const header = document.querySelector('header');
@@ -736,20 +688,20 @@
             return;
         }
 
-        const handleScroll = () => {
+        const handleScroll = throttle(() => {
             if (window.scrollY > CONFIG.SCROLL.THRESHOLD) {
                 header.classList.add('header-scrolled');
             } else {
                 header.classList.remove('header-scrolled');
             }
-        };
+        }, 16);
 
-        window.addEventListener('scroll', debounce(handleScroll, CONFIG.SCROLL.DEBOUNCE_DELAY));
-        handleScroll(); // Call once on load
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll();
     };
 
     /**
-     * Initializes the enhanced mobile menu functionality
+     * Initializes the mobile menu functionality
      */
     const initEnhancedMobileMenu = () => {
         const mobileMenuToggles = document.querySelectorAll('.mobile-menu-toggle');
@@ -760,7 +712,6 @@
             return;
         }
 
-        // Function to toggle menu state
         const toggleMenu = () => {
             const isOpen = mobileMenu.classList.contains('show');
             
@@ -777,7 +728,6 @@
                     toggle.setAttribute('aria-expanded', 'true');
                 });
                 
-                // Focus first menu item for accessibility
                 const firstMenuItem = mobileMenu.querySelector('a');
                 if (firstMenuItem) {
                     setTimeout(() => firstMenuItem.focus(), 100);
@@ -785,7 +735,6 @@
             }
         };
 
-        // Add click handlers to all toggle buttons
         mobileMenuToggles.forEach(toggle => {
             toggle.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -793,7 +742,6 @@
             });
         });
 
-        // Close menu when clicking on navigation links
         const menuLinks = mobileMenu.querySelectorAll('a[href^="#"]');
         menuLinks.forEach(link => {
             link.addEventListener('click', () => {
@@ -805,7 +753,6 @@
             });
         });
 
-        // Close menu on escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && mobileMenu.classList.contains('show')) {
                 toggleMenu();
@@ -824,7 +771,7 @@
                 const target = document.querySelector(targetId);
                 
                 if (target) {
-                    const headerOffset = 80; // Account for fixed header
+                    const headerOffset = 80;
                     const elementPosition = target.getBoundingClientRect().top;
                     const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -840,34 +787,29 @@
     };
 
     /**
-     * Initializes video background functionality with error handling
+     * Initializes video background functionality
      */
     const initVideoBackground = () => {
         const videos = document.querySelectorAll('video[autoplay]');
         
         videos.forEach(video => {
-            // Ensure video plays
             const playPromise = video.play();
             if (playPromise) {
                 playPromise.catch(e => {
                     console.log('Video autoplay prevented:', e);
-                    // Show play button or fallback
                 });
             }
             
-            // Handle video load errors
             video.addEventListener('error', () => {
                 console.log('Video failed to load, showing fallback background');
                 video.style.display = 'none';
                 
-                // Show fallback background
                 const fallback = video.parentElement.querySelector('.gradient-bg');
                 if (fallback) {
                     fallback.style.display = 'block';
                 }
             });
 
-            // Ensure video is muted for autoplay
             video.muted = true;
             video.setAttribute('muted', '');
             video.setAttribute('playsinline', '');
@@ -875,8 +817,7 @@
     };
 
     /**
-     * Initializes fade-in animations for elements with the 'fade-in' class.
-     * Uses IntersectionObserver for efficient detection of elements entering the viewport.
+     * Initializes fade-in animations
      */
     const initFadeInAnimations = () => {
         const fadeInElements = document.querySelectorAll('.fade-in');
@@ -899,16 +840,15 @@
                 observer.observe(element);
             });
         } else {
-            // Fallback for browsers without IntersectionObserver
             fadeInElements.forEach(element => {
                 element.classList.add('visible');
             });
-            console.warn("IntersectionObserver not supported. Fallback for fade-in animations applied.");
+            console.warn("IntersectionObserver not supported. Fallback applied.");
         }
     };
 
     /**
-     * Sets the current year in the footer's designated element.
+     * Sets the current year in the footer
      */
     const initFooterYear = () => {
         const currentYearSpan = document.getElementById('current-year');
@@ -918,7 +858,7 @@
     };
 
     /**
-     * Initializes "Add to Cart" button functionality with enhanced feedback
+     * Initializes "Add to Cart" button functionality
      */
     const initAddToCartButtons = () => {
         const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
@@ -964,7 +904,7 @@
                     
                     if (success) {
                         // Show success feedback
-                        clickedButton.textContent = 'Agregado';
+                        clickedButton.textContent = '¡Agregado!';
                         clickedButton.classList.remove('loading');
                         clickedButton.classList.add('added');
                         
@@ -991,24 +931,6 @@
         });
     };
 
-    // --- Legacy Functions (kept for compatibility) ---
-
-    /**
-     * Legacy mobile navigation (kept as fallback)
-     */
-    const initMobileNav = () => {
-        // Implementation kept for compatibility but enhanced version takes precedence
-        console.log('Legacy mobile nav initialized as fallback');
-    };
-
-    /**
-     * Legacy navbar scroll (kept as fallback)
-     */
-    const initNavbarScroll = () => {
-        // Implementation kept for compatibility but enhanced version takes precedence
-        console.log('Legacy navbar scroll initialized as fallback');
-    };
-
     // --- Document Ready / Initialization ---
 
     /**
@@ -1016,9 +938,9 @@
      */
     document.addEventListener('DOMContentLoaded', () => {
         try {
-            console.log('Initializing Brasas El Gordo website...');
+            console.log('🔥 Initializing Brasas El Gordo website...');
 
-            // Initialize enhanced features
+            // Initialize core features
             initEnhancedHeader();
             initEnhancedMobileMenu();
             initSmoothScrolling();
@@ -1031,14 +953,10 @@
             initCartPopup();
             initAddToCartButtons();
 
-            // Initialize legacy features as fallbacks
-            initMobileNav();
-            initNavbarScroll();
-
-            console.log('Main JavaScript initialized and ready.');
+            console.log('✅ Main JavaScript initialized and ready.');
             
         } catch (error) {
-            console.error('Error during initialization:', error);
+            console.error('❌ Error during initialization:', error);
             showToast('Error al inicializar la aplicación', 'error');
         }
     });
@@ -1046,21 +964,20 @@
     // --- Global Error Handling ---
     window.addEventListener('error', (event) => {
         console.error('Global error caught:', event.error);
-        // Don't show toast for every error to avoid spam
     });
 
     window.addEventListener('unhandledrejection', (event) => {
         console.error('Unhandled promise rejection:', event.reason);
-        event.preventDefault(); // Prevent the error from being logged to console again
+        event.preventDefault();
     });
 
-    // --- Performance Monitoring (optional) ---
+    // --- Performance Monitoring ---
     if ('performance' in window) {
         window.addEventListener('load', () => {
             setTimeout(() => {
                 const perfData = performance.getEntriesByType('navigation')[0];
                 if (perfData) {
-                    console.log(`Page load time: ${perfData.loadEventEnd - perfData.loadEventStart}ms`);
+                    console.log(`Page load time: ${(perfData.loadEventEnd - perfData.loadEventStart).toFixed(2)}ms`);
                 }
             }, 0);
         });
@@ -1072,5 +989,16 @@
             cartObserver.disconnect();
         }
     });
+
+    // --- Debug tools (development only) ---
+    if (window.location.hostname === 'localhost' || window.location.hostname.includes('127.0.0.1')) {
+        window.BrasasDebug = {
+            cart: cart,
+            addItem: addItemToCart,
+            showToast: showToast,
+            config: CONFIG
+        };
+        console.log('🔧 Debug tools available at window.BrasasDebug');
+    }
 
 })(); // End of IIFE
