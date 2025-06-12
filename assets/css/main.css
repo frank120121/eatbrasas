@@ -624,35 +624,59 @@ video {
   color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
 
+.\!container {
+  width: 100% !important;
+}
+
 .container {
   width: 100%;
 }
 
 @media (min-width: 640px) {
+  .\!container {
+    max-width: 640px !important;
+  }
+
   .container {
     max-width: 640px;
   }
 }
 
 @media (min-width: 768px) {
+  .\!container {
+    max-width: 768px !important;
+  }
+
   .container {
     max-width: 768px;
   }
 }
 
 @media (min-width: 1024px) {
+  .\!container {
+    max-width: 1024px !important;
+  }
+
   .container {
     max-width: 1024px;
   }
 }
 
 @media (min-width: 1280px) {
+  .\!container {
+    max-width: 1280px !important;
+  }
+
   .container {
     max-width: 1280px;
   }
 }
 
 @media (min-width: 1536px) {
+  .\!container {
+    max-width: 1536px !important;
+  }
+
   .container {
     max-width: 1536px;
   }
@@ -1051,6 +1075,11 @@ video {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.mobile-menu.\!show {
+  --tw-translate-x: 0px;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
 /* ===== MENU COMPONENTS ===== */
 
 /* Custom scrollbar hiding for horizontal nav */
@@ -1440,6 +1469,12 @@ img[loading="lazy"].loaded {
   opacity: 1;
 }
 
+.toast.\!show {
+  --tw-translate-y: 0px;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+  opacity: 1;
+}
+
 .\!toast.success {
   --tw-bg-opacity: 1;
   background-color: rgb(22 163 74 / var(--tw-bg-opacity, 1));
@@ -1737,7 +1772,7 @@ img[loading="lazy"].loaded {
 .sticky-header {
   position: sticky;
   top: 0px;
-  z-index: 50;
+  z-index: 30;
 }
 
 /* Form Components */
@@ -3447,15 +3482,15 @@ img[loading="lazy"].loaded {
 /* Z-index management */
 
 .z-header {
-  z-index: 50;
+  z-index: 30;
 }
 
 .z-cart {
-  z-index: 60;
+  z-index: 40;
 }
 
 .z-toast {
-  z-index: 70;
+  z-index: 50;
 }
 
 /* Focus utilities */

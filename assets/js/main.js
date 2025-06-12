@@ -30,7 +30,43 @@
             OPEN_TIME: 10.75, // 10:45 AM
             CLOSE_TIME: 22,   // 10:00 PM
             ADDRESS: 'Av. Álvaro Obregón 2437, Sonora, 84094 Heroica Nogales, Son'
+        },
+        SELECTORS: {
+            CART: {
+                DESKTOP_COUNT: '#cart-item-count',
+                MOBILE_COUNT: '#mobile-cart-item-count',
+                OVERLAY: '#cart-overlay',
+                DRAWER: '#cart-drawer',
+                BTN: '#cart-btn',
+                MOBILE_BTN: '#mobile-cart-btn',
+                CLOSE_BTN: '#close-cart-btn',
+                ITEMS_CONTAINER: '#cart-items-container',
+                EMPTY_MESSAGE: '#empty-cart-message',
+                FOOTER: '#cart-footer',
+                HEADER_COUNT: '#cart-header-count',
+                TOTAL: '#cart-total',
+                SR_ANNOUNCEMENT: '#cart-sr-announcement'
+            },
+            BUSINESS: {
+                STATUS_CONTAINER: '#business-status',
+                STATUS_INDICATOR: '#status-indicator',
+                STATUS_TEXT: '#status-text'
+            }
         }
+    };
+
+    const CONTACT_INFO = {
+        phone: '+526311234567',
+        phoneDisplay: '+52 631 123 4567',
+        email: 'info@brasaselgordo.com',
+        whatsappBase: 'https://wa.me/526311234567',
+        address: {
+            full: 'Av. Álvaro Obregón 2437, Sonora, 84094 Heroica Nogales, Son',
+            street: 'Av. Álvaro Obregón 2437',
+            city: 'Heroica Nogales, Sonora',
+            postalCode: '84094'
+        },
+        googleMapsUrl: 'https://maps.google.com/?q=Av.+Alvaro+Obregon+2437,+Sonora,+84094+Heroica+Nogales,+Son'
     };
 
     // --- Utility Functions ---
@@ -59,6 +95,110 @@
                 setTimeout(() => inThrottle = false, limit);
             }
         };
+    };
+
+    /**
+     * Generic element selector with error handling
+     */
+    const getElement = (selector, required = false) => {
+        const element = document.querySelector(selector);
+        if (!element && required) {
+            console.error(`Required element not found: ${selector}`);
+        }
+        return element;
+    };
+
+    /**
+     * Generic elements selector
+     */
+    const getElements = (selector) => {
+        return document.querySelectorAll(selector);
+    };
+
+    /**
+     * Generic class toggle utility
+     */
+    const toggleClasses = (element, addClasses = [], removeClasses = []) => {
+        if (!element) return;
+        removeClasses.forEach(cls => element.classList.remove(cls));
+        addClasses.forEach(cls => element.classList.add(cls));
+    };
+
+    /**
+     * Generic attribute setter
+     */
+    const setAttributes = (element, attributes) => {
+        if (!element) return;
+        Object.entries(attributes).forEach(([key, value]) => {
+            element.setAttribute(key, value);
+        });
+    };
+
+    /**
+     * Generic element updater for cart counters
+     */
+    const updateElementDisplay = (selector, count, hiddenClass = 'hidden', visibleClass = 'inline-block') => {
+        const element = getElement(selector);
+        if (!element) return;
+
+        element.textContent = count;
+        setAttributes(element, { 'aria-label': `${count} artículos en el carrito` });
+
+        if (count > 0) {
+            toggleClasses(element, [visibleClass], [hiddenClass]);
+        } else {
+            toggleClasses(element, [hiddenClass], [visibleClass]);
+        }
+    };
+
+    /**
+     * Generic business status updater
+     */
+    const updateBusinessStatusDisplay = (isOpen) => {
+        const container = getElement(CONFIG.SELECTORS.BUSINESS.STATUS_CONTAINER);
+        const indicator = getElement(CONFIG.SELECTORS.BUSINESS.STATUS_INDICATOR);
+        const text = getElement(CONFIG.SELECTORS.BUSINESS.STATUS_TEXT);
+
+        if (!container || !indicator || !text) return;
+
+        const styles = isOpen ? {
+            container: 'mt-4 flex items-center space-x-3 bg-green-50 px-4 py-3 rounded-xl',
+            indicator: 'w-3 h-3 bg-green-500 rounded-full animate-pulse',
+            text: 'text-green-700 font-semibold text-sm',
+            textContent: 'Abierto ahora'
+        } : {
+            container: 'mt-4 flex items-center space-x-3 bg-red-50 px-4 py-3 rounded-xl',
+            indicator: 'w-3 h-3 bg-red-500 rounded-full',
+            text: 'text-red-700 font-semibold text-sm',
+            textContent: getClosedMessage()
+        };
+
+        container.className = styles.container;
+        indicator.className = styles.indicator;
+        text.className = styles.text;
+        text.textContent = styles.textContent;
+    };
+
+    /**
+     * Calculate closed message
+     */
+    const getClosedMessage = () => {
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+        const currentTime = currentHour + (currentMinute / 60);
+        
+        const nextOpen = new Date();
+        if (currentTime >= CONFIG.BUSINESS.CLOSE_TIME) {
+            nextOpen.setDate(nextOpen.getDate() + 1);
+        }
+        nextOpen.setHours(10, 45, 0, 0);
+        
+        const hoursUntilOpen = Math.ceil((nextOpen - now) / (1000 * 60 * 60));
+        
+        return hoursUntilOpen <= 12 
+            ? `Cerrado - Abre en ${hoursUntilOpen}h`
+            : 'Cerrado - Abre mañana a las 10:45 AM';
     };
 
     /**
@@ -109,6 +249,14 @@
             console.error('JSON stringification failed:', error);
             return null;
         }
+    }
+
+    /**
+     * Helper function to generate WhatsApp URLs with messages
+     */
+    function getWhatsAppUrl(message = '') {
+        const encodedMessage = encodeURIComponent(message);
+        return `${CONTACT_INFO.whatsappBase}?text=${encodedMessage}`;
     }
 
     /**
@@ -183,41 +331,14 @@
     }
 
     /**
-     * Updates the displayed number of items in the cart icon
+     * Updates the displayed number of items in the cart icon - REFACTORED
      */
     function updateCartCountDisplay() {
-        const cartItemCountSpan = document.getElementById('cart-item-count');
-        const mobileCartItemCountSpan = document.getElementById('mobile-cart-item-count');
-        
         const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
         
-        // Update desktop cart counter
-        if (cartItemCountSpan) {
-            cartItemCountSpan.textContent = totalItems;
-            cartItemCountSpan.setAttribute('aria-label', `${totalItems} artículos en el carrito`);
-
-            if (totalItems > 0) {
-                cartItemCountSpan.classList.remove('hidden');
-                cartItemCountSpan.classList.add('inline-block');
-            } else {
-                cartItemCountSpan.classList.remove('inline-block');
-                cartItemCountSpan.classList.add('hidden');
-            }
-        }
-        
-        // Update mobile cart counter
-        if (mobileCartItemCountSpan) {
-            mobileCartItemCountSpan.textContent = totalItems;
-            mobileCartItemCountSpan.setAttribute('aria-label', `${totalItems} artículos en el carrito`);
-
-            if (totalItems > 0) {
-                mobileCartItemCountSpan.classList.remove('hidden');
-                mobileCartItemCountSpan.classList.add('inline-block');
-            } else {
-                mobileCartItemCountSpan.classList.remove('inline-block');
-                mobileCartItemCountSpan.classList.add('hidden');
-            }
-        }
+        // Update both desktop and mobile counters using the utility function
+        updateElementDisplay(CONFIG.SELECTORS.CART.DESKTOP_COUNT, totalItems);
+        updateElementDisplay(CONFIG.SELECTORS.CART.MOBILE_COUNT, totalItems);
 
         // Update screen reader announcement
         announceCartUpdate(totalItems);
@@ -227,7 +348,7 @@
      * Announces cart updates to screen readers
      */
     function announceCartUpdate(totalItems) {
-        const announcement = document.getElementById('cart-sr-announcement');
+        const announcement = getElement(CONFIG.SELECTORS.CART.SR_ANNOUNCEMENT);
         if (announcement) {
             announcement.textContent = `Carrito actualizado: ${totalItems} ${totalItems === 1 ? 'artículo' : 'artículos'}`;
         }
@@ -237,7 +358,7 @@
      * Creates and shows a toast notification
      */
     function showToast(message, type = 'success', duration = CONFIG.ANIMATIONS.TOAST_DURATION) {
-        const toastContainer = document.getElementById('toast-container');
+        const toastContainer = getElement('#toast-container');
         if (!toastContainer) {
             console.warn('Toast container not found. Cannot display toast:', message);
             return;
@@ -245,8 +366,10 @@
 
         const toast = document.createElement('div');
         toast.className = `toast ${type}`;
-        toast.setAttribute('role', 'alert');
-        toast.setAttribute('aria-live', 'polite');
+        setAttributes(toast, {
+            'role': 'alert',
+            'aria-live': 'polite'
+        });
         
         // Add icon based on type
         const icons = {
@@ -336,28 +459,24 @@
     // --- Location & Contact Functions ---
 
     /**
-     * Copies the business address to clipboard with fallback support
+     * Generic copy text functionality
      */
-    function copyAddress(event) {
-        const address = CONFIG.BUSINESS.ADDRESS;
-        
+    function copyTextToClipboard(text, successCallback, errorCallback) {
         if (navigator.clipboard && window.isSecureContext) {
             // Use modern clipboard API
-            navigator.clipboard.writeText(address).then(() => {
-                showCopySuccess(event);
-            }).catch(() => {
-                fallbackCopyText(address, event);
+            navigator.clipboard.writeText(text).then(successCallback).catch(() => {
+                fallbackCopyText(text, successCallback, errorCallback);
             });
         } else {
             // Fallback for older browsers
-            fallbackCopyText(address, event);
+            fallbackCopyText(text, successCallback, errorCallback);
         }
     }
 
     /**
      * Fallback method for copying text in older browsers
      */
-    function fallbackCopyText(text, event) {
+    function fallbackCopyText(text, successCallback, errorCallback) {
         const textArea = document.createElement('textarea');
         textArea.value = text;
         textArea.style.position = 'fixed';
@@ -369,13 +488,26 @@
         
         try {
             document.execCommand('copy');
-            showCopySuccess(event);
+            if (successCallback) successCallback();
         } catch (err) {
             console.error('Copy failed:', err);
-            showToast('No se pudo copiar la dirección', 'error');
+            if (errorCallback) errorCallback();
         } finally {
             textArea.remove();
         }
+    }
+
+    /**
+     * Copies the business address to clipboard with fallback support
+     */
+    function copyAddress(event) {
+        const address = CONFIG.BUSINESS.ADDRESS;
+        
+        copyTextToClipboard(
+            address,
+            () => showCopySuccess(event),
+            () => showToast('No se pudo copiar la dirección', 'error')
+        );
     }
 
     /**
@@ -415,44 +547,8 @@
         const currentMinute = now.getMinutes();
         const currentTime = currentHour + (currentMinute / 60);
         
-        const statusContainer = document.getElementById('business-status');
-        const statusIndicator = document.getElementById('status-indicator');
-        const statusText = document.getElementById('status-text');
-        
-        if (!statusContainer || !statusIndicator || !statusText) {
-            return; // Elements not found
-        }
-        
         const isOpen = currentTime >= CONFIG.BUSINESS.OPEN_TIME && currentTime < CONFIG.BUSINESS.CLOSE_TIME;
-        
-        if (isOpen) {
-            // Open
-            statusContainer.className = 'mt-4 flex items-center space-x-3 bg-green-50 px-4 py-3 rounded-xl';
-            statusIndicator.className = 'w-3 h-3 bg-green-500 rounded-full animate-pulse';
-            statusText.className = 'text-green-700 font-semibold text-sm';
-            statusText.textContent = 'Abierto ahora';
-        } else {
-            // Closed
-            statusContainer.className = 'mt-4 flex items-center space-x-3 bg-red-50 px-4 py-3 rounded-xl';
-            statusIndicator.className = 'w-3 h-3 bg-red-500 rounded-full';
-            statusText.className = 'text-red-700 font-semibold text-sm';
-            
-            // Calculate next opening time
-            const nextOpen = new Date();
-            if (currentTime >= CONFIG.BUSINESS.CLOSE_TIME) {
-                // After closing time, open tomorrow
-                nextOpen.setDate(nextOpen.getDate() + 1);
-            }
-            nextOpen.setHours(10, 45, 0, 0);
-            
-            const hoursUntilOpen = Math.ceil((nextOpen - now) / (1000 * 60 * 60));
-            
-            if (hoursUntilOpen <= 12) {
-                statusText.textContent = `Cerrado - Abre en ${hoursUntilOpen}h`;
-            } else {
-                statusText.textContent = 'Cerrado - Abre mañana a las 10:45 AM';
-            }
-        }
+        updateBusinessStatusDisplay(isOpen);
     }
 
     /**
@@ -460,6 +556,19 @@
      */
     function checkBusinessStatus() {
         updateBusinessStatus();
+    }
+
+    /**
+     * Generic event listener attacher with cleanup
+     */
+    function attachEventListeners(selector, event, handler, options = {}) {
+        const elements = getElements(selector);
+        elements.forEach(element => {
+            // Remove inline onclick if it exists
+            element.removeAttribute('onclick');
+            element.addEventListener(event, handler, options);
+        });
+        return elements.length;
     }
 
     /**
@@ -474,23 +583,13 @@
             setInterval(updateBusinessStatus, 60000);
 
             // Add copy address button listeners
-            const copyAddressButtons = document.querySelectorAll('button[onclick="copyAddress()"]');
-            copyAddressButtons.forEach(button => {
-                // Remove inline onclick and add event listener
-                button.removeAttribute('onclick');
-                button.addEventListener('click', (event) => {
-                    event.preventDefault();
-                    copyAddress(event);
-                });
+            attachEventListeners('button[onclick="copyAddress()"]', 'click', (event) => {
+                event.preventDefault();
+                copyAddress(event);
             });
 
             // Add check business status button listeners
-            const checkStatusButtons = document.querySelectorAll('button[onclick="checkBusinessStatus()"]');
-            checkStatusButtons.forEach(button => {
-                // Remove inline onclick and add event listener
-                button.removeAttribute('onclick');
-                button.addEventListener('click', checkBusinessStatus);
-            });
+            attachEventListeners('button[onclick="checkBusinessStatus()"]', 'click', checkBusinessStatus);
 
             console.log('✅ Location and contact functionality initialized');
         } catch (error) {
@@ -507,7 +606,7 @@
     function initImageLoading() {
         console.log('🖼️ Initializing enhanced image loading...');
         
-        const images = document.querySelectorAll('img[loading="lazy"]');
+        const images = getElements('img[loading="lazy"]');
         console.log(`Found ${images.length} lazy-loaded images`);
         
         if (images.length === 0) {
@@ -558,7 +657,7 @@
         
         // Fallback: After 2 seconds, make sure all images are visible
         setTimeout(() => {
-            const stillHiddenImages = document.querySelectorAll('img[loading="lazy"]:not(.loaded)');
+            const stillHiddenImages = getElements('img[loading="lazy"]:not(.loaded)');
             if (stillHiddenImages.length > 0) {
                 console.log(`⚠️ Forcing visibility for ${stillHiddenImages.length} remaining images`);
                 stillHiddenImages.forEach((img, index) => {
@@ -575,7 +674,7 @@
         // Additional fallback: Force load images in problematic categories
         const problematicCategories = ['carnes-asadas', 'tacos-quesadillas'];
         problematicCategories.forEach(categoryId => {
-            const categorySection = document.getElementById(categoryId);
+            const categorySection = getElement(`#${categoryId}`);
             if (categorySection) {
                 const categoryImages = categorySection.querySelectorAll('img[loading="lazy"]');
                 console.log(`🔍 Found ${categoryImages.length} images in ${categoryId}`);
@@ -600,8 +699,8 @@
      */
     function initMenuNavigation() {
         try {
-            const categoryNavButtons = document.querySelectorAll('.category-nav-btn');
-            const menuCategories = document.querySelectorAll('.menu-category');
+            const categoryNavButtons = getElements('.category-nav-btn');
+            const menuCategories = getElements('.menu-category');
 
             if (categoryNavButtons.length === 0 || menuCategories.length === 0) {
                 console.log('Menu navigation elements not found - skipping menu initialization');
@@ -610,7 +709,7 @@
 
             // Smooth scroll to category with offset for sticky nav
             function scrollToCategory(categoryId) {
-                const targetElement = document.getElementById(categoryId);
+                const targetElement = getElement(`#${categoryId}`);
                 if (targetElement) {
                     const headerOffset = 140; // Account for sticky nav height
                     const elementPosition = targetElement.getBoundingClientRect().top;
@@ -626,16 +725,14 @@
             // Update active navigation button
             function updateActiveNavButton(activeCategoryId) {
                 categoryNavButtons.forEach(btn => {
-                    btn.classList.remove('active', 'text-primary', 'bg-primary/10');
-                    btn.classList.add('text-gray-600');
-                    btn.setAttribute('aria-selected', 'false');
+                    toggleClasses(btn, ['text-gray-600'], ['active', 'text-primary', 'bg-primary/10']);
+                    setAttributes(btn, { 'aria-selected': 'false' });
                 });
 
-                const activeBtn = document.querySelector(`[data-category="${activeCategoryId}"]`);
+                const activeBtn = getElement(`[data-category="${activeCategoryId}"]`);
                 if (activeBtn) {
-                    activeBtn.classList.add('active', 'text-primary', 'bg-primary/10');
-                    activeBtn.classList.remove('text-gray-600');
-                    activeBtn.setAttribute('aria-selected', 'true');
+                    toggleClasses(activeBtn, ['active', 'text-primary', 'bg-primary/10'], ['text-gray-600']);
+                    setAttributes(activeBtn, { 'aria-selected': 'true' });
                 }
             }
 
@@ -671,7 +768,7 @@
             }
 
             // Enhanced touch feedback for mobile
-            const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+            const addToCartButtons = getElements('.add-to-cart-btn');
             addToCartButtons.forEach(button => {
                 // Add haptic feedback for supported devices
                 button.addEventListener('click', function() {
@@ -708,13 +805,15 @@
     // --- Cart Popup Functions ---
 
     /**
-     * Opens the cart popup with smooth animation
+     * Generic cart popup animation handler
      */
-    function openCartPopup() {
-        const overlay = document.getElementById('cart-overlay');
-        const drawer = document.getElementById('cart-drawer');
+    function animateCartPopup(show = true) {
+        const overlay = getElement(CONFIG.SELECTORS.CART.OVERLAY);
+        const drawer = getElement(CONFIG.SELECTORS.CART.DRAWER);
         
-        if (overlay && drawer) {
+        if (!overlay || !drawer) return;
+
+        if (show) {
             overlay.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
             
@@ -730,19 +829,7 @@
                     }
                 }, CONFIG.ANIMATIONS.CART_ANIMATION_DURATION);
             });
-            
-            updateCartDisplay();
-        }
-    }
-
-    /**
-     * Closes the cart popup with smooth animation
-     */
-    function closeCartPopup() {
-        const overlay = document.getElementById('cart-overlay');
-        const drawer = document.getElementById('cart-drawer');
-        
-        if (overlay && drawer) {
+        } else {
             overlay.classList.remove('show');
             drawer.classList.remove('show');
             
@@ -751,6 +838,21 @@
                 document.body.style.overflow = '';
             }, CONFIG.ANIMATIONS.CART_ANIMATION_DURATION);
         }
+    }
+
+    /**
+     * Opens the cart popup with smooth animation
+     */
+    function openCartPopup() {
+        animateCartPopup(true);
+        updateCartDisplay();
+    }
+
+    /**
+     * Closes the cart popup with smooth animation
+     */
+    function closeCartPopup() {
+        animateCartPopup(false);
     }
 
     /**
@@ -765,7 +867,7 @@
                     <div class="flex-1 min-w-0">
                         <h4 class="font-semibold text-gray-900 truncate">${escapeHtml(item.title)}</h4>
                         <p class="text-sm text-gray-500 truncate">${escapeHtml(item.description || '')}</p>
-                        <p class="text-lg font-bold text-primary mt-1">$${item.price} × ${item.quantity} = $${itemTotal}</p>
+                        <p class="text-lg font-bold text-primary mt-1">${item.price} × ${item.quantity} = ${itemTotal}</p>
                     </div>
                     
                     <div class="flex items-center space-x-3 ml-4">
@@ -808,15 +910,21 @@
      * Updates the cart display in the popup - MODIFIED to show all items
      */
     function updateCartDisplay() {
-        const emptyMessage = document.getElementById('empty-cart-message');
-        const itemsContainer = document.getElementById('cart-items-container');
-        const cartFooter = document.getElementById('cart-footer');
-        const cartHeaderCount = document.getElementById('cart-header-count');
-        const showMoreContainer = document.getElementById('show-more-container');
-        const cartTotal = document.getElementById('cart-total');
+        const elements = {
+            emptyMessage: getElement(CONFIG.SELECTORS.CART.EMPTY_MESSAGE),
+            itemsContainer: getElement(CONFIG.SELECTORS.CART.ITEMS_CONTAINER),
+            cartFooter: getElement(CONFIG.SELECTORS.CART.FOOTER),
+            cartHeaderCount: getElement(CONFIG.SELECTORS.CART.HEADER_COUNT),
+            showMoreContainer: getElement('#show-more-container'),
+            cartTotal: getElement(CONFIG.SELECTORS.CART.TOTAL)
+        };
 
-        if (!emptyMessage || !itemsContainer || !cartFooter || !cartHeaderCount || !cartTotal) {
-            console.error('Required cart elements not found');
+        // Check if required elements exist
+        const requiredElements = ['emptyMessage', 'itemsContainer', 'cartFooter', 'cartHeaderCount', 'cartTotal'];
+        const missingElements = requiredElements.filter(key => !elements[key]);
+        
+        if (missingElements.length > 0) {
+            console.error('Required cart elements not found:', missingElements);
             return;
         }
 
@@ -824,29 +932,37 @@
             const totalItems = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
             const totalPrice = cart.reduce((sum, item) => sum + ((item.price || 0) * (item.quantity || 0)), 0);
 
-            cartHeaderCount.textContent = totalItems;
+            elements.cartHeaderCount.textContent = totalItems;
 
             if (cart.length === 0) {
-                emptyMessage.classList.remove('hidden');
-                itemsContainer.classList.add('hidden');
-                cartFooter.classList.add('hidden');
-                showMoreContainer.classList.add('hidden');
+                toggleClasses(elements.emptyMessage, [], ['hidden']);
+                toggleClasses(elements.itemsContainer, ['hidden'], []);
+                toggleClasses(elements.cartFooter, ['hidden'], []);
+                if (elements.showMoreContainer) {
+                    toggleClasses(elements.showMoreContainer, ['hidden'], []);
+                }
             } else {
-                emptyMessage.classList.add('hidden');
-                itemsContainer.classList.remove('hidden');
-                cartFooter.classList.remove('hidden');
+                toggleClasses(elements.emptyMessage, ['hidden'], []);
+                toggleClasses(elements.itemsContainer, [], ['hidden']);
+                toggleClasses(elements.cartFooter, [], ['hidden']);
 
-                itemsContainer.setAttribute('role', 'list');
-                itemsContainer.setAttribute('aria-label', `Artículos del carrito, ${cart.length} elementos`);
+                setAttributes(elements.itemsContainer, {
+                    'role': 'list',
+                    'aria-label': `Artículos del carrito, ${cart.length} elementos`
+                });
 
-                // CHANGE: Show ALL items instead of limiting based on device
-                itemsContainer.innerHTML = cart.map((item, index) => createCartItemHTML(item, index)).join('');
+                // Show ALL items instead of limiting based on device
+                elements.itemsContainer.innerHTML = cart.map((item, index) => createCartItemHTML(item, index)).join('');
 
-                // CHANGE: Always hide the "show more" container since we're showing all items
-                showMoreContainer.classList.add('hidden');
+                // Always hide the "show more" container since we're showing all items
+                if (elements.showMoreContainer) {
+                    toggleClasses(elements.showMoreContainer, ['hidden'], []);
+                }
 
-                cartTotal.textContent = `${totalPrice.toFixed(0)}`;
-                cartTotal.setAttribute('aria-label', `Total del carrito: ${totalPrice.toFixed(0)} pesos`);
+                elements.cartTotal.textContent = `${totalPrice.toFixed(0)}`;
+                setAttributes(elements.cartTotal, {
+                    'aria-label': `Total del carrito: ${totalPrice.toFixed(0)} pesos`
+                });
             }
         } catch (error) {
             console.error('Error updating cart display:', error);
@@ -894,7 +1010,7 @@
             return;
         }
 
-        const itemElement = document.querySelector(`.cart-item[data-index="${index}"]`);
+        const itemElement = getElement(`.cart-item[data-index="${index}"]`);
         const itemTitle = cart[index].title;
 
         const performRemoval = () => {
@@ -915,39 +1031,68 @@
     }
 
     /**
+     * Generic cart button event handler
+     */
+    function handleCartButtonAction(button) {
+        const action = button.dataset.action;
+        const index = parseInt(button.dataset.index, 10);
+
+        if (isNaN(index)) {
+            console.error('Invalid item index:', button.dataset.index);
+            return;
+        }
+
+        button.disabled = true;
+        button.classList.add('loading');
+
+        try {
+            switch (action) {
+                case 'increase':
+                    updateCartItemQuantity(index, 1);
+                    break;
+                case 'decrease':
+                    updateCartItemQuantity(index, -1);
+                    break;
+                case 'remove':
+                    removeCartItem(index);
+                    break;
+                default:
+                    console.warn('Unknown cart action:', action);
+            }
+        } finally {
+            setTimeout(() => {
+                button.disabled = false;
+                button.classList.remove('loading');
+            }, 200);
+        }
+    }
+
+    /**
      * Initializes cart popup event listeners
      */
     function initCartPopup() {
         try {
-            // Cart icon click handlers
-            const cartIconBtn = document.getElementById('cart-btn');
-            const mobileCartIconBtn = document.getElementById('mobile-cart-btn');
-            const closeCartBtn = document.getElementById('close-cart-btn');
-            const overlay = document.getElementById('cart-overlay');
-            const continueShoppingBtn = document.getElementById('continue-shopping-btn');
-            const continueShoppingFooterBtn = document.getElementById('continue-shopping-footer-btn');
+            // Cart icon click handlers - using utility function
+            const cartButtons = [
+                { selector: CONFIG.SELECTORS.CART.BTN, handler: openCartPopup },
+                { selector: CONFIG.SELECTORS.CART.MOBILE_BTN, handler: openCartPopup },
+                { selector: CONFIG.SELECTORS.CART.CLOSE_BTN, handler: closeCartPopup },
+                { selector: '#continue-shopping-btn', handler: closeCartPopup },
+                { selector: '#continue-shopping-footer-btn', handler: closeCartPopup }
+            ];
 
-            // Open cart popup
-            if (cartIconBtn) {
-                cartIconBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    openCartPopup();
-                });
-            }
-
-            if (mobileCartIconBtn) {
-                mobileCartIconBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    openCartPopup();
-                });
-            }
-
-            // Close cart popup
-            if (closeCartBtn) {
-                closeCartBtn.addEventListener('click', closeCartPopup);
-            }
+            cartButtons.forEach(({ selector, handler }) => {
+                const element = getElement(selector);
+                if (element) {
+                    element.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        handler();
+                    });
+                }
+            });
 
             // Close on overlay click
+            const overlay = getElement(CONFIG.SELECTORS.CART.OVERLAY);
             if (overlay) {
                 overlay.addEventListener('click', (e) => {
                     if (e.target === overlay) {
@@ -956,52 +1101,13 @@
                 });
             }
 
-            // Continue shopping buttons
-            if (continueShoppingBtn) {
-                continueShoppingBtn.addEventListener('click', closeCartPopup);
-            }
-
-            if (continueShoppingFooterBtn) {
-                continueShoppingFooterBtn.addEventListener('click', closeCartPopup);
-            }
-
             // Cart item interactions using event delegation
-            const cartItemsContainer = document.getElementById('cart-items-container');
+            const cartItemsContainer = getElement(CONFIG.SELECTORS.CART.ITEMS_CONTAINER);
             if (cartItemsContainer) {
                 cartItemsContainer.addEventListener('click', (e) => {
                     const button = e.target.closest('button[data-action]');
-                    if (!button) return;
-
-                    const action = button.dataset.action;
-                    const index = parseInt(button.dataset.index, 10);
-
-                    if (isNaN(index)) {
-                        console.error('Invalid item index:', button.dataset.index);
-                        return;
-                    }
-
-                    button.disabled = true;
-                    button.classList.add('loading');
-
-                    try {
-                        switch (action) {
-                            case 'increase':
-                                updateCartItemQuantity(index, 1);
-                                break;
-                            case 'decrease':
-                                updateCartItemQuantity(index, -1);
-                                break;
-                            case 'remove':
-                                removeCartItem(index);
-                                break;
-                            default:
-                                console.warn('Unknown cart action:', action);
-                        }
-                    } finally {
-                        setTimeout(() => {
-                            button.disabled = false;
-                            button.classList.remove('loading');
-                        }, 200);
+                    if (button) {
+                        handleCartButtonAction(button);
                     }
                 });
             }
@@ -1009,7 +1115,7 @@
             // Keyboard navigation
             document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
-                    const cartOverlay = document.getElementById('cart-overlay');
+                    const cartOverlay = getElement(CONFIG.SELECTORS.CART.OVERLAY);
                     if (cartOverlay && !cartOverlay.classList.contains('hidden')) {
                         closeCartPopup();
                     }
@@ -1018,7 +1124,7 @@
 
             // Update display on window resize
             window.addEventListener('resize', debounce(() => {
-                const cartOverlay = document.getElementById('cart-overlay');
+                const cartOverlay = getElement(CONFIG.SELECTORS.CART.OVERLAY);
                 if (cartOverlay && !cartOverlay.classList.contains('hidden')) {
                     updateCartDisplay();
                 }
@@ -1036,7 +1142,7 @@
      * Initializes the header with scroll effects
      */
     const initEnhancedHeader = () => {
-        const header = document.querySelector('header');
+        const header = getElement('header');
         if (!header) {
             console.warn('Header element not found');
             return;
@@ -1055,39 +1161,44 @@
     };
 
     /**
+     * Generic mobile menu toggle handler
+     */
+    function toggleMobileMenu(mobileMenu, mobileMenuToggles, show = null) {
+        const isOpen = show !== null ? !show : mobileMenu.classList.contains('show');
+        
+        if (isOpen) {
+            toggleClasses(mobileMenu, [], ['show']);
+            document.body.style.overflow = '';
+            mobileMenuToggles.forEach(toggle => {
+                setAttributes(toggle, { 'aria-expanded': 'false' });
+            });
+        } else {
+            toggleClasses(mobileMenu, ['show'], []);
+            document.body.style.overflow = 'hidden';
+            mobileMenuToggles.forEach(toggle => {
+                setAttributes(toggle, { 'aria-expanded': 'true' });
+            });
+            
+            const firstMenuItem = mobileMenu.querySelector('a');
+            if (firstMenuItem) {
+                setTimeout(() => firstMenuItem.focus(), 100);
+            }
+        }
+    }
+
+    /**
      * Initializes the mobile menu functionality
      */
     const initEnhancedMobileMenu = () => {
-        const mobileMenuToggles = document.querySelectorAll('.mobile-menu-toggle');
-        const mobileMenu = document.querySelector('.mobile-menu');
+        const mobileMenuToggles = getElements('.mobile-menu-toggle');
+        const mobileMenu = getElement('.mobile-menu');
         
         if (!mobileMenu || mobileMenuToggles.length === 0) {
             console.warn('Mobile menu elements not found');
             return;
         }
 
-        const toggleMenu = () => {
-            const isOpen = mobileMenu.classList.contains('show');
-            
-            if (isOpen) {
-                mobileMenu.classList.remove('show');
-                document.body.style.overflow = '';
-                mobileMenuToggles.forEach(toggle => {
-                    toggle.setAttribute('aria-expanded', 'false');
-                });
-            } else {
-                mobileMenu.classList.add('show');
-                document.body.style.overflow = 'hidden';
-                mobileMenuToggles.forEach(toggle => {
-                    toggle.setAttribute('aria-expanded', 'true');
-                });
-                
-                const firstMenuItem = mobileMenu.querySelector('a');
-                if (firstMenuItem) {
-                    setTimeout(() => firstMenuItem.focus(), 100);
-                }
-            }
-        };
+        const toggleMenu = () => toggleMobileMenu(mobileMenu, mobileMenuToggles);
 
         mobileMenuToggles.forEach(toggle => {
             toggle.addEventListener('click', (e) => {
@@ -1099,11 +1210,7 @@
         const menuLinks = mobileMenu.querySelectorAll('a[href^="#"]');
         menuLinks.forEach(link => {
             link.addEventListener('click', () => {
-                mobileMenu.classList.remove('show');
-                document.body.style.overflow = '';
-                mobileMenuToggles.forEach(toggle => {
-                    toggle.setAttribute('aria-expanded', 'false');
-                });
+                toggleMobileMenu(mobileMenu, mobileMenuToggles, false);
             });
         });
 
@@ -1115,36 +1222,53 @@
     };
 
     /**
+     * Generic smooth scroll handler
+     */
+    function smoothScrollToTarget(targetId, offset = 80) {
+        const target = getElement(targetId);
+        
+        if (target) {
+            const elementPosition = target.getBoundingClientRect().top;
+            const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+            window.scrollTo({
+                top: offsetPosition,
+                behavior: 'smooth'
+            });
+        } else {
+            console.warn('Scroll target not found:', targetId);
+        }
+    }
+
+    /**
      * Initializes smooth scrolling for anchor links
      */
     const initSmoothScrolling = () => {
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const target = document.querySelector(targetId);
-                
-                if (target) {
-                    const headerOffset = 80;
-                    const elementPosition = target.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
-                } else {
-                    console.warn('Scroll target not found:', targetId);
-                }
-            });
+        attachEventListeners('a[href^="#"]', 'click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            smoothScrollToTarget(targetId);
         });
     };
+
+    /**
+     * Generic video error handler
+     */
+    function handleVideoError(video) {
+        console.log('Video failed to load, showing fallback background');
+        video.style.display = 'none';
+        
+        const fallback = video.parentElement.querySelector('.gradient-bg');
+        if (fallback) {
+            fallback.style.display = 'block';
+        }
+    }
 
     /**
      * Initializes video background functionality
      */
     const initVideoBackground = () => {
-        const videos = document.querySelectorAll('video[autoplay]');
+        const videos = getElements('video[autoplay]');
         
         videos.forEach(video => {
             const playPromise = video.play();
@@ -1154,19 +1278,13 @@
                 });
             }
             
-            video.addEventListener('error', () => {
-                console.log('Video failed to load, showing fallback background');
-                video.style.display = 'none';
-                
-                const fallback = video.parentElement.querySelector('.gradient-bg');
-                if (fallback) {
-                    fallback.style.display = 'block';
-                }
-            });
+            video.addEventListener('error', () => handleVideoError(video));
 
             video.muted = true;
-            video.setAttribute('muted', '');
-            video.setAttribute('playsinline', '');
+            setAttributes(video, {
+                'muted': '',
+                'playsinline': ''
+            });
         });
     };
 
@@ -1174,7 +1292,7 @@
      * Initializes fade-in animations
      */
     const initFadeInAnimations = () => {
-        const fadeInElements = document.querySelectorAll('.fade-in');
+        const fadeInElements = getElements('.fade-in');
 
         if ('IntersectionObserver' in window) {
             const observer = new IntersectionObserver((entries) => {
@@ -1205,17 +1323,48 @@
      * Sets the current year in the footer
      */
     const initFooterYear = () => {
-        const currentYearSpan = document.getElementById('current-year');
+        const currentYearSpan = getElement('#current-year');
         if (currentYearSpan) {
             currentYearSpan.textContent = new Date().getFullYear();
         }
     };
 
     /**
+     * Generic button state manager for add to cart buttons
+     */
+    function manageButtonState(button, state, originalText, duration = CONFIG.ANIMATIONS.BUTTON_FEEDBACK_DURATION) {
+        const states = {
+            loading: { text: 'Agregando...', classes: ['loading'], disabled: true },
+            success: { text: '¡Agregado!', classes: ['added'], disabled: false },
+            error: { text: originalText, classes: [], disabled: false },
+            reset: { text: originalText, classes: [], disabled: false }
+        };
+
+        const currentState = states[state] || states.reset;
+        
+        button.textContent = currentState.text;
+        button.disabled = currentState.disabled;
+        
+        // Remove all state classes first
+        Object.values(states).forEach(s => {
+            s.classes.forEach(cls => button.classList.remove(cls));
+        });
+        
+        // Add current state classes
+        currentState.classes.forEach(cls => button.classList.add(cls));
+
+        if (state === 'success') {
+            setTimeout(() => {
+                manageButtonState(button, 'reset', originalText);
+            }, duration);
+        }
+    }
+
+    /**
      * Initializes "Add to Cart" button functionality
      */
     const initAddToCartButtons = () => {
-        const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+        const addToCartButtons = getElements('.add-to-cart-btn');
         
         addToCartButtons.forEach(button => {
             button.addEventListener('click', async (event) => {
@@ -1249,41 +1398,46 @@
                 const clickedButton = event.target;
                 const originalText = clickedButton.dataset.originalText || clickedButton.textContent;
                 
-                clickedButton.disabled = true;
-                clickedButton.classList.add('loading');
-                clickedButton.textContent = 'Agregando...';
+                manageButtonState(clickedButton, 'loading', originalText);
 
                 try {
                     const success = addItemToCart({ title, price, description });
                     
                     if (success) {
-                        // Show success feedback
-                        clickedButton.textContent = '¡Agregado!';
-                        clickedButton.classList.remove('loading');
-                        clickedButton.classList.add('added');
-                        
-                        // Revert button after delay
-                        setTimeout(() => {
-                            clickedButton.textContent = originalText;
-                            clickedButton.classList.remove('added');
-                            clickedButton.disabled = false;
-                        }, CONFIG.ANIMATIONS.BUTTON_FEEDBACK_DURATION);
+                        manageButtonState(clickedButton, 'success', originalText);
                     } else {
-                        // Handle failure
-                        clickedButton.textContent = originalText;
-                        clickedButton.classList.remove('loading');
-                        clickedButton.disabled = false;
+                        manageButtonState(clickedButton, 'error', originalText);
                     }
                 } catch (error) {
                     console.error('Error adding item to cart:', error);
-                    clickedButton.textContent = originalText;
-                    clickedButton.classList.remove('loading');
-                    clickedButton.disabled = false;
+                    manageButtonState(clickedButton, 'error', originalText);
                     showToast('Error al añadir producto al carrito', 'error');
                 }
             });
         });
     };
+
+    /**
+     * Generic contact info updater
+     */
+    function updateContactElements() {
+        // Update all phone links
+        attachEventListeners('a[href^="tel:"]', 'click', function() {
+            this.href = `tel:${CONTACT_INFO.phone}`;
+        });
+        
+        // Update all email links  
+        attachEventListeners('a[href^="mailto:"]', 'click', function() {
+            this.href = `mailto:${CONTACT_INFO.email}`;
+        });
+        
+        // Update WhatsApp links
+        getElements('a[href*="wa.me"]').forEach(link => {
+            const currentUrl = new URL(link.href);
+            const message = currentUrl.searchParams.get('text') || '';
+            link.href = getWhatsAppUrl(message);
+        });
+    }
 
     // --- Document Ready / Initialization ---
 
@@ -1313,8 +1467,11 @@
             // Initialize menu navigation
             initMenuNavigation();
             
-            // Initialize enhanced image loading (NEW - moved here for better timing)
+            // Initialize enhanced image loading
             initImageLoading();
+
+            // Update contact elements
+            updateContactElements();
 
             console.log('✅ Main JavaScript initialized and ready.');
             
@@ -1362,7 +1519,7 @@
             config: CONFIG,
             copyAddress: copyAddress,
             updateBusinessStatus: updateBusinessStatus,
-            initImageLoading: initImageLoading // Add for debugging
+            initImageLoading: initImageLoading
         };
         console.log('🔧 Debug tools available at window.BrasasDebug');
     }

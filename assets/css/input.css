@@ -434,7 +434,7 @@
   }
 
   .sticky-header {
-    @apply sticky top-0 z-50;
+    @apply sticky top-0 z-30;
   }
 
   /* Form Components */
@@ -466,9 +466,9 @@
   }
 
   /* Z-index management */
-  .z-header { z-index: 50; }
-  .z-cart { z-index: 60; }
-  .z-toast { z-index: 70; }
+  .z-header { z-index: 30; }
+  .z-cart { z-index: 40; }
+  .z-toast { z-index: 50; }
 
   /* Focus utilities */
   .focus-visible {

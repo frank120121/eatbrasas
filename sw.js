@@ -3,7 +3,7 @@
  * Provides offline functionality, asset caching, and background sync
  */
 
-const CACHE_NAME = 'brasas-el-gordo-v1.2.5';
+const CACHE_NAME = 'brasas-el-gordo-v1.2.3';
 const OFFLINE_PAGE = '/offline.html';
 
 // Critical assets that must be cached for offline functionality
