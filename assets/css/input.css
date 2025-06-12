@@ -217,15 +217,6 @@
     }
   }
 
-  /* Smooth image loading - CRITICAL FOR IMAGE VISIBILITY */
-  img[loading="lazy"] {
-    @apply opacity-0 transition-opacity duration-300;
-  }
-
-  img[loading="lazy"].loaded {
-    @apply opacity-100;
-  }
-
   /* Hero Section Components */
   .hero-background {
     @apply absolute inset-0 z-0;
@@ -434,7 +425,7 @@
   }
 
   .sticky-header {
-    @apply sticky top-0 z-30;
+    @apply sticky top-0 z-50;
   }
 
   /* Form Components */
@@ -466,9 +457,9 @@
   }
 
   /* Z-index management */
-  .z-header { z-index: 30; }
-  .z-cart { z-index: 40; }
-  .z-toast { z-index: 50; }
+  .z-header { z-index: 50; }
+  .z-cart { z-index: 60; }
+  .z-toast { z-index: 70; }
 
   /* Focus utilities */
   .focus-visible {

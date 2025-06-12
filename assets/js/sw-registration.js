@@ -1,33 +1,35 @@
 /**
- * Service Worker Registration and Management
- * Add this code to your main.js file or create a separate sw-registration.js
+ * Lightweight Service Worker Registration for Mexican Mobile Market
+ * Optimized for low-end devices and slow connections
  */
 
-// Service Worker Configuration
+// Simplified configuration for Mexican market
 const SW_CONFIG = {
     SW_URL: '/sw.js',
-    UPDATE_CHECK_INTERVAL: 60000, // Check for updates every minute
-    CACHE_CART_INTERVAL: 30000, // Sync cart data every 30 seconds
-    ENABLE_NOTIFICATIONS: true,
+    UPDATE_CHECK_INTERVAL: 300000, // Check every 5 minutes (was 1 minute)
+    CART_SYNC_INTERVAL: 60000,     // Sync every minute (was 30 seconds)
+    DATA_LIMIT_MB: 2,              // 2MB limit for Mexican prepaid plans
+    WARN_AT_PERCENTAGE: 70,        // Warn at 70% usage
     DEBUG: window.location.hostname === 'localhost'
 };
 
 /**
- * Service Worker Registration and Management
+ * Lightweight Service Worker Manager for Mexico
  */
 class ServiceWorkerManager {
     constructor() {
         this.registration = null;
-        this.isUpdateAvailable = false;
-        this.deferredPrompt = null;
+        this.isOnline = navigator.onLine;
+        this.dataUsage = 0;
         this.updateCheckInterval = null;
         this.cartSyncInterval = null;
         
+        // Initialize immediately for critical functionality
         this.init();
     }
 
     /**
-     * Initialize the Service Worker Manager
+     * Initialize service worker
      */
     async init() {
         if (!('serviceWorker' in navigator)) {
@@ -41,16 +43,15 @@ class ServiceWorkerManager {
             this.startPeriodicTasks();
             this.handleInstallPrompt();
             
-            if (SW_CONFIG.DEBUG) {
-                console.log('🔧 SW Manager initialized in debug mode');
-            }
+            console.log('✅ SW Manager initialized for Mexico');
+            
         } catch (error) {
-            console.error('Failed to initialize Service Worker Manager:', error);
+            console.error('❌ SW Manager initialization failed:', error);
         }
     }
 
     /**
-     * Register the Service Worker
+     * Register service worker
      */
     async registerServiceWorker() {
         try {
@@ -58,20 +59,15 @@ class ServiceWorkerManager {
                 scope: '/'
             });
 
-            console.log('✅ Service Worker registered successfully');
+            console.log('✅ Service Worker registered');
 
-            // Check for updates immediately
-            await this.checkForUpdates();
-
-            // Handle different registration states
+            // Handle registration states
             if (this.registration.installing) {
-                console.log('🔄 Service Worker installing...');
                 this.trackInstalling(this.registration.installing);
             } else if (this.registration.waiting) {
-                console.log('⏳ Service Worker waiting...');
                 this.showUpdateNotification();
             } else if (this.registration.active) {
-                console.log('✅ Service Worker active');
+                this.syncCartData();
             }
 
         } catch (error) {
@@ -81,72 +77,142 @@ class ServiceWorkerManager {
     }
 
     /**
-     * Set up event listeners for Service Worker events
+     * Setup essential event listeners
      */
     setupEventListeners() {
-        // Listen for Service Worker updates
-        navigator.serviceWorker.addEventListener('controllerchange', () => {
-            console.log('🔄 Service Worker controller changed');
-            window.location.reload();
-        });
-
-        // Listen for messages from Service Worker
+        // Service worker messages
         navigator.serviceWorker.addEventListener('message', event => {
             this.handleServiceWorkerMessage(event);
         });
 
-        // Handle page visibility changes
+        // Online/offline handling for Mexico
+        window.addEventListener('online', () => {
+            console.log('📡 Back online');
+            this.isOnline = true;
+            this.syncCartData();
+            this.notifyServiceWorker('PROCESS_OFFLINE_ORDERS');
+            this.showToast('🌐 Conexión restaurada', 'success');
+        });
+
+        window.addEventListener('offline', () => {
+            console.log('📡 Gone offline');
+            this.isOnline = false;
+            this.showToast('📱 Modo offline activado', 'info');
+        });
+
+        // Check for updates when page becomes visible
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden) {
                 this.checkForUpdates();
             }
         });
 
-        // Handle online/offline events
-        window.addEventListener('online', () => {
-            console.log('📡 Back online');
-            this.syncCartData();
-            this.showToast('Conexión restaurada', 'success');
-        });
-
-        window.addEventListener('offline', () => {
-            console.log('📡 Gone offline');
-            this.showToast('Sin conexión - El carrito se guardará localmente', 'info');
-        });
-    }
-
-    /**
-     * Handle messages from the Service Worker
-     */
-    handleServiceWorkerMessage(event) {
-        const { type, message, data } = event.data;
-
-        switch (type) {
-            case 'SW_ACTIVATED':
-                console.log('🎉 Service Worker activated:', message);
-                break;
-
-            case 'CART_SYNCED':
-                console.log('🛒 Cart synced:', message);
-                this.showToast('Carrito sincronizado', 'success');
-                break;
-
-            case 'UPDATE_AVAILABLE':
-                console.log('🆕 Update available');
-                this.showUpdateNotification();
-                break;
-
-            case 'CACHE_UPDATED':
-                console.log('💾 Cache updated');
-                break;
-
-            default:
-                console.log('📨 SW Message:', type, message);
+        // Monitor connection for Mexican networks
+        if (navigator.connection) {
+            navigator.connection.addEventListener('change', () => {
+                const { effectiveType, downlink } = navigator.connection;
+                console.log(`📡 Connection: ${effectiveType}, ${downlink}Mbps`);
+                
+                // Notify SW of poor connection for optimization
+                if (effectiveType === '2g' || downlink < 1) {
+                    this.notifyServiceWorker('SLOW_CONNECTION', { effectiveType, downlink });
+                }
+            });
         }
     }
 
     /**
-     * Check for Service Worker updates
+     * Handle service worker messages
+     */
+    handleServiceWorkerMessage(event) {
+        const { type, message } = event.data || {};
+
+        switch (type) {
+            case 'SW_READY':
+                console.log('✅ Service Worker ready');
+                this.syncCartData();
+                break;
+
+            case 'ORDERS_SYNCED':
+                this.showToast('📦 Pedidos enviados exitosamente', 'success');
+                break;
+
+            case 'PROCESS_OFFLINE_ORDERS':
+                // Handle offline orders in main app
+                this.processOfflineOrders();
+                break;
+
+            case 'UPDATE_AVAILABLE':
+                this.showUpdateNotification();
+                break;
+
+            default:
+                if (SW_CONFIG.DEBUG) {
+                    console.log('📨 SW Message:', type, message);
+                }
+        }
+    }
+
+    /**
+     * Sync cart data with service worker
+     */
+    syncCartData() {
+        if (!navigator.serviceWorker.controller) return;
+
+        try {
+            const cartData = localStorage.getItem('brasasElGordoCart');
+            
+            if (cartData) {
+                navigator.serviceWorker.controller.postMessage({
+                    type: 'CACHE_CART_DATA',
+                    cartData: {
+                        ...JSON.parse(cartData),
+                        market: 'nogales-sonora',
+                        timestamp: new Date().toISOString()
+                    }
+                });
+                
+                if (SW_CONFIG.DEBUG) {
+                    console.log('🛒 Cart data synced');
+                }
+            }
+        } catch (error) {
+            console.warn('❌ Cart sync failed:', error);
+        }
+    }
+
+    /**
+     * Process offline orders
+     */
+    processOfflineOrders() {
+        try {
+            const offlineOrders = localStorage.getItem('brasasOfflineOrders');
+            
+            if (offlineOrders && this.isOnline) {
+                const orders = JSON.parse(offlineOrders);
+                
+                // Process each order
+                orders.forEach((order, index) => {
+                    // Send order data to your API here
+                    // For now, just log and clear
+                    console.log('📦 Processing offline order:', order);
+                    
+                    // Remove processed order
+                    setTimeout(() => {
+                        const remainingOrders = orders.filter((_, i) => i !== index);
+                        localStorage.setItem('brasasOfflineOrders', JSON.stringify(remainingOrders));
+                    }, 1000);
+                });
+                
+                this.showToast('📦 Pedidos offline procesados', 'success');
+            }
+        } catch (error) {
+            console.error('❌ Failed to process offline orders:', error);
+        }
+    }
+
+    /**
+     * Check for service worker updates
      */
     async checkForUpdates() {
         if (!this.registration) return;
@@ -154,236 +220,144 @@ class ServiceWorkerManager {
         try {
             await this.registration.update();
             
-            if (this.registration.waiting && !this.isUpdateAvailable) {
-                this.isUpdateAvailable = true;
+            if (this.registration.waiting) {
                 this.showUpdateNotification();
             }
         } catch (error) {
-            console.warn('Update check failed:', error);
+            console.warn('❌ Update check failed:', error);
         }
     }
 
     /**
-     * Track installing Service Worker
+     * Show update notification
+     */
+    showUpdateNotification() {
+        const updateMessage = `
+            🔄 Nueva versión disponible con mejoras para México. 
+            <button onclick="swManager.applyUpdate()" style="
+                background: #fff; 
+                color: #ad2118; 
+                border: none; 
+                padding: 8px 12px; 
+                border-radius: 5px; 
+                margin-left: 10px; 
+                cursor: pointer; 
+                font-weight: bold;
+            ">Actualizar</button>
+        `;
+        
+        this.showToast(updateMessage, 'info', 10000);
+    }
+
+    /**
+     * Apply service worker update
+     */
+    applyUpdate() {
+        if (!this.registration?.waiting) {
+            console.warn('❌ No update waiting');
+            return;
+        }
+
+        this.registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+        this.showToast('🔄 Aplicando actualización...', 'info');
+    }
+
+    /**
+     * Track service worker installation
      */
     trackInstalling(worker) {
         worker.addEventListener('statechange', () => {
             if (worker.state === 'installed') {
                 if (navigator.serviceWorker.controller) {
-                    // New update available
-                    this.isUpdateAvailable = true;
                     this.showUpdateNotification();
                 } else {
-                    // Service Worker installed for the first time
-                    console.log('🎉 Service Worker installed for the first time');
-                    this.showToast('¡App lista para uso sin conexión!', 'success');
+                    console.log('🎉 Service Worker installed');
+                    this.showToast('✅ App lista para uso offline', 'success');
                 }
             }
         });
     }
 
     /**
-     * Show update notification to user
+     * Handle PWA install prompt
      */
-    showUpdateNotification() {
-        if (typeof showToast === 'function') {
-            const toast = showToast(
-                'Nueva versión disponible. <button onclick="swManager.applyUpdate()" style="background: #fff; color: #ad2118; border: none; padding: 5px 10px; border-radius: 5px; margin-left: 10px; cursor: pointer; font-weight: bold;">Actualizar</button>',
-                'info',
-                10000 // Show for 10 seconds
-            );
+    handleInstallPrompt() {
+        let deferredPrompt = null;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
             
-            // Make the toast persistent until user acts
-            if (toast) {
-                toast.style.position = 'sticky';
-            }
-        } else {
-            // Fallback if showToast is not available
-            if (confirm('Nueva versión disponible. ¿Actualizar ahora?')) {
-                this.applyUpdate();
-            }
-        }
+            // Show install prompt after short delay
+            setTimeout(() => {
+                this.showInstallPrompt(deferredPrompt);
+            }, 5000);
+        });
+
+        window.addEventListener('appinstalled', () => {
+            console.log('🎉 PWA installed');
+            this.showToast('🎉 App instalada correctamente', 'success');
+            deferredPrompt = null;
+        });
     }
 
     /**
-     * Apply the Service Worker update
+     * Show simplified install prompt for Mexico
      */
-    applyUpdate() {
-        if (!this.registration?.waiting) {
-            console.warn('No update waiting');
+    showInstallPrompt(deferredPrompt) {
+        // Check if recently dismissed
+        const dismissed = localStorage.getItem('pwa-install-dismissed');
+        if (dismissed && Date.now() < parseInt(dismissed)) {
             return;
         }
 
-        // Tell the waiting Service Worker to skip waiting
-        this.registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-        
-        // Show loading state
-        if (typeof showToast === 'function') {
-            showToast('Aplicando actualización...', 'info');
-        }
-        
-        // The page will reload automatically when the new SW takes control
-    }
-
-    /**
-     * Sync cart data with Service Worker
-     */
-    syncCartData() {
-        if (!navigator.serviceWorker.controller) return;
-
-        try {
-            // Get cart data from localStorage (matching your main.js structure)
-            const cartData = localStorage.getItem('brasasElGordoCart');
-            
-            if (cartData) {
-                navigator.serviceWorker.controller.postMessage({
-                    type: 'CACHE_CART_DATA',
-                    cartData: JSON.parse(cartData)
-                });
-                
-                if (SW_CONFIG.DEBUG) {
-                    console.log('🛒 Cart data sent to SW for caching');
-                }
-            }
-        } catch (error) {
-            console.warn('Failed to sync cart data:', error);
-        }
-    }
-
-    /**
-     * Handle install prompt for PWA
-     */
-    handleInstallPrompt() {
-        window.addEventListener('beforeinstallprompt', (e) => {
-            console.log('💾 PWA install prompt available');
-            e.preventDefault();
-            this.deferredPrompt = e;
-            
-            // Show custom install button/banner
-            this.showInstallPrompt();
-        });
-
-        // Handle successful installation
-        window.addEventListener('appinstalled', () => {
-            console.log('🎉 PWA installed successfully');
-            this.deferredPrompt = null;
-            
-            if (typeof showToast === 'function') {
-                showToast('¡App instalada correctamente!', 'success');
-            }
-        });
-    }
-
-    /**
-     * Show custom install prompt
-     */
-    showInstallPrompt() {
-        // Create a custom install banner
-        const installBanner = document.createElement('div');
-        installBanner.id = 'pwa-install-banner';
-        installBanner.innerHTML = `
-            <div style="
-                position: fixed;
-                bottom: 20px;
-                left: 20px;
-                right: 20px;
-                background: linear-gradient(135deg, #ad2118 0%, #8a1a13 100%);
-                color: white;
-                padding: 15px 20px;
-                border-radius: 15px;
-                box-shadow: 0 10px 25px rgba(173, 33, 24, 0.3);
-                z-index: 1000;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                font-family: inherit;
-                animation: slideUp 0.5s ease-out;
-            ">
-                <div style="flex: 1;">
-                    <div style="font-weight: bold; margin-bottom: 5px;">📱 Instalar Brasas El Gordo</div>
-                    <div style="font-size: 14px; opacity: 0.9;">Acceso rápido y uso sin conexión</div>
-                </div>
-                <div style="display: flex; gap: 10px;">
-                    <button id="install-pwa-btn" style="
-                        background: white;
-                        color: #ad2118;
-                        border: none;
-                        padding: 10px 15px;
-                        border-radius: 8px;
-                        font-weight: bold;
-                        cursor: pointer;
-                        font-size: 14px;
-                    ">Instalar</button>
-                    <button id="dismiss-install-btn" style="
-                        background: transparent;
-                        color: white;
-                        border: 1px solid rgba(255,255,255,0.3);
-                        padding: 10px 15px;
-                        border-radius: 8px;
-                        cursor: pointer;
-                        font-size: 14px;
-                    ">Más tarde</button>
-                </div>
+        const installMessage = `
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <span style="font-size: 20px; margin-right: 8px;">🇲🇽</span>
+                <strong>Instalar Brasas El Gordo</strong>
             </div>
-            <style>
-                @keyframes slideUp {
-                    from { transform: translateY(100%); opacity: 0; }
-                    to { transform: translateY(0); opacity: 1; }
-                }
-            </style>
+            <div style="font-size: 14px; margin-bottom: 15px;">
+                ✅ Funciona sin internet<br>
+                ✅ Ahorra datos móviles
+            </div>
+            <button onclick="swManager.installPWA()" style="
+                background: #fff; 
+                color: #ad2118; 
+                border: none; 
+                padding: 10px 15px; 
+                border-radius: 8px; 
+                cursor: pointer; 
+                font-weight: bold;
+                margin-right: 10px;
+            ">📱 Instalar</button>
+            <button onclick="swManager.dismissInstall()" style="
+                background: transparent; 
+                color: #fff; 
+                border: 1px solid rgba(255,255,255,0.5); 
+                padding: 10px 15px; 
+                border-radius: 8px; 
+                cursor: pointer;
+            ">Más tarde</button>
         `;
 
-        document.body.appendChild(installBanner);
-
-        // Handle install button click
-        document.getElementById('install-pwa-btn').addEventListener('click', () => {
-            this.installPWA();
-        });
-
-        // Handle dismiss button click
-        document.getElementById('dismiss-install-btn').addEventListener('click', () => {
-            installBanner.remove();
-            
-            // Don't show again for 3 days
-            localStorage.setItem('pwa-install-dismissed', Date.now() + (3 * 24 * 60 * 60 * 1000));
-        });
-
-        // Auto-dismiss after 30 seconds
-        setTimeout(() => {
-            if (document.getElementById('pwa-install-banner')) {
-                installBanner.remove();
-            }
-        }, 30000);
+        this.showToast(installMessage, 'info', 30000);
+        
+        // Store prompt for later use
+        this.deferredPrompt = deferredPrompt;
     }
 
     /**
      * Install PWA
      */
     async installPWA() {
-        if (!this.deferredPrompt) {
-            console.warn('Install prompt not available');
-            return;
-        }
+        if (!this.deferredPrompt) return;
 
         try {
             this.deferredPrompt.prompt();
             const { outcome } = await this.deferredPrompt.userChoice;
             
-            console.log(`PWA install outcome: ${outcome}`);
-            
-            if (outcome === 'accepted') {
-                console.log('🎉 User accepted PWA install');
-            } else {
-                console.log('❌ User dismissed PWA install');
-            }
-            
+            console.log(`PWA install: ${outcome}`);
             this.deferredPrompt = null;
-            
-            // Remove install banner
-            const banner = document.getElementById('pwa-install-banner');
-            if (banner) {
-                banner.remove();
-            }
             
         } catch (error) {
             console.error('PWA installation failed:', error);
@@ -391,132 +365,127 @@ class ServiceWorkerManager {
     }
 
     /**
-     * Start periodic background tasks
+     * Dismiss install prompt
+     */
+    dismissInstall() {
+        // Don't show again for 7 days
+        localStorage.setItem('pwa-install-dismissed', Date.now() + (7 * 24 * 60 * 60 * 1000));
+        this.deferredPrompt = null;
+    }
+
+    /**
+     * Notify service worker
+     */
+    notifyServiceWorker(type, data = {}) {
+        if (!navigator.serviceWorker.controller) return;
+
+        navigator.serviceWorker.controller.postMessage({
+            type,
+            data: {
+                ...data,
+                market: 'nogales-sonora',
+                timestamp: new Date().toISOString()
+            }
+        });
+    }
+
+    /**
+     * Start periodic tasks
      */
     startPeriodicTasks() {
-        // Check for updates periodically
+        // Check for updates less frequently to save battery
         this.updateCheckInterval = setInterval(() => {
-            if (!document.hidden) {
+            if (!document.hidden && this.isOnline) {
                 this.checkForUpdates();
             }
         }, SW_CONFIG.UPDATE_CHECK_INTERVAL);
 
         // Sync cart data periodically
         this.cartSyncInterval = setInterval(() => {
-            this.syncCartData();
-        }, SW_CONFIG.CACHE_CART_INTERVAL);
+            if (this.isOnline) {
+                this.syncCartData();
+            }
+        }, SW_CONFIG.CART_SYNC_INTERVAL);
     }
 
     /**
-     * Stop periodic tasks
+     * Simple toast notification
      */
-    stopPeriodicTasks() {
-        if (this.updateCheckInterval) {
-            clearInterval(this.updateCheckInterval);
-            this.updateCheckInterval = null;
-        }
-
-        if (this.cartSyncInterval) {
-            clearInterval(this.cartSyncInterval);
-            this.cartSyncInterval = null;
-        }
-    }
-
-    /**
-     * Request notification permission
-     */
-    async requestNotificationPermission() {
-        if (!('Notification' in window)) {
-            console.warn('Notifications not supported');
-            return false;
-        }
-
-        if (Notification.permission === 'granted') {
-            return true;
-        }
-
-        if (Notification.permission === 'denied') {
-            return false;
-        }
-
-        const permission = await Notification.requestPermission();
-        return permission === 'granted';
-    }
-
-    /**
-     * Show toast notification (fallback if showToast not available)
-     */
-    showToast(message, type = 'info') {
+    showToast(message, type = 'info', duration = 3000) {
+        // Try to use existing toast function
         if (typeof showToast === 'function') {
-            return showToast(message, type);
+            return showToast(message, type, duration);
         }
         
-        // Fallback toast implementation
-        console.log(`Toast [${type}]: ${message}`);
-        
+        // Simple fallback toast
         const toast = document.createElement('div');
-        toast.textContent = message;
+        toast.innerHTML = message;
         toast.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
-            background: ${type === 'error' ? '#dc3545' : type === 'success' ? '#28a745' : '#007bff'};
-            color: white;
-            padding: 15px 20px;
-            border-radius: 5px;
+            left: 20px;
+            background: ${type === 'error' ? '#dc3545' : type === 'success' ? '#28a745' : type === 'warning' ? '#ffc107' : '#007bff'};
+            color: ${type === 'warning' ? '#212529' : 'white'};
+            padding: 15px;
+            border-radius: 10px;
             z-index: 10000;
             font-family: inherit;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            word-wrap: break-word;
         `;
         
         document.body.appendChild(toast);
         
         setTimeout(() => {
-            toast.remove();
-        }, 3000);
+            if (toast.parentNode) {
+                toast.remove();
+            }
+        }, duration);
         
         return toast;
     }
 
     /**
-     * Get Service Worker status
+     * Get current status
      */
     getStatus() {
         return {
             supported: 'serviceWorker' in navigator,
             registered: !!this.registration,
             active: !!this.registration?.active,
-            updateAvailable: this.isUpdateAvailable,
-            scope: this.registration?.scope,
-            scriptURL: this.registration?.scriptURL
+            isOnline: this.isOnline,
+            dataUsage: this.dataUsage
         };
     }
 
     /**
-     * Cleanup when page unloads
+     * Cleanup
      */
     destroy() {
-        this.stopPeriodicTasks();
+        if (this.updateCheckInterval) {
+            clearInterval(this.updateCheckInterval);
+        }
+        if (this.cartSyncInterval) {
+            clearInterval(this.cartSyncInterval);
+        }
     }
 }
 
 // Initialize Service Worker Manager
 let swManager;
 
-// Add to your existing DOMContentLoaded event listener in main.js
 document.addEventListener('DOMContentLoaded', () => {
-    // ... your existing initialization code ...
-    
-    // Initialize Service Worker Manager
     try {
         swManager = new ServiceWorkerManager();
         
-        // Make it globally available for debugging
+        // Make globally available for debugging
         if (SW_CONFIG.DEBUG) {
             window.swManager = swManager;
             console.log('🔧 SW Manager available at window.swManager');
         }
     } catch (error) {
-        console.error('Failed to initialize Service Worker Manager:', error);
+        console.error('❌ Failed to initialize SW Manager:', error);
     }
 });
 
@@ -527,7 +496,7 @@ window.addEventListener('beforeunload', () => {
     }
 });
 
-// Export for use in other files if needed
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { ServiceWorkerManager, SW_CONFIG };
+// Export for other modules
+if (typeof window !== 'undefined') {
+    window.swManager = swManager;
 }
