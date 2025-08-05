@@ -1,11 +1,11 @@
 // assets/js/modules/config.js
 
 /**
- * Configuration constants for Brasas El Gordo website
+ * Configuration constants for Brasas Smokehouse website
  */
 export const CONFIG = {
     CART: {
-        STORAGE_KEY: 'brasasElGordoCart',
+        STORAGE_KEY: 'brasasSmokehouseCart',
         MAX_QUANTITY: 99
     },
     ANIMATIONS: {
@@ -18,9 +18,9 @@ export const CONFIG = {
         DEBOUNCE_DELAY: 10
     },
     BUSINESS: {
-        OPEN_TIME: 10.75, // 10:45 AM
-        CLOSE_TIME: 22,   // 10:00 PM
-        ADDRESS: 'Av. Álvaro Obregón 2437, Sonora, 84094 Heroica Nogales, Son'
+        OPEN_TIME: 6.00, // 6:00 AM
+        CLOSE_TIME: 23,   // 11:00 PM
+        ADDRESS: 'Prolongación Álvaro Obregón 4257, Villa Sonora, 84093 Heroica Nogales, Son'
     },
     SELECTORS: {
         CART: {
@@ -46,16 +46,17 @@ export const CONFIG = {
     }
 };
 
+
 export const CONTACT_INFO = {
-    phone: '+526311234567',
-    phoneDisplay: '+52 631 123 4567',
-    email: 'info@brasaselgordo.com',
-    whatsappBase: 'https://wa.me/526311234567',
+    phone: '+526311093226',
+    phoneDisplay: '+52 631 109 3226',
+    email: 'info@eatbrasas.com',
+    whatsappBase: 'https://wa.me/526311093226',
     address: {
-        full: 'Av. Álvaro Obregón 2437, Sonora, 84094 Heroica Nogales, Son',
-        street: 'Av. Álvaro Obregón 2437',
-        city: 'Heroica Nogales, Sonora',
-        postalCode: '84094'
+        full: 'Prolongación Álvaro Obregón 4257, Villa Sonora, 84093 Heroica Nogales, Son',
+        street: 'Prolongación Álvaro Obregón 4257',
+        city: 'Villa Sonora, Heroica Nogales, Sonora',
+        postalCode: '84093'
     },
-    googleMapsUrl: 'https://maps.google.com/?q=Av.+Alvaro+Obregon+2437,+Sonora,+84094+Heroica+Nogales,+Son'
+    googleMapsUrl: 'https://maps.app.goo.gl/tumFtTnoojhrDaqt7'
 };
