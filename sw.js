@@ -1,4 +1,4 @@
-// Service Worker for Brasas El Gordo - Optimized for Mexican mobile market
+// Service Worker for Brasas Smokehouse - Optimized for Mexican mobile market
 // Version: 1.3.0 - Lightweight & Mobile-First
 
 const CACHE_VERSION = 'brasas-mx-v1.2.0';
@@ -336,7 +336,7 @@ async function handleError(request) {
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Sin conexión - Brasas El Gordo</title>
+        <title>Sin conexión - Brasas Smokehouse</title>
         <style>
           body { font-family: system-ui; text-align: center; padding: 20px; background: #f5f5f5; margin: 0; }
           .container { max-width: 400px; margin: 0 auto; background: white; padding: 40px 20px; border-radius: 15px; }
@@ -358,7 +358,7 @@ async function handleError(request) {
         <div class="container">
           <div class="logo">B</div>
           <h1>Sin conexión</h1>
-          <p>Brasas El Gordo funciona sin internet.</p>
+          <p>Brasas Smokehouse funciona sin internet.</p>
           <div class="features">
             <h3>Disponible offline:</h3>
             <ul>
@@ -500,7 +500,7 @@ async function processOfflineOrders() {
  * Push notifications - Simplified
  */
 self.addEventListener('push', event => {
-  const title = 'Brasas El Gordo';
+  const title = 'Brasas Smokehouse';
   const options = {
     body: 'Tu pedido está listo!',
     icon: '/assets/images/logo/android-chrome-192x192.png',

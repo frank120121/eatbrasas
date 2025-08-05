@@ -95,7 +95,7 @@ export class ContactManager {
 
             // Set default message if none exists
             if (!message) {
-                message = '¡Hola! Me interesa hacer un pedido en Brasas El Gordo.';
+                message = '¡Hola! Me interesa hacer un pedido en Smokehouse.';
             }
 
             link.href = getWhatsAppUrl(message);

@@ -18,7 +18,7 @@ import { ImageLoader, imageLoader } from './modules/product/image-loading.js';
 /**
  * Lightweight App Manager - Prioritizes core functionality first
  */
-class BrasasElGordoApp {
+class BrasasSmokehouseApp {
     constructor() {
         this.managers = {};
         this.isInitialized = false;
@@ -31,7 +31,7 @@ class BrasasElGordoApp {
      */
     async init() {
         try {
-            console.log('🔥 Starting Brasas El Gordo PWA...');
+            console.log('🔥 Starting Brasas Smokehouse PWA...');
 
             // Stage 1: Critical functionality (blocks rendering)
             await this.initCritical();
@@ -309,7 +309,7 @@ class BrasasElGordoApp {
 }
 
 // Create app instance
-const app = new BrasasElGordoApp();
+const app = new BrasasSmokehouseApp();
 
 /**
  * Initialize when DOM is ready

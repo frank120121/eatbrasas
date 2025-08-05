@@ -160,7 +160,7 @@ class ServiceWorkerManager {
         if (!navigator.serviceWorker.controller) return;
 
         try {
-            const cartData = localStorage.getItem('brasasElGordoCart');
+            const cartData = localStorage.getItem('brasasSmokehouseCart');
             
             if (cartData) {
                 navigator.serviceWorker.controller.postMessage({
@@ -314,7 +314,7 @@ class ServiceWorkerManager {
         const installMessage = `
             <div style="display: flex; align-items: center; margin-bottom: 10px;">
                 <span style="font-size: 20px; margin-right: 8px;">🇲🇽</span>
-                <strong>Instalar Brasas El Gordo</strong>
+                <strong>Instalar Brasas Smokehouse</strong>
             </div>
             <div style="font-size: 14px; margin-bottom: 15px;">
                 ✅ Funciona sin internet<br>

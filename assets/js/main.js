@@ -1,7 +1,7 @@
 // assets/js/main.js
 
 /**
- * Main application script for Brasas El Gordo website.
+ * Main application script for Brasas Smokehouse website.
  * Encapsulated in an IIFE to avoid polluting the global scope.
  */
 (function() {
@@ -1445,7 +1445,7 @@
      */
     document.addEventListener('DOMContentLoaded', () => {
         try {
-            console.log('🔥 Initializing Brasas El Gordo website...');
+            console.log('🔥 Initializing Brasas Smokehouse website...');
 
             // Initialize core features
             initEnhancedHeader();

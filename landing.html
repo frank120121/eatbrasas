@@ -24,18 +24,18 @@
             --white: #ffffff;
             --gray-dark: #1f2937;
             --gray-light: #f9fafb;
-            --black-bg: #111111; /* Slightly softer than pure black */
+            --black-bg: #111111; 
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Inter', -apple-system, system-ui, sans-serif;
-            line-height: 1.5; /* Increased for readability */
+            line-height: 1.5; 
             background: var(--black-bg);
             color: var(--white);
             overflow-x: hidden;
         }
         .container {
-            max-width: 520px; /* Slightly wider for form elements */
+            max-width: 520px;
             margin: 0 auto;
             padding: 0 20px;
         }
@@ -58,7 +58,7 @@
             background-size: cover;
         }
         
-        /* Your logo section was good, minor tweaks for spacing */
+        /* logo section */
         .logo-section { margin-bottom: 25px; }
         .logo {
             width: 80px; height: 80px; background: var(--primary); border-radius: 16px;
@@ -69,14 +69,14 @@
         .brand-name { font-size: 28px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
         .tagline { font-size: 14px; font-weight: 600; color: #ccc; margin-top: 5px; letter-spacing: 1px; }
 
-        /* Status Badge is great */
+        /* Status Badge */
         .status-badge {
             background: var(--orange); color: var(--white); font-size: 14px; font-weight: 800;
             padding: 8px 18px; border-radius: 25px; margin-bottom: 20px;
             display: inline-block; letter-spacing: 1px; text-transform: uppercase;
         }
 
-        /* Updated Headlines for the Offer */
+        /* Headlines for the Offer */
         .headline {
             font-size: clamp(2.2rem, 10vw, 3rem); /* Responsive font size */
             font-weight: 900; line-height: 1.1; margin-bottom: 15px;
@@ -86,7 +86,7 @@
             font-weight: 600; color: #ccc; margin-bottom: 30px; max-width: 400px;
         }
 
-        /* --- LEAD CAPTURE FORM (THE MOST IMPORTANT PART) --- */
+        /* --- LEAD CAPTURE FORM --- */
         .lead-capture-form {
             margin-bottom: 25px;
         }
@@ -176,7 +176,7 @@
 
             <div class="status-badge">PRÓXIMAMENTE EN NOGALES</div>
 
-            <h2 class="headline">Consigue tu Descuento de Apertura</h2>
+            <h2 class="headline">Consigue tu Descuento de Apertura Ahora</h2>
             <p class="subheadline">Sé el primero en probar la mejor carne ahumada de Nogales. Inscríbete y te enviaremos una oferta especial para la gran apertura.</p>
 
             <form class="lead-capture-form" id="signup-form">
@@ -184,8 +184,10 @@
                 <button type="submit" class="submit-btn">¡QUIERO MI DESCUENTO!</button>
                 <p class="form-feedback" id="form-feedback"></p>
             </form>
-
-            <p class="secondary-cta-text">... O síguenos para ver el proceso:</p>
+            <a href="/" class="submit-btn" style="background:#333; margin-bottom: 2rem; border: 2px solid white;">
+            Ir al sitio principal
+            </a>
+            <p class="secondary-cta-text">... Síguenos para ver el proceso:</p>
             <div class="social-buttons">
                 <a href="https://www.facebook.com/eatbrasas" target="_blank" rel="noopener" class="social-btn">
                     <svg fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
@@ -201,7 +203,7 @@
     <section class="anticipation-section">
         <div class="container">
             <h2 class="anticipation-title">La Espera Pronto Terminará</h2>
-            <p class="anticipation-subtitle">Estamos afinando cada detalle, desde nuestras mezclas secretas de leña hasta el servicio más rápido de drive-thru para que disfrutes sin bajarte del auto.</p>
+            <p class="anticipation-subtitle">Estamos afinando cada detalle, desde nuestras mezclas secretas de leña hasta el servicio más rápido de drive-thru para que disfrutes la experiencia que te mereces.</p>
             <div class="countdown" id="countdown">
                 <div class="countdown-item"><div class="countdown-number" id="days">00</div><div class="countdown-label">Días</div></div>
                 <div class="countdown-item"><div class="countdown-number" id="hours">00</div><div class="countdown-label">Horas</div></div>
@@ -234,7 +236,6 @@
             this.querySelector('button').disabled = true;
 
             // TODO: Integrate with your email marketing service
-            // This is where you send the email to Mailchimp, ConvertKit, etc.
             // Example using a fictional function:
             // sendToEmailService(userEmail); 
             console.log(`Email captured: ${userEmail}. Ready to send to email service.`);
@@ -242,8 +243,7 @@
 
 
         // --- COUNTDOWN TIMER SCRIPT ---
-        // TODO: Set your target opening date here!
-        // Format: 'Month Day, Year HH:MM:SS' e.g. 'October 30, 2025 10:00:00'
+
         const countdownDate = new Date('October 30, 2025 10:00:00').getTime();
 
         const countdownFunction = setInterval(function() {

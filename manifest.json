@@ -1,6 +1,6 @@
 {
-  "name": "Brasas El Gordo - Tacos a la Leña",
-  "short_name": "Brasas El Gordo",
+  "name": "Brasas Smokehouse - Carne Ahumada • Drive-Thru",
+  "short_name": "Brasas Smokehouse",
   "description": "Tacos premium y carnes a la leña desde Nogales, Sonora. Ordena, gana puntos y disfruta del sabor auténtico.",
   "lang": "es-MX",
   "start_url": "/?utm_source=web_app_manifest",
@@ -90,7 +90,7 @@
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Vista principal de Brasas El Gordo en desktop"
+      "label": "Vista principal de Brasas Smokehouse en desktop"
     },
     {
       "src": "/assets/images/screenshots/mobile-menu.png",
