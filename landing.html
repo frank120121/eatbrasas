@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PRÓXIMAMENTE - Brasas Carne Ahumada en Nogales. Consigue tu descuento de apertura. Carne ahumada auténtica con mezclas especiales de leña.">
+    <meta name="keywords" content="brasas, carne ahumada, nogales sonora, drive-thru, proximamente, brisket, costillas">
+    <meta name="robots" content="index, follow">
+    
+    <title>PRÓXIMAMENTE - Brasas Carne Ahumada | Nogales Sonora</title>
+    
+    <meta property="og:title" content="PRÓXIMAMENTE - Brasas Carne Ahumada">
+    <meta property="og:description" content="La mejor carne ahumada llega a Nogales. ¡Inscríbete y obtén un descuento especial para la gran apertura!">
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#ad2118">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #ad2118;
+            --orange: #d97706;
+            --white: #ffffff;
+            --gray-dark: #1f2937;
+            --gray-light: #f9fafb;
+            --black-bg: #111111; /* Slightly softer than pure black */
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            line-height: 1.5; /* Increased for readability */
+            background: var(--black-bg);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 520px; /* Slightly wider for form elements */
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 0;
+            /* TODO: THIS IS THE MOST IMPORTANT VISUAL CHANGE! */
+            /* Replace this pattern with a high-quality, mouth-watering photo of your food. */
+            /* A dark, moody shot of brisket or ribs would be perfect. */
+            background: 
+                linear-gradient(rgba(17, 17, 17, 0.85), rgba(17, 17, 17, 0.85)), 
+                url('https://images.unsplash.com/photo-1599454101155-d571556c9a3a?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy') no-repeat center center;
+            background-size: cover;
+        }
+        
+        /* Your logo section was good, minor tweaks for spacing */
+        .logo-section { margin-bottom: 25px; }
+        .logo {
+            width: 80px; height: 80px; background: var(--primary); border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 15px; border: 3px solid var(--white);
+        }
+        .flame-icon { width: 40px; height: 40px; color: var(--white); }
+        .brand-name { font-size: 28px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
+        .tagline { font-size: 14px; font-weight: 600; color: #ccc; margin-top: 5px; letter-spacing: 1px; }
+
+        /* Status Badge is great */
+        .status-badge {
+            background: var(--orange); color: var(--white); font-size: 14px; font-weight: 800;
+            padding: 8px 18px; border-radius: 25px; margin-bottom: 20px;
+            display: inline-block; letter-spacing: 1px; text-transform: uppercase;
+        }
+
+        /* Updated Headlines for the Offer */
+        .headline {
+            font-size: clamp(2.2rem, 10vw, 3rem); /* Responsive font size */
+            font-weight: 900; line-height: 1.1; margin-bottom: 15px;
+        }
+        .subheadline {
+            font-size: clamp(1rem, 4vw, 1.2rem);
+            font-weight: 600; color: #ccc; margin-bottom: 30px; max-width: 400px;
+        }
+
+        /* --- LEAD CAPTURE FORM (THE MOST IMPORTANT PART) --- */
+        .lead-capture-form {
+            margin-bottom: 25px;
+        }
+        .email-input {
+            width: 100%;
+            padding: 18px 20px;
+            font-size: 16px;
+            border-radius: 12px;
+            border: 2px solid var(--gray-dark);
+            background: var(--gray-light);
+            color: var(--gray-dark);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .email-input::placeholder { color: #6b7280; }
+        .submit-btn {
+            background: var(--orange); color: var(--white);
+            border: none; width: 100%; padding: 18px 20px;
+            border-radius: 12px; font-weight: 800; font-size: 18px;
+            cursor: pointer; transition: all 0.2s ease;
+            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
+        }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(217, 119, 6, 0.5); }
+        .form-feedback {
+            margin-top: 15px; font-weight: 600; height: 20px;
+        }
+        .form-feedback.success { color: #25D366; }
+
+        /* Secondary CTA (Social Follow) */
+        .secondary-cta-text { margin-bottom: 15px; font-weight: 600; color: #ccc; }
+        .social-buttons { display: flex; gap: 12px; justify-content: center; }
+        .social-btn {
+            background: rgba(255,255,255,0.1); color: var(--white);
+            padding: 12px; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .social-btn:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
+        .social-btn svg { width: 24px; height: 24px; }
+
+        /* --- ANTICIPATION SECTION --- */
+        .anticipation-section {
+            padding: 80px 0;
+            background: var(--gray-dark);
+            text-align: center;
+        }
+        .anticipation-title {
+            font-size: clamp(1.5rem, 6vw, 2rem);
+            font-weight: 800; margin-bottom: 15px; color: var(--orange);
+        }
+        .anticipation-subtitle {
+            font-size: 1.1rem; color: #ccc; max-width: 450px;
+            margin: 0 auto 40px;
+        }
+
+        /* Countdown Timer */
+        .countdown { display: flex; justify-content: center; gap: 15px; }
+        .countdown-item {
+            background: rgba(0,0,0,0.2);
+            padding: 15px;
+            border-radius: 12px;
+            min-width: 80px;
+        }
+        .countdown-number { font-size: 2.5rem; font-weight: 900; line-height: 1; }
+        .countdown-label { font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #ccc; }
+
+        /* --- FOOTER --- */
+        .footer {
+            padding: 40px 0; text-align: center; font-size: 14px; color: #888;
+        }
+        .footer-logo { font-weight: 800; color: #ccc; }
+
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <div class="container">
+            
+            <div class="logo-section">
+                <div class="logo">
+                    <svg class="flame-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45.12l-2.495 4.575a1 1 0 01-1.393.422L4.05 5.234a1 1 0 00-1.55.372l-1.49 4.467a1 1 0 00.98 1.348h1.265a1 1 0 01.95.69l1.49 4.467a1 1 0 001.959-.04l2.495-4.575a1 1 0 011.393-.422l3.4-1.89a1 1 0 00-.98-1.348h-1.265a1 1 0 01-.95-.69L9.605 3.078a1 1 0 00-1.96 0l-1.49 4.467a1 1 0 00.98 1.348h1.265a1 1 0 01.95.69l1.49 4.467a1 1 0 001.959-.04l2.495-4.575a1 1 0 011.393-.422l3.4-1.89a1 1 0 00-.98-1.348H15.95a1 1 0 01-.95-.69l-1.49-4.467a1 1 0 00-1.55-.372l-2.496 4.575a1 1 0 01-1.393.422L6.05 5.234a1 1 0 00-1.55.372l-1.49 4.467a1 1 0 00.98 1.348h1.265a1 1 0 01.95.69l1.49 4.467a1 1 0 001.96 0L12.395 2.553z" clip-rule="evenodd"></path></svg>
+                </div>
+                <h1 class="brand-name">BRASAS</h1>
+                <p class="tagline">CARNE AHUMADA • DRIVE-THRU</p>
+            </div>
+
+            <div class="status-badge">PRÓXIMAMENTE EN NOGALES</div>
+
+            <h2 class="headline">Consigue tu Descuento de Apertura</h2>
+            <p class="subheadline">Sé el primero en probar la mejor carne ahumada de Nogales. Inscríbete y te enviaremos una oferta especial para la gran apertura.</p>
+
+            <form class="lead-capture-form" id="signup-form">
+                <input type="email" id="email-input" class="email-input" placeholder="Escribe tu correo electrónico" required>
+                <button type="submit" class="submit-btn">¡QUIERO MI DESCUENTO!</button>
+                <p class="form-feedback" id="form-feedback"></p>
+            </form>
+
+            <p class="secondary-cta-text">... O síguenos para ver el proceso:</p>
+            <div class="social-buttons">
+                <a href="https://www.facebook.com/eatbrasas" target="_blank" rel="noopener" class="social-btn">
+                    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </a>
+                <a href="https://www.instagram.com/eatbrasas" target="_blank" rel="noopener" class="social-btn">
+                    <svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919.058-1.265.07-1.645.07-4.849h.001zm0 5.816a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                </a>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="anticipation-section">
+        <div class="container">
+            <h2 class="anticipation-title">La Espera Pronto Terminará</h2>
+            <p class="anticipation-subtitle">Estamos afinando cada detalle, desde nuestras mezclas secretas de leña hasta el servicio más rápido de drive-thru para que disfrutes sin bajarte del auto.</p>
+            <div class="countdown" id="countdown">
+                <div class="countdown-item"><div class="countdown-number" id="days">00</div><div class="countdown-label">Días</div></div>
+                <div class="countdown-item"><div class="countdown-number" id="hours">00</div><div class="countdown-label">Horas</div></div>
+                <div class="countdown-item"><div class="countdown-number" id="minutes">00</div><div class="countdown-label">Minutos</div></div>
+                <div class="countdown-item"><div class="countdown-number" id="seconds">00</div><div class="countdown-label">Segundos</div></div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p class="footer-logo">&copy; 2025 BRASAS</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- FORM SUBMISSION SCRIPT ---
+        const signupForm = document.getElementById('signup-form');
+        const emailInput = document.getElementById('email-input');
+        const formFeedback = document.getElementById('form-feedback');
+
+        signupForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Stop form from reloading page
+            const userEmail = emailInput.value;
+
+            // Display instant feedback to the user
+            formFeedback.textContent = '¡Excelente! Estás en la lista. Revisa tu correo.';
+            formFeedback.classList.add('success');
+            emailInput.disabled = true;
+            this.querySelector('button').disabled = true;
+
+            // TODO: Integrate with your email marketing service
+            // This is where you send the email to Mailchimp, ConvertKit, etc.
+            // Example using a fictional function:
+            // sendToEmailService(userEmail); 
+            console.log(`Email captured: ${userEmail}. Ready to send to email service.`);
+        });
+
+
+        // --- COUNTDOWN TIMER SCRIPT ---
+        // TODO: Set your target opening date here!
+        // Format: 'Month Day, Year HH:MM:SS' e.g. 'October 30, 2025 10:00:00'
+        const countdownDate = new Date('October 30, 2025 10:00:00').getTime();
+
+        const countdownFunction = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = countdownDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Add leading zero if number is less than 10
+            const format = (num) => (num < 10 ? '0' + num : num);
+
+            document.getElementById('days').innerText = format(days);
+            document.getElementById('hours').innerText = format(hours);
+            document.getElementById('minutes').innerText = format(minutes);
+            document.getElementById('seconds').innerText = format(seconds);
+
+            if (distance < 0) {
+                clearInterval(countdownFunction);
+                document.getElementById('countdown').innerHTML = "<h3 style='font-size: 1.5rem; font-weight: 800;'>¡YA ABRIMOS!</h3>";
+            }
+        }, 1000);
+    </script>
+    
+</body>
+</html>
