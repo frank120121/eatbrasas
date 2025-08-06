@@ -126,7 +126,7 @@
     <!-- ABOVE THE FOLD CONTAINER -->
     <div class="above-fold-container">
         
- <!-- Header -->
+        <!-- Header -->
         <header class="above-fold-header fixed w-full top-0 z-50 bg-white transition-all duration-300">
             <div class="max-w-7xl mx-auto">
                 <div class="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
@@ -134,9 +134,13 @@
                     <!-- Mobile: Logo + Menu Toggle -->
                     <div class="flex items-center space-x-4 lg:hidden">
                         <a href="#home" class="flex items-center" aria-label="Brasas Smokehouse - Ir al inicio">
-                            <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center hover:bg-primary-dark hover:scale-105 transition-all duration-200">
-                                <span class="text-white font-bold text-xl">B</span>
-                            </div>
+                            <img 
+                                src="/assets/images/logo/brasas-icon-64.png"
+                                srcset="/assets/images/logo/brasas-icon-128.png 2x"
+                                alt="Brasas Smokehouse"
+                                class="w-12 h-12 rounded-xl hover:scale-105 transition-all duration-200 shadow-sm"
+                                loading="eager"
+                            >
                         </a>
 
                         <button 
@@ -167,9 +171,24 @@
                     <!-- Desktop: Logo -->
                     <div class="hidden lg:flex items-center space-x-4">
                         <a href="#home" class="flex items-center" aria-label="Brasas Smokehouse - Ir al inicio">
-                            <div class="w-12 h-12 bg-primary rounded-lg flex items-center justify-center hover:bg-primary-dark hover:scale-105 transition-all duration-200">
-                                <span class="text-white font-bold text-xl" aria-hidden="true">B</span>
-                            </div>
+                            <!-- Option 1: Square Icon (Recommended for consistency) -->
+                            <img 
+                                src="/assets/images/logo/brasas-icon-256.png"
+                                srcset="/assets/images/logo/brasas-icon-256.png 2x"
+                                alt="Brasas Smokehouse"
+                                class="w-12 h-12 rounded-xl hover:scale-105 transition-all duration-200 shadow-sm"
+                                loading="eager"
+                            >
+                            
+                            <!-- Option 2: Full Horizontal Logo (Uncomment if preferred) -->
+                            <!-- 
+                            <img 
+                                src="/assets/images/logo/brasas-logo-full-300.png"
+                                srcset="/assets/images/logo/brasas-logo-full-600.png 2x"
+                                alt="Brasas Smokehouse"
+                                class="h-10 w-auto hover:scale-105 transition-all duration-200 drop-shadow-sm"
+                                loading="eager"
+                            >
                         </a>
                     </div>
 
@@ -191,7 +210,6 @@
                                 <div class="text-gray-600 text-sm">Nogales, Sonora</div>
                             </div>
                         </a>
-
                     </div>
 
                 </div>
@@ -308,9 +326,13 @@
                     <div class="loyalty-content">
                         <!-- Icon -->
                         <div class="loyalty-icon" aria-hidden="true">
-                            <div class="w-full h-full bg-primary rounded-lg flex items-center justify-center">
-                                <span class="text-white font-bold text-lg">B</span>
-                            </div>
+                            <img 
+                                src="/assets/images/logo/brasas-icon-64.png"
+                                srcset="/assets/images/logo/brasas-icon-128.png 2x"
+                                alt=""
+                                class="w-auto h-auto rounded-lg object-contain"
+                                loading="lazy"
+                            >
                         </div>
                         
                         <!-- Text -->
@@ -899,16 +921,14 @@
         <div class="fade-in">
             <a href="#home" class="inline-block mb-6" aria-label="Brasas Smokehouse - Ir al inicio">
                 <img 
-                    src="/assets/images/logo/brasas-logo-full-300.png"
-                    srcset="/assets/images/logo/brasas-logo-full-600.png 2x, /assets/images/logo/brasas-logo-full-1200.png 3x"
+                    src="/assets/images/logo/brasas-logo-full-1200.png"
+                    srcset="/assets/images/logo/brasas-logo-full-1200.png 2x, /assets/images/logo/brasas-logo-full-1200.png 3x"
                     alt="Brasas Smokehouse"
-                    class="w-auto h-auto object-contain hover:scale-105 transition-all duration-200"
+                    class="w-40 h-8 object-contain hover:scale-105 transition-all duration-200"
                     loading="lazy"
                 >
             </a>
         </div>
-
-
 
         <!-- Column 2: Navigation -->
         <div class="fade-in">
@@ -953,7 +973,7 @@
             </div>
         </address>
 
-        <!-- Modern Social Icons -->
+        <!-- Social Icons -->
         <div class="flex space-x-4 mt-6">
             <!-- Facebook -->
             <a href="https://facebook.com/eatbrasas" target="_blank" rel="noopener noreferrer" aria-label="Síguenos en Facebook" class="social-icon text-gray-400 hover:text-primary transition-all duration-300">
