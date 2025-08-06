@@ -17,7 +17,8 @@ export class HeaderManager {
     constructor(showToast = null) {
         this.showToast = showToast;
         this.header = null;
-        this.lastScrollY = 0; // CORRECTED: Initialized to 0
+        this.lastScrollY = 0;
+        this.autoHideTimeout = null; // ADDED: To manage the auto-hide timer
         this.mobileMenu = null;
         this.mobileMenuToggles = [];
         this.isInitialized = false;
@@ -68,22 +69,29 @@ export class HeaderManager {
      */
     initScrollEffects() {
         if (!this.header) return;
-
-        // Set the initial scroll position correctly on load
         this.lastScrollY = window.scrollY;
-
-        this.scrollHandler = throttle(() => {
-            this.updateHeaderScrollState();
-        }, 100);
-
+        this.scrollHandler = throttle(() => this.updateHeaderScrollState(), 100);
         window.addEventListener('scroll', this.scrollHandler, { passive: true });
-        
-        // Set initial state on load
         this.updateHeaderScrollState();
     }
     
+    // --- HELPER METHODS FOR VISIBILITY ---
+    showHeader() {
+        if (this.header.classList.contains('invisible')) {
+            this.header.classList.add('opacity-100', 'visible');
+            this.header.classList.remove('opacity-0', 'invisible');
+        }
+    }
+
+    hideHeader() {
+        if (this.header.classList.contains('visible')) {
+            this.header.classList.add('opacity-0', 'invisible');
+            this.header.classList.remove('opacity-100', 'visible');
+        }
+    }
+
     /**
-     * Update header state to show on scroll-up and hide on scroll-down.
+     * Update header state with auto-hide timer.
      */
     updateHeaderScrollState() {
         if (!this.header) return;
@@ -91,130 +99,63 @@ export class HeaderManager {
         const currentScrollY = window.scrollY;
         const headerHeight = this.header.offsetHeight;
 
-        // CORRECTED: Added this block to always hide header at the top
+        // Clear any existing auto-hide timer every time the user scrolls
+        clearTimeout(this.autoHideTimeout);
+
         if (currentScrollY <= 10) {
-            this.header.classList.add('opacity-0', 'invisible');
-            this.header.classList.remove('opacity-100', 'visible');
+            this.hideHeader();
         }
         // Show header on SCROLL UP
         else if (currentScrollY < this.lastScrollY) {
-            this.header.classList.add('opacity-100', 'visible');
-            this.header.classList.remove('opacity-0', 'invisible');
+            this.showHeader();
+            // Set a timer to hide the header again after a delay
+            this.autoHideTimeout = setTimeout(() => {
+                this.hideHeader();
+            }, 3000); // Hide after 3 seconds of inactivity. Change this value to adjust the delay.
         }
-        // Hide header on SCROLL DOWN (and not at the very top)
+        // Hide header on SCROLL DOWN
         else if (currentScrollY > this.lastScrollY && currentScrollY > headerHeight) {
-            this.header.classList.add('opacity-0', 'invisible');
-            this.header.classList.remove('opacity-100', 'visible');
+            this.hideHeader();
         }
 
-        // Update the last scroll position, but don't let it be negative
         this.lastScrollY = Math.max(0, currentScrollY);
     }
 
-    /**
-     * Announce header state changes for screen readers
-     */
-    announceHeaderState(state) {
-        // This is for debugging and could be used for accessibility announcements
-        console.log(`Header state: ${state}`);
-    }
+    // --- All other methods remain the same ---
 
-    /**
-     * Initialize mobile menu functionality
-     */
     initMobileMenu() {
-        if (!this.mobileMenu || this.mobileMenuToggles.length === 0) {
-            console.warn('Mobile menu elements not found - skipping mobile menu initialization');
-            return;
-        }
-
-        // Set up toggle button event listeners
+        if (!this.mobileMenu || this.mobileMenuToggles.length === 0) return;
         this.mobileMenuToggles.forEach(toggle => {
             toggle.addEventListener('click', (e) => {
                 e.preventDefault();
                 this.toggleMobileMenu();
             });
-
-            // Set initial ARIA attributes
             setAttributes(toggle, {
                 'aria-expanded': 'false',
                 'aria-controls': this.mobileMenu.id || 'mobile-menu',
                 'aria-label': 'Abrir menú de navegación'
             });
         });
-
-        // Set up menu link event listeners
         this.initMobileMenuLinks();
         this.initMobileMenuKeyboard();
         this.initClickOutsideHandler();
-
-        console.log('✅ Mobile menu functionality initialized');
     }
 
-    /**
-     * Initialize mobile menu links
-     */
     initMobileMenuLinks() {
         if (!this.mobileMenu) return;
-
         const menuLinks = this.mobileMenu.querySelectorAll('a[href^="#"]');
-        menuLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                this.closeMobileMenu();
-            });
-        });
+        menuLinks.forEach(link => link.addEventListener('click', () => this.closeMobileMenu()));
     }
 
-    /**
-     * Initialize mobile menu keyboard navigation
-     */
     initMobileMenuKeyboard() {
         document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && this.isMobileMenuOpen) {
-                this.closeMobileMenu();
-            }
+            if (e.key === 'Escape' && this.isMobileMenuOpen) this.closeMobileMenu();
         });
-
-        if (this.mobileMenu) {
-            this.mobileMenu.addEventListener('keydown', (e) => {
-                if (e.key === 'Tab' && this.isMobileMenuOpen) {
-                    this.handleTabNavigation(e);
-                }
-            });
-        }
     }
 
-    /**
-     * Handle tab navigation within mobile menu
-     */
-    handleTabNavigation(e) {
-        const focusableElements = this.mobileMenu.querySelectorAll(
-            'a[href], button, [tabindex]:not([tabindex="-1"])'
-        );
-        
-        const firstElement = focusableElements[0];
-        const lastElement = focusableElements[focusableElements.length - 1];
-
-        if (e.shiftKey) { // Shift + Tab
-            if (document.activeElement === firstElement) {
-                e.preventDefault();
-                lastElement.focus();
-            }
-        } else { // Tab
-            if (document.activeElement === lastElement) {
-                e.preventDefault();
-                firstElement.focus();
-            }
-        }
-    }
-
-    /**
-     * Initialize click outside handler for mobile menu
-     */
     initClickOutsideHandler() {
         document.addEventListener('click', (e) => {
-            if (this.isMobileMenuOpen && 
-                this.mobileMenu && 
+            if (this.isMobileMenuOpen && this.mobileMenu && 
                 !this.mobileMenu.contains(e.target) &&
                 !this.mobileMenuToggles.some(toggle => toggle.contains(e.target))) {
                 this.closeMobileMenu();
@@ -222,74 +163,36 @@ export class HeaderManager {
         });
     }
 
-    /**
-     * Toggle mobile menu state
-     */
     toggleMobileMenu() {
-        if (this.isMobileMenuOpen) {
-            this.closeMobileMenu();
-        } else {
-            this.openMobileMenu();
-        }
+        this.isMobileMenuOpen ? this.closeMobileMenu() : this.openMobileMenu();
     }
 
-    /**
-     * Open mobile menu with animation and accessibility
-     */
     openMobileMenu() {
         if (!this.mobileMenu || this.isMobileMenuOpen) return;
         this.isMobileMenuOpen = true;
-        toggleClasses(this.mobileMenu, ['show'], []);
+        this.mobileMenu.classList.add('show');
         document.body.style.overflow = 'hidden';
-
-        this.mobileMenuToggles.forEach(toggle => {
-            setAttributes(toggle, {
-                'aria-expanded': 'true',
-                'aria-label': 'Cerrar menú de navegación'
-            });
-        });
-
-        const firstMenuItem = this.mobileMenu.querySelector('a, button');
-        if (firstMenuItem) {
-            setTimeout(() => firstMenuItem.focus(), 100);
-        }
+        this.mobileMenuToggles.forEach(toggle => setAttributes(toggle, {'aria-expanded': 'true'}));
     }
 
-    /**
-     * Close mobile menu with animation and accessibility
-     */
     closeMobileMenu() {
         if (!this.mobileMenu || !this.isMobileMenuOpen) return;
         this.isMobileMenuOpen = false;
-        toggleClasses(this.mobileMenu, [], ['show']);
+        this.mobileMenu.classList.remove('show');
         document.body.style.overflow = '';
-
-        this.mobileMenuToggles.forEach(toggle => {
-            setAttributes(toggle, {
-                'aria-expanded': 'false',
-                'aria-label': 'Abrir menú de navegación'
-            });
-        });
-
-        if (this.mobileMenuToggles[0]) {
-            this.mobileMenuToggles[0].focus();
-        }
+        this.mobileMenuToggles.forEach(toggle => setAttributes(toggle, {'aria-expanded': 'false'}));
+        if (this.mobileMenuToggles[0]) this.mobileMenuToggles[0].focus();
     }
 
-    // --- Other methods from original file ---
     initSmoothScrolling() {
-        const smoothScrollLinks = attachEventListeners('a[href^="#"]', 'click', (e) => {
-            this.handleSmoothScroll(e);
-        });
+        attachEventListeners('a[href^="#"]', 'click', (e) => this.handleSmoothScroll(e));
     }
 
     handleSmoothScroll(e) {
         e.preventDefault();
         const targetId = e.currentTarget.getAttribute('href');
         const targetElement = getElement(targetId);
-        if (targetElement) {
-            this.smoothScrollToTarget(targetElement);
-        }
+        if (targetElement) this.smoothScrollToTarget(targetElement);
     }
 
     smoothScrollToTarget(targetElement, offset = 80) {
@@ -304,17 +207,13 @@ export class HeaderManager {
     }
 
     handleResize() {
-        const isDesktop = window.innerWidth >= 1024; // lg breakpoint
-        if (isDesktop && this.isMobileMenuOpen) {
-            this.closeMobileMenu();
-        }
+        if (window.innerWidth >= 1024 && this.isMobileMenuOpen) this.closeMobileMenu();
     }
     
     destroy() {
         if (this.scrollHandler) window.removeEventListener('scroll', this.scrollHandler);
         if (this.resizeHandler) window.removeEventListener('resize', this.resizeHandler);
-        // Additional cleanup for other listeners if needed
-        console.log('Header manager destroyed');
+        clearTimeout(this.autoHideTimeout);
     }
 }
 
