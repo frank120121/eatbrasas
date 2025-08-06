@@ -4,8 +4,7 @@ import { CONFIG } from './modules/config.js';
 import { getElement, getElements } from './modules/utils.js';
 
 // Import managers
-import { CartManager } from './modules/cart/cart-manager.js';
-import { CartUI } from './modules/cart/cart-ui.js';
+
 import { ToastManager, toast } from './modules/ui/toast.js';
 import { HeaderManager, headerManager } from './modules/ui/header.js';
 import { NavigationManager, navigationManager } from './modules/ui/navigation.js';
@@ -52,16 +51,10 @@ class BrasasSmokehouseApp {
         // Toast system (needed by everything else)
         this.managers.toast = toast;
         
-        // Cart functionality (core business feature)
-        this.initCart();
-        
-        // Basic header (navigation needs to work)
+        // Header
         this.managers.header = headerManager;
         this.managers.header.showToast = this.showToast.bind(this);
         this.managers.header.init();
-        
-        // Add to cart buttons (immediate user interaction)
-        this.initAddToCartButtons();
         
         this.criticalInitComplete = true;
         console.log('✅ Critical features initialized');
@@ -133,149 +126,10 @@ class BrasasSmokehouseApp {
     initFallbackMode() {
         console.warn('🚨 Initializing fallback mode');
         
-        // Ensure basic cart functionality works
-        if (!this.managers.cart) {
-            this.initCart();
-        }
-        
-        // Basic add to cart
-        this.initAddToCartButtons();
-        
         // Show user that some features may be limited
         setTimeout(() => {
             this.showToast('Algunas funciones están limitadas', 'warning', 3000);
         }, 1000);
-    }
-
-    /**
-     * Initialize cart with error handling
-     */
-    initCart() {
-        try {
-            this.managers.cartManager = new CartManager(
-                this.showToast.bind(this),
-                () => this.managers.cartUI?.updateCartCountDisplay(),
-                () => this.managers.cartUI?.updateCartDisplay()
-            );
-
-            this.managers.cartUI = new CartUI(
-                this.managers.cartManager,
-                this.showToast.bind(this)
-            );
-
-            this.managers.cartManager.init();
-            this.managers.cartUI.init();
-            
-        } catch (error) {
-            console.error('❌ Cart initialization failed:', error);
-            this.showToast('Error en el carrito. Funcionalidad limitada.', 'error');
-        }
-    }
-
-    /**
-     * Lightweight add to cart button handler
-     */
-    initAddToCartButtons() {
-        // Use event delegation for better performance
-        document.addEventListener('click', (event) => {
-            const button = event.target.closest('.add-to-cart-btn');
-            if (!button) return;
-
-            event.preventDefault();
-            this.handleAddToCart(button);
-        });
-
-        console.log('✅ Add to cart buttons ready');
-    }
-
-    /**
-     * Handle add to cart action
-     */
-    async handleAddToCart(button) {
-        const productCard = button.closest('.product-card');
-        if (!productCard) {
-            this.showToast('Error: Producto no encontrado', 'error');
-            return;
-        }
-
-        const productData = this.extractProductData(productCard);
-        if (!productData) {
-            this.showToast('Error: Datos del producto incompletos', 'error');
-            return;
-        }
-
-        // Visual feedback
-        this.setButtonState(button, 'loading');
-
-        try {
-            if (!this.managers.cartManager) {
-                throw new Error('Cart not initialized');
-            }
-
-            const success = this.managers.cartManager.addItem(productData);
-            
-            if (success) {
-                this.setButtonState(button, 'success');
-                // Reset after short delay
-                setTimeout(() => this.setButtonState(button, 'normal'), 1500);
-            } else {
-                this.setButtonState(button, 'error');
-            }
-            
-        } catch (error) {
-            console.error('Add to cart error:', error);
-            this.setButtonState(button, 'error');
-            this.showToast('Error al añadir producto', 'error');
-        }
-    }
-
-    /**
-     * Extract product data from card
-     */
-    extractProductData(productCard) {
-        const title = productCard.dataset.title;
-        const description = productCard.dataset.description;
-        const priceText = productCard.dataset.price;
-
-        if (!title || !priceText) return null;
-
-        const priceMatch = priceText.match(/\$([\d.,]+)/);
-        const price = priceMatch ? parseFloat(priceMatch[1].replace(',', '')) : 0;
-
-        if (price <= 0) return null;
-
-        return { title, price, description };
-    }
-
-    /**
-     * Simple button state management
-     */
-    setButtonState(button, state) {
-        const states = {
-            normal: { text: button.dataset.originalText || 'Agregar', disabled: false, className: '' },
-            loading: { text: 'Agregando...', disabled: true, className: 'loading' },
-            success: { text: '¡Agregado!', disabled: false, className: 'success' },
-            error: { text: 'Error', disabled: false, className: 'error' }
-        };
-
-        const currentState = states[state] || states.normal;
-        
-        // Store original text if not stored
-        if (!button.dataset.originalText) {
-            button.dataset.originalText = button.textContent;
-        }
-        
-        // Apply state
-        button.textContent = currentState.text;
-        button.disabled = currentState.disabled;
-        
-        // Remove all state classes
-        button.classList.remove('loading', 'success', 'error');
-        
-        // Add current state class
-        if (currentState.className) {
-            button.classList.add(currentState.className);
-        }
     }
 
     /**

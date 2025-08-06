@@ -1,11 +1,7 @@
 // assets/js/modules/ui/navigation.js
-// Mobile-optimized Navigation Manager for low-end devices
 
 import { getElement, getElements, setAttributes } from '../utils.js';
 
-/**
- * Lightweight NavigationManager - Mobile-first approach
- */
 export class NavigationManager {
     constructor(showToast = null) {
         this.showToast = showToast;

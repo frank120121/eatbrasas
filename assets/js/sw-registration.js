@@ -1,13 +1,8 @@
-/**
- * Lightweight Service Worker Registration for Mexican Mobile Market
- * Optimized for low-end devices and slow connections
- */
 
-// Simplified configuration for Mexican market
+// sw-registration.js
 const SW_CONFIG = {
     SW_URL: '/sw.js',
     UPDATE_CHECK_INTERVAL: 300000, // Check every 5 minutes (was 1 minute)
-    CART_SYNC_INTERVAL: 60000,     // Sync every minute (was 30 seconds)
     DATA_LIMIT_MB: 2,              // 2MB limit for Mexican prepaid plans
     WARN_AT_PERCENTAGE: 70,        // Warn at 70% usage
     DEBUG: window.location.hostname === 'localhost'
@@ -22,8 +17,6 @@ class ServiceWorkerManager {
         this.isOnline = navigator.onLine;
         this.dataUsage = 0;
         this.updateCheckInterval = null;
-        this.cartSyncInterval = null;
-        
         // Initialize immediately for critical functionality
         this.init();
     }
@@ -66,10 +59,7 @@ class ServiceWorkerManager {
                 this.trackInstalling(this.registration.installing);
             } else if (this.registration.waiting) {
                 this.showUpdateNotification();
-            } else if (this.registration.active) {
-                this.syncCartData();
-            }
-
+            } 
         } catch (error) {
             console.error('❌ Service Worker registration failed:', error);
             throw error;
@@ -89,8 +79,6 @@ class ServiceWorkerManager {
         window.addEventListener('online', () => {
             console.log('📡 Back online');
             this.isOnline = true;
-            this.syncCartData();
-            this.notifyServiceWorker('PROCESS_OFFLINE_ORDERS');
             this.showToast('🌐 Conexión restaurada', 'success');
         });
 
@@ -130,17 +118,8 @@ class ServiceWorkerManager {
         switch (type) {
             case 'SW_READY':
                 console.log('✅ Service Worker ready');
-                this.syncCartData();
                 break;
 
-            case 'ORDERS_SYNCED':
-                this.showToast('📦 Pedidos enviados exitosamente', 'success');
-                break;
-
-            case 'PROCESS_OFFLINE_ORDERS':
-                // Handle offline orders in main app
-                this.processOfflineOrders();
-                break;
 
             case 'UPDATE_AVAILABLE':
                 this.showUpdateNotification();
@@ -150,64 +129,6 @@ class ServiceWorkerManager {
                 if (SW_CONFIG.DEBUG) {
                     console.log('📨 SW Message:', type, message);
                 }
-        }
-    }
-
-    /**
-     * Sync cart data with service worker
-     */
-    syncCartData() {
-        if (!navigator.serviceWorker.controller) return;
-
-        try {
-            const cartData = localStorage.getItem('brasasSmokehouseCart');
-            
-            if (cartData) {
-                navigator.serviceWorker.controller.postMessage({
-                    type: 'CACHE_CART_DATA',
-                    cartData: {
-                        ...JSON.parse(cartData),
-                        market: 'nogales-sonora',
-                        timestamp: new Date().toISOString()
-                    }
-                });
-                
-                if (SW_CONFIG.DEBUG) {
-                    console.log('🛒 Cart data synced');
-                }
-            }
-        } catch (error) {
-            console.warn('❌ Cart sync failed:', error);
-        }
-    }
-
-    /**
-     * Process offline orders
-     */
-    processOfflineOrders() {
-        try {
-            const offlineOrders = localStorage.getItem('brasasOfflineOrders');
-            
-            if (offlineOrders && this.isOnline) {
-                const orders = JSON.parse(offlineOrders);
-                
-                // Process each order
-                orders.forEach((order, index) => {
-                    // Send order data to your API here
-                    // For now, just log and clear
-                    console.log('📦 Processing offline order:', order);
-                    
-                    // Remove processed order
-                    setTimeout(() => {
-                        const remainingOrders = orders.filter((_, i) => i !== index);
-                        localStorage.setItem('brasasOfflineOrders', JSON.stringify(remainingOrders));
-                    }, 1000);
-                });
-                
-                this.showToast('📦 Pedidos offline procesados', 'success');
-            }
-        } catch (error) {
-            console.error('❌ Failed to process offline orders:', error);
         }
     }
 
@@ -400,12 +321,6 @@ class ServiceWorkerManager {
             }
         }, SW_CONFIG.UPDATE_CHECK_INTERVAL);
 
-        // Sync cart data periodically
-        this.cartSyncInterval = setInterval(() => {
-            if (this.isOnline) {
-                this.syncCartData();
-            }
-        }, SW_CONFIG.CART_SYNC_INTERVAL);
     }
 
     /**
@@ -465,9 +380,6 @@ class ServiceWorkerManager {
     destroy() {
         if (this.updateCheckInterval) {
             clearInterval(this.updateCheckInterval);
-        }
-        if (this.cartSyncInterval) {
-            clearInterval(this.cartSyncInterval);
         }
     }
 }

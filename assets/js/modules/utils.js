@@ -69,22 +69,6 @@ export const setAttributes = (element, attributes) => {
     });
 };
 
-/**
- * Generic element updater for cart counters
- */
-export const updateElementDisplay = (selector, count, hiddenClass = 'hidden', visibleClass = 'inline-block') => {
-    const element = getElement(selector);
-    if (!element) return;
-
-    element.textContent = count;
-    setAttributes(element, { 'aria-label': `${count} artículos en el carrito` });
-
-    if (count > 0) {
-        toggleClasses(element, [visibleClass], [hiddenClass]);
-    } else {
-        toggleClasses(element, [hiddenClass], [visibleClass]);
-    }
-};
 
 /**
  * Escapes HTML characters to prevent XSS
@@ -93,32 +77,6 @@ export function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
-}
-
-/**
- * Validates cart item data structure
- */
-export function validateCartItem(item) {
-    if (!item || typeof item !== 'object') {
-        throw new Error('Item must be an object');
-    }
-
-    const required = ['title', 'price'];
-    const missing = required.filter(field => !item[field]);
-    
-    if (missing.length > 0) {
-        throw new Error(`Missing required fields: ${missing.join(', ')}`);
-    }
-    
-    if (typeof item.price !== 'number' || item.price <= 0) {
-        throw new Error('Price must be a positive number');
-    }
-
-    if (item.title.trim().length === 0) {
-        throw new Error('Title cannot be empty');
-    }
-    
-    return true;
 }
 
 /**

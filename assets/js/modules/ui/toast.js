@@ -6,7 +6,7 @@ import { getElement, setAttributes, escapeHtml } from '../utils.js';
 export class ToastManager {
     constructor() {
         this.toastContainer = null;
-        this.srAnnouncementElement = null;
+        this.srAnnouncementElement = null; // This will now point to the general announcer
         this.activeToasts = new Set();
         this.init();
     }
@@ -16,7 +16,8 @@ export class ToastManager {
      */
     init() {
         this.toastContainer = getElement('#toast-container');
-        this.srAnnouncementElement = getElement(CONFIG.SELECTORS.CART.SR_ANNOUNCEMENT);
+        // CORRECTED: Point to the general screen reader announcement element
+        this.srAnnouncementElement = getElement('#general-sr-announcement'); 
         
         if (!this.toastContainer) {
             console.warn('Toast container not found. Creating fallback container.');
@@ -63,18 +64,18 @@ export class ToastManager {
         });
 
         // Auto-dismiss
-        setTimeout(() => {
+        const timeoutId = setTimeout(() => {
             this.dismissToast(toast);
         }, duration);
+
+        // Store timeoutId on the element to be cleared if needed
+        toast.autoHideTimeout = timeoutId;
 
         return toast;
     }
 
     /**
      * Creates a toast element
-     * @param {string} message - The message to display
-     * @param {string} type - Toast type
-     * @returns {HTMLElement} - The created toast element
      */
     createToastElement(message, type) {
         const toast = document.createElement('div');
@@ -84,12 +85,13 @@ export class ToastManager {
         toast.className = `toast ${type}`;
         setAttributes(toast, {
             'role': 'alert',
-            'aria-live': 'polite',
+            'aria-live': 'assertive', // Assertive is better for notifications
             'aria-atomic': 'true'
         });
         
         const icon = this.getIconForType(type);
         
+        // Use innerHTML for structure but escape the message content
         toast.innerHTML = `
             <span class="toast-icon" aria-hidden="true" style="margin-right: 8px;">${icon}</span>
             <span class="toast-message">${escapeHtml(message)}</span>
@@ -100,12 +102,9 @@ export class ToastManager {
             </button>
         `;
 
-        // Add click handler for close button
         const closeButton = toast.querySelector('.toast-close');
         if (closeButton) {
-            closeButton.addEventListener('click', () => {
-                this.dismissToast(toast);
-            });
+            closeButton.addEventListener('click', () => this.dismissToast(toast));
         }
 
         return toast;
@@ -113,8 +112,6 @@ export class ToastManager {
 
     /**
      * Gets the appropriate icon for toast type
-     * @param {string} type - Toast type
-     * @returns {string} - Icon character or SVG
      */
     getIconForType(type) {
         const icons = {
@@ -128,199 +125,55 @@ export class ToastManager {
 
     /**
      * Dismisses a toast with animation
-     * @param {HTMLElement} toast - Toast element to dismiss
      */
     dismissToast(toast) {
-        if (!toast || !this.activeToasts.has(toast)) {
-            return;
-        }
+        if (!toast || !this.activeToasts.has(toast)) return;
 
         toast.classList.remove('show');
         this.activeToasts.delete(toast);
 
         toast.addEventListener('transitionend', () => {
-            if (toast.parentNode) {
-                toast.remove();
-            }
+            if (toast.parentNode) toast.remove();
         }, { once: true });
         
-        // Fallback removal in case transition doesn't fire
+        // Fallback removal
         setTimeout(() => {
-            if (toast.parentNode) {
-                toast.remove();
-            }
+            if (toast.parentNode) toast.remove();
         }, 500);
     }
 
-    /**
-     * Shows a success toast
-     * @param {string} message - Success message
-     * @param {number} duration - Optional duration override
-     * @returns {HTMLElement|null} - The created toast element
-     */
-    success(message, duration) {
-        return this.show(message, 'success', duration);
-    }
+    // --- Helper methods for different toast types ---
+    success(message, duration) { return this.show(message, 'success', duration); }
+    error(message, duration) { return this.show(message, 'error', duration); }
+    warning(message, duration) { return this.show(message, 'warning', duration); }
+    info(message, duration) { return this.show(message, 'info', duration); }
 
-    /**
-     * Shows an error toast
-     * @param {string} message - Error message
-     * @param {number} duration - Optional duration override
-     * @returns {HTMLElement|null} - The created toast element
-     */
-    error(message, duration) {
-        return this.show(message, 'error', duration);
-    }
-
-    /**
-     * Shows a warning toast
-     * @param {string} message - Warning message
-     * @param {number} duration - Optional duration override
-     * @returns {HTMLElement|null} - The created toast element
-     */
-    warning(message, duration) {
-        return this.show(message, 'warning', duration);
-    }
-
-    /**
-     * Shows an info toast
-     * @param {string} message - Info message
-     * @param {number} duration - Optional duration override
-     * @returns {HTMLElement|null} - The created toast element
-     */
-    info(message, duration) {
-        return this.show(message, 'info', duration);
-    }
-
-    /**
-     * Dismisses all active toasts
-     */
     dismissAll() {
-        const toastsToRemove = [...this.activeToasts];
-        toastsToRemove.forEach(toast => {
-            this.dismissToast(toast);
-        });
+        this.activeToasts.forEach(toast => this.dismissToast(toast));
     }
 
-    /**
-     * Announces cart updates to screen readers
-     * @param {number} totalItems - Total number of items in cart
-     */
-    announceCartUpdate(totalItems) {
-        if (!this.srAnnouncementElement) {
-            this.srAnnouncementElement = getElement(CONFIG.SELECTORS.CART.SR_ANNOUNCEMENT);
-        }
-
-        if (this.srAnnouncementElement) {
-            this.srAnnouncementElement.textContent = `Carrito actualizado: ${totalItems} ${totalItems === 1 ? 'artículo' : 'artículos'}`;
-        }
-    }
+    // REMOVED: announceCartUpdate function is gone.
 
     /**
      * Announces general updates to screen readers
      * @param {string} message - Message to announce
      */
     announce(message) {
-        if (!this.srAnnouncementElement) {
-            this.srAnnouncementElement = getElement(CONFIG.SELECTORS.CART.SR_ANNOUNCEMENT);
-        }
-
+        // This now correctly uses the general-purpose element found during init
         if (this.srAnnouncementElement) {
             this.srAnnouncementElement.textContent = message;
         }
     }
 
-    /**
-     * Gets the count of active toasts
-     * @returns {number} - Number of active toasts
-     */
-    getActiveToastCount() {
-        return this.activeToasts.size;
-    }
+    // --- Other utility methods ---
+    getActiveToastCount() { return this.activeToasts.size; }
 
-    /**
-     * Checks if a specific toast type is currently active
-     * @param {string} type - Toast type to check
-     * @returns {boolean} - True if a toast of this type is active
-     */
     hasActiveToastOfType(type) {
         return [...this.activeToasts].some(toast => toast.classList.contains(type));
     }
-
-    /**
-     * Creates a persistent toast that doesn't auto-dismiss
-     * @param {string} message - The message to display
-     * @param {string} type - Toast type
-     * @returns {HTMLElement|null} - The created toast element
-     */
-    showPersistent(message, type = 'info') {
-        const toast = this.show(message, type, 0); // 0 duration means no auto-dismiss
-        
-        if (toast) {
-            // Clear any existing auto-dismiss timeout
-            clearTimeout(toast.autoHideTimeout);
-            toast.classList.add('persistent');
-        }
-        
-        return toast;
-    }
-
-    /**
-     * Shows a toast with a custom action button
-     * @param {string} message - The message to display
-     * @param {string} actionText - Text for the action button
-     * @param {Function} actionCallback - Callback for the action button
-     * @param {string} type - Toast type
-     * @param {number} duration - Duration in ms
-     * @returns {HTMLElement|null} - The created toast element
-     */
-    showWithAction(message, actionText, actionCallback, type = 'info', duration = CONFIG.ANIMATIONS.TOAST_DURATION * 2) {
-        const toast = this.createToastElement(message, type);
-        
-        // Add action button
-        const actionButton = document.createElement('button');
-        actionButton.className = 'toast-action ml-2 px-2 py-1 text-xs bg-white bg-opacity-20 rounded hover:bg-opacity-30 transition-colors';
-        actionButton.textContent = actionText;
-        actionButton.addEventListener('click', () => {
-            actionCallback();
-            this.dismissToast(toast);
-        });
-        
-        toast.appendChild(actionButton);
-        
-        this.toastContainer.appendChild(toast);
-        this.activeToasts.add(toast);
-
-        // Animate in
-        requestAnimationFrame(() => {
-            toast.classList.add('show');
-        });
-
-        // Auto-dismiss after longer duration
-        setTimeout(() => {
-            this.dismissToast(toast);
-        }, duration);
-
-        return toast;
-    }
-
-    /**
-     * Cleanup method
-     */
+    
     destroy() {
         this.dismissAll();
-        this.activeToasts.clear();
-        
-        if (this.toastContainer && this.toastContainer.id === 'toast-container') {
-            // Only remove if we created it as a fallback
-            const isOurContainer = this.toastContainer.querySelector('.toast') === null;
-            if (isOurContainer) {
-                this.toastContainer.remove();
-            }
-        }
-        
-        this.toastContainer = null;
-        this.srAnnouncementElement = null;
     }
 }
 
