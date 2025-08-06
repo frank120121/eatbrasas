@@ -1,14 +1,14 @@
 {
   "name": "Brasas Smokehouse - Carne Ahumada • Drive-Thru",
   "short_name": "Brasas Smokehouse",
-  "description": "Tacos premium y carnes a la leña desde Nogales, Sonora. Ordena, gana puntos y disfruta del sabor auténtico.",
+  "description": "Carne Ahumada • Drive-Thru desde Nogales, Sonora. Ordena, gana puntos, descuentos, producto gratis y disfruta del sabor auténtico.",
   "lang": "es-MX",
   "start_url": "/?utm_source=web_app_manifest",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "theme_color": "#ad2118",
-  "background_color": "#ffffff",
+  "background_color": "#111111",
   "dir": "ltr",
   "categories": ["food", "restaurant", "shopping"],
 
@@ -27,21 +27,33 @@
       "src": "/assets/images/logo/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/images/logo/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
     },
     {
       "src": "/assets/images/logo/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/images/logo/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
 
   "shortcuts": [
     {
-      "name": "Menú de tacos",
-      "short_name": "Tacos",
-      "description": "Ver todos los tacos a la leña",
+      "name": "Menú de Carne Ahumada",
+      "short_name": "Menú",
+      "description": "Ver todas las diferentes carnes ahumadas",
       "url": "/#menu",
       "icons": [{ 
         "src": "/assets/images/logo/favicon-32x32.png", 
@@ -50,10 +62,10 @@
       }]
     },
     {
-      "name": "Productos para casa",
-      "short_name": "Productos",
-      "description": "Manteca ahumada, aceites y especias premium",
-      "url": "/#productos",
+      "name": "Ubicación del restaurante",
+      "short_name": "Ubicación",
+      "description": "Encuéntranos en Villa Sonora, Nogales",
+      "url": "/#location",
       "icons": [{ 
         "src": "/assets/images/logo/favicon-32x32.png", 
         "sizes": "32x32",
@@ -61,10 +73,10 @@
       }]
     },
     {
-      "name": "Ver carrito",
-      "short_name": "Carrito",
-      "description": "Tu carrito de compras",
-      "url": "/#carrito",
+      "name": "Métodos de contacto",
+      "short_name": "Contacto",
+      "description": "Contacta a Brasas Smokehouse por WhatsApp, teléfono o email",
+      "url": "/#contacto",
       "icons": [{ 
         "src": "/assets/images/logo/favicon-32x32.png", 
         "sizes": "32x32",
@@ -72,10 +84,10 @@
       }]
     },
     {
-      "name": "Programa de lealtad",
-      "short_name": "Rewards",
-      "description": "Únete a Brasas Rewards y gana puntos",
-      "url": "/#rewards",
+      "name": "Notificaciones WhatsApp",
+      "short_name": "WhatsApp",
+      "description": "Recibe notificaciones por WhatsApp cuando abramos",
+      "url": "https://wa.me/message/VE4RQVV7SXPSN1",
       "icons": [{ 
         "src": "/assets/images/logo/favicon-32x32.png", 
         "sizes": "32x32",
@@ -97,21 +109,10 @@
       "sizes": "360x640",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Menú de tacos en dispositivo móvil"
+      "label": "Menú de carnes ahumadas en dispositivo móvil"
     }
   ],
 
   "related_applications": [],
-  "prefer_related_applications": false,
-
-  "protocol_handlers": [
-    {
-      "protocol": "mailto",
-      "url": "/contact?email=%s"
-    },
-    {
-      "protocol": "tel",
-      "url": "/contact?phone=%s"
-    }
-  ]
+  "prefer_related_applications": false
 }

@@ -22,15 +22,12 @@ const CRITICAL_ASSETS = [
   '/assets/js/main.js',
   '/assets/js/modules/config.js',
   '/assets/js/modules/utils.js',
-  '/assets/js/modules/cart/cart-storage.js',
-  '/assets/js/modules/cart/cart-manager.js',
   '/assets/js/modules/ui/toast.js',
   OFFLINE_PAGE
 ];
 
 // Menu functionality assets
 const MENU_ASSETS = [
-  '/assets/js/modules/cart/cart-ui.js',
   '/assets/js/modules/business/status.js',
   '/assets/js/modules/business/contact.js',
   '/assets/js/modules/ui/header.js',
