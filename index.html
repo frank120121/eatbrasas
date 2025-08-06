@@ -206,8 +206,17 @@
         </section>        
     </div>
 
+    <!-- Toast Container -->
+    <div 
+        id="toast-container" 
+        class="fixed top-20 right-4 z-50 space-y-3"
+        role="region"
+        aria-label="Notificaciones"
+        aria-live="polite"
+    ></div>
+
     <!-- Header -->
-    <header class="site-header fixed w-full top-0 z-50 bg-white transition-all duration-300 -translate-y-full">
+    <header class="site-header fixed w-full top-0 z-50 bg-white transition-all duration-300 opacity-0 invisible">
         <div class="max-w-7xl mx-auto">
             <div class="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
 
@@ -301,16 +310,6 @@
             </div>
         </div>
     </header>
-
-    <!-- Toast Container -->
-    <div 
-        id="toast-container" 
-        class="fixed top-20 right-4 z-50 space-y-3"
-        role="region"
-        aria-label="Notificaciones"
-        aria-live="polite"
-    ></div>
-
     <!-- Main Content -->
     <main id="main-content" role="main">
 

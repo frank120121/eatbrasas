@@ -17,7 +17,7 @@ export class HeaderManager {
     constructor(showToast = null) {
         this.showToast = showToast;
         this.header = null;
-        this.scrollTriggerElement = null;
+        this.lastScrollY;
         this.mobileMenu = null;
         this.mobileMenuToggles = [];
         this.isInitialized = false;
@@ -53,16 +53,13 @@ export class HeaderManager {
      */
     initElements() {
         this.header = getElement('header');
-        this.scrollTriggerElement = getElement('#categories-grid');
         this.mobileMenu = getElement('.mobile-menu');
         this.mobileMenuToggles = [...getElements('.mobile-menu-toggle')];
 
         if (!this.header) {
             throw new Error('Header element not found');
         }
-        if (!this.scrollTriggerElement) {
-            console.warn('Header scroll trigger element #categories-grid not found.');
-        }
+
 
 
         console.log(`Found header and ${this.mobileMenuToggles.length} mobile menu toggles`);
@@ -90,35 +87,26 @@ export class HeaderManager {
     updateHeaderScrollState() {
         if (!this.header) return;
 
-        // Fallback behavior if the trigger element isn't found
-        if (!this.scrollTriggerElement) {
-            const isScrolled = window.scrollY > 50; // Show after 50px of scrolling
-            if (isScrolled) {
-                this.header.classList.remove('opacity-0', 'invisible');
-                this.header.classList.add('opacity-100', 'visible');
-            } else {
-                this.header.classList.remove('opacity-100', 'visible');
-                this.header.classList.add('opacity-0', 'invisible');
-            }
-            return;
-        }
+        const currentScrollY = window.scrollY;
 
-        // Main logic: watch the categories grid
-        const triggerPosition = this.scrollTriggerElement.getBoundingClientRect().top;
-        const headerIsVisible = this.header.classList.contains('opacity-100');
-
-        // Show the header (fade in)
-        if (triggerPosition <= 0 && !headerIsVisible) {
-            this.header.classList.remove('opacity-0', 'invisible');
-            this.header.classList.add('opacity-100', 'visible');
-            this.announceHeaderState('visible');
-        } 
-        // Hide the header (fade out)
-        else if (triggerPosition > 0 && headerIsVisible) {
-            this.header.classList.remove('opacity-100', 'visible');
+        // Always hide the header if we are at the very top of the page
+        if (currentScrollY <= 10) {
             this.header.classList.add('opacity-0', 'invisible');
-            this.announceHeaderState('hidden');
+            this.header.classList.remove('opacity-100', 'visible');
         }
+        // Show header on SCROLL UP
+        else if (currentScrollY < this.lastScrollY) {
+            this.header.classList.add('opacity-100', 'visible');
+            this.header.classList.remove('opacity-0', 'invisible');
+        }
+        // Hide header on SCROLL DOWN
+        else if (currentScrollY > this.lastScrollY) {
+            this.header.classList.add('opacity-0', 'invisible');
+            this.header.classList.remove('opacity-100', 'visible');
+        }
+
+        // Update the last scroll position
+        this.lastScrollY = currentScrollY;
     }
 
     /**
