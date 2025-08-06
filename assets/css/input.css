@@ -113,9 +113,13 @@
     @apply bg-white shadow-lg rounded-3xl transition-all duration-300;
   }
 
-  /* Text Effects */
+  /* Text Effects - Updated with new gradient */
   .text-gradient {
-    @apply bg-gradient-to-r from-orange-500 to-orange-300 bg-clip-text text-transparent;
+    background: linear-gradient(135deg, #f59e0b, #ea580c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    @apply bg-clip-text text-transparent;
   }
 
   /* Animation Classes */
@@ -127,15 +131,17 @@
     @apply opacity-100 translate-y-0;
   }
 
+  /* Enhanced Shine Effect */
   .shine {
     @apply relative overflow-hidden;
   }
   
   .shine::before {
     content: '';
-    @apply absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent;
+    @apply absolute inset-0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
     left: -100%;
-    transition: left 500ms ease-in-out;
+    transition: left 0.5s ease-in-out;
   }
   
   .shine:hover::before {
@@ -204,6 +210,56 @@
     @apply scroll-mt-36; /* Offset for sticky navigation */
   }
 
+  /* ===== MENU PREVIEW COMPONENTS (Coming Soon) ===== */
+  .category-preview-card {
+    @apply bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100;
+    @apply transition-all duration-500 hover:shadow-2xl hover:-translate-y-2;
+    @apply scroll-margin-top-8; /* For accessibility */
+    animation: fadeIn 0.8s ease-in-out both;
+  }
+
+  /* Stagger animations for category cards */
+  .category-preview-card:nth-child(1) { animation-delay: 0.1s; }
+  .category-preview-card:nth-child(2) { animation-delay: 0.2s; }
+  .category-preview-card:nth-child(3) { animation-delay: 0.3s; }
+  .category-preview-card:nth-child(4) { animation-delay: 0.4s; }
+  .category-preview-card:nth-child(5) { animation-delay: 0.5s; }
+  .category-preview-card:nth-child(6) { animation-delay: 0.6s; }
+
+  /* Coming soon badges */
+  .coming-soon-badge {
+    @apply px-4 py-2 rounded-full text-sm font-semibold inline-block;
+  }
+
+  /* Category icons with hover effects */
+  .category-icon {
+    @apply w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6;
+    @apply transition-transform duration-300 group-hover:scale-110;
+  }
+
+  /* Notification signup button */
+  .notify-btn {
+    @apply inline-flex items-center justify-center bg-white text-primary;
+    @apply px-6 sm:px-8 py-4 rounded-2xl font-bold text-lg;
+    @apply transition-all duration-300 hover:scale-105 shine space-x-3;
+    @apply w-full sm:w-auto;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-2;
+  }
+
+  /* Coming soon status indicator */
+  .status-indicator {
+    @apply w-3 h-3 rounded-full animate-pulse;
+  }
+
+  /* Feature highlight cards */
+  .feature-highlight {
+    @apply text-center;
+  }
+
+  .feature-icon {
+    @apply w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4;
+  }
+
   /* Enhanced mobile touch targets */
   @media (max-width: 768px) {
     .add-to-cart-btn {
@@ -214,6 +270,35 @@
     .category-nav-btn {
       min-height: 44px;
       @apply px-4 py-3;
+    }
+
+    /* Mobile optimizations for menu preview */
+    .category-preview-card {
+      @apply mb-4;
+      min-height: 280px;
+    }
+
+    .category-preview-card h3 {
+      @apply text-xl; /* Reduced from text-2xl for mobile */
+    }
+
+    .category-preview-card p {
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* Mobile-specific text gradient display */
+    .text-gradient {
+      @apply block mt-2;
+    }
+
+    /* Larger touch targets for mobile */
+    .notify-btn {
+      @apply min-h-[48px] text-base;
+    }
+
+    .coming-soon-badge {
+      @apply text-xs px-3 py-1;
     }
   }
 
@@ -474,6 +559,16 @@
   .animate-bounce-subtle {
     animation: bounce-subtle 2s ease-in-out infinite;
   }
+
+  /* Enhanced fade-in animation */
+  .fade-in {
+    animation: fadeIn 0.8s ease-in-out;
+  }
+
+  /* Scroll margin for accessibility */
+  .scroll-margin-top-8 {
+    scroll-margin-top: 2rem;
+  }
 }
 
 /* ===== CART OVERLAY AND DRAWER ===== */
@@ -694,6 +789,18 @@
 }
 
 @keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced fadeIn animation for menu preview */
+@keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(30px);

@@ -3,7 +3,7 @@ module.exports = {
   content: [
     "./index.html", 
     "./assets/**/*.js",
-    "./assets/**/*.css"  // Added CSS files to content array
+    "./assets/css/input.css"
   ],
   theme: {
     extend: {
