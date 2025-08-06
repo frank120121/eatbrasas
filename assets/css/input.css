@@ -412,7 +412,7 @@
     @apply flex flex-col overflow-hidden relative;
   }
 
-  .above-fold-header {
+  .site-header {
     @apply flex-shrink-0 h-16 relative z-50;
   }
 
