@@ -282,11 +282,11 @@ class ServiceWorkerManager {
      * Handle PWA install prompt
      */
     handleInstallPrompt() {
-        let deferredPrompt = null;
+        this.deferredPrompt = null;
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
-            deferredPrompt = e;
+            this.deferredPrompt = e;
             
             // Show install prompt after short delay
             setTimeout(() => {

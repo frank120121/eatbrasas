@@ -3,9 +3,6 @@
 import { CONFIG } from '../config.js';
 import { getElement, setAttributes, escapeHtml } from '../utils.js';
 
-/**
- * ToastManager - Handles toast notifications and screen reader announcements
- */
 export class ToastManager {
     constructor() {
         this.toastContainer = null;

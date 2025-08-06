@@ -1,18 +1,16 @@
-// Service Worker for Brasas Smokehouse - Optimized for Mexican mobile market
-// Version: 1.3.0 - Lightweight & Mobile-First
+//sw.js
 
-const CACHE_VERSION = 'brasas-mx-v1.2.0';
+const CACHE_VERSION = 'brasas-mx-v1.2.1';
 const CRITICAL_CACHE = `critical-${CACHE_VERSION}`;
 const MENU_CACHE = `menu-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
 
 const OFFLINE_PAGE = '/offline.html';
 
-// Streamlined cache limits for low-end devices
 const CACHE_LIMITS = {
-  critical: 30,   // Essential files
-  menu: 50,       // Menu functionality 
-  images: 100     // Product images
+  critical: 30,  
+  menu: 50,       
+  images: 100     
 };
 
 // Critical assets - Only essentials
@@ -41,7 +39,7 @@ const MENU_ASSETS = [
   '/assets/js/modules/product/image-loading.js'
 ];
 
-// Static assets - Only essentials
+// Static assets
 const STATIC_ASSETS = [
   '/assets/images/logo/android-chrome-192x192.png',
   '/assets/images/logo/android-chrome-512x512.png',
@@ -49,7 +47,7 @@ const STATIC_ASSETS = [
   '/assets/images/favicon/favicon.ico'
 ];
 
-// Network timeout for Mexican connections
+// Network timeout
 const NETWORK_TIMEOUT = 6000; // 6 seconds for 2G/3G
 let dataUsage = 0;
 const DATA_LIMIT = 2 * 1024 * 1024; // 2MB session limit
