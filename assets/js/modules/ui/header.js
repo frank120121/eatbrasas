@@ -71,16 +71,18 @@ export class HeaderManager {
     initScrollEffects() {
         if (!this.header) return;
 
+        // Set the initial scroll position correctly on load
+        this.lastScrollY = window.scrollY;
+
         this.scrollHandler = throttle(() => {
             this.updateHeaderScrollState();
-        }, 16); // ~60fps
+        }, 100); // A slightly higher throttle can feel smoother
 
         window.addEventListener('scroll', this.scrollHandler, { passive: true });
         
-        // Set initial state
+        // Set initial state on load
         this.updateHeaderScrollState();
     }
-
     /**
      * Update header state based on scroll position
      */
@@ -88,25 +90,21 @@ export class HeaderManager {
         if (!this.header) return;
 
         const currentScrollY = window.scrollY;
+        const headerHeight = this.header.offsetHeight;
 
-        // Always hide the header if we are at the very top of the page
-        if (currentScrollY <= 10) {
-            this.header.classList.add('opacity-0', 'invisible');
-            this.header.classList.remove('opacity-100', 'visible');
-        }
         // Show header on SCROLL UP
-        else if (currentScrollY < this.lastScrollY) {
+        if (currentScrollY < this.lastScrollY) {
             this.header.classList.add('opacity-100', 'visible');
             this.header.classList.remove('opacity-0', 'invisible');
         }
-        // Hide header on SCROLL DOWN
-        else if (currentScrollY > this.lastScrollY) {
+        // Hide header on SCROLL DOWN (and not at the very top)
+        else if (currentScrollY > this.lastScrollY && currentScrollY > headerHeight) {
             this.header.classList.add('opacity-0', 'invisible');
             this.header.classList.remove('opacity-100', 'visible');
         }
 
-        // Update the last scroll position
-        this.lastScrollY = currentScrollY;
+        // Update the last scroll position, but don't let it be negative
+        this.lastScrollY = Math.max(0, currentScrollY);
     }
 
     /**
