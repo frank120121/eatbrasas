@@ -30,7 +30,7 @@ export const CONTACT_INFO = {
     phone: '+526311093226',
     phoneDisplay: '+52 631 109 3226',
     email: 'info@eatbrasas.com',
-    whatsappBase: 'https://wa.me/526311093226',
+    whatsappUrl: 'https://wa.me/message/VE4RQVV7SXPSN1',
     address: {
         full: 'Prolongación Álvaro Obregón 4257, Villa Sonora, 84093 Heroica Nogales, Son',
         street: 'Prolongación Álvaro Obregón 4257',

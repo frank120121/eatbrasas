@@ -104,14 +104,6 @@ export function safeJSONStringify(obj) {
 }
 
 /**
- * Helper function to generate WhatsApp URLs with messages
- */
-export function getWhatsAppUrl(message = '') {
-    const encodedMessage = encodeURIComponent(message);
-    return `${CONTACT_INFO.whatsappBase}?text=${encodedMessage}`;
-}
-
-/**
  * Generic event listener attacher with cleanup
  */
 export function attachEventListeners(selector, event, handler, options = {}) {
