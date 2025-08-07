@@ -733,3 +733,37 @@
     @apply text-black bg-white;
   }
 }
+/* ============================================= */
+/* == FORCE HIDE DESKTOP ELEMENTS ON MOBILE == */
+/* ============================================= */
+@media (max-width: 1023px) {
+    /* Hide ALL desktop elements on mobile */
+    .hidden.lg\:flex {
+        display: none !important;
+    }
+    
+    /* Ensure mobile elements show properly */
+    .lg\:hidden {
+        display: flex !important;
+    }
+    
+    /* Specific targeting for header sections */
+    header .hidden {
+        display: none !important;
+    }
+}
+
+/* ============================================= */
+/* == FORCE HIDE MOBILE ELEMENTS ON DESKTOP === */
+/* ============================================= */
+@media (min-width: 1024px) {
+    /* Hide mobile elements on desktop */
+    .lg\:hidden {
+        display: none !important;
+    }
+    
+    /* Show desktop elements */
+    .hidden.lg\:flex {
+        display: flex !important;
+    }
+}

@@ -1,4 +1,4 @@
-// assets/js/modules/product/image-loading.js - PERMANENT ROBUST VERSION
+// assets/js/modules/product/image-loading.js
 
 import { getElements } from '../utils.js';
 
@@ -15,7 +15,6 @@ export class ImageLoader {
     }
 
     async init() {
-        // Initialize immediately - images should never block visibility
         this.performInit();
     }
 
@@ -30,10 +29,8 @@ export class ImageLoader {
                 return;
             }
 
-            // CRITICAL: Ensure all images are visible first
             this.ensureImageVisibility();
             
-            // Then optimize loading
             this.initLoadingStrategy();
             this.setupFailsafe();
             
@@ -63,25 +60,19 @@ export class ImageLoader {
         this.images = [...getElements('img')];
         
         this.images.forEach((img, index) => {
-            // Ensure image is visible immediately
             img.style.opacity = '1';
             img.style.visibility = 'visible';
             img.style.display = 'block';
             
-            // Remove problematic classes
             img.classList.remove('hidden', 'invisible');
             
-            // Set up proper loading
             if (img.dataset.src && !img.src) {
-                // This is a lazy image - mark it but don't hide it
                 img.classList.add('lazy-loading');
                 img.loading = 'lazy';
             } else if (img.src) {
-                // Already has source
                 img.classList.add('loaded');
             }
             
-            // Prevent layout shift without hiding
             if (!img.style.minHeight && !img.naturalHeight) {
                 img.style.minHeight = '200px';
                 img.style.backgroundColor = '#f3f4f6';
@@ -93,17 +84,68 @@ export class ImageLoader {
 
     ensureImageVisibility() {
         this.images.forEach(img => {
-            // CRITICAL: Never hide images
-            img.style.opacity = '1';
+            // Check if the image is inside a desktop-only container
+            const isInDesktopContainer = img.closest('.hidden.lg\\:flex');
+            const isInMobileHiddenContainer = img.closest('.lg\\:hidden');
+            
+            // Only make visible if not in desktop-only containers on mobile
+            const isMobile = window.innerWidth < 1024;
+            
+            if (isMobile && isInDesktopContainer) {
+                // Skip desktop images on mobile
+                return;
+            }
+            
+            if (!isMobile && isInMobileHiddenContainer) {
+                // Skip mobile images on desktop
+                return;
+            }
+            
+            // Only modify images that should be visible
+            if (img.offsetParent === null) {
+                // Check if parent is intentionally hidden by responsive classes
+                const parent = img.parentElement;
+                if (parent && (
+                    (isMobile && parent.classList.contains('hidden') && parent.classList.contains('lg:flex')) ||
+                    (!isMobile && parent.classList.contains('lg:hidden'))
+                )) {
+                    return; // Don't override responsive hiding
+                }
+                
+                if (img.dataset.src && !img.src) {
+                    img.src = img.dataset.src;
+                }
+                return; 
+            }
+
+            // Safe to make visible
             img.style.visibility = 'visible';
+            img.style.opacity = '1';
             img.style.display = 'block';
             
-            // Ensure parent containers are visible
+            if (img.dataset.src && !img.src) {
+                img.src = img.dataset.src;
+            }
+            
+            // Only make parent containers visible if they don't have responsive hiding classes
             let parent = img.parentElement;
             let depth = 0;
             while (parent && parent !== document.body && depth < 5) {
-                parent.style.visibility = 'visible';
-                parent.classList.remove('hidden', 'invisible');
+                // Don't override responsive classes
+                const hasResponsiveHiding = (
+                    (isMobile && parent.classList.contains('hidden') && parent.classList.contains('lg:flex')) ||
+                    (!isMobile && parent.classList.contains('lg:hidden'))
+                );
+                
+                if (!hasResponsiveHiding && parent.offsetParent === null && window.getComputedStyle(parent).display === 'none') {
+                    break; 
+                }
+                
+                if (!hasResponsiveHiding) {
+                    parent.style.visibility = 'visible';
+                    parent.classList.remove('hidden', 'invisible');
+                }
+                
                 parent = parent.parentElement;
                 depth++;
             }
@@ -119,12 +161,10 @@ export class ImageLoader {
     }
 
     initImmediateLoading() {
-        // Load all images immediately for low-end devices
         this.images.forEach((img, index) => {
             if (index < 3) {
                 this.loadImage(img);
             } else {
-                // Small stagger to prevent overwhelming
                 setTimeout(() => this.loadImage(img), index * 100);
             }
         });
@@ -133,20 +173,16 @@ export class ImageLoader {
     }
 
     initIntelligentLoading() {
-        // Load critical images immediately
         this.loadCriticalImages();
         
-        // Set up lazy loading for others
         if (window.IntersectionObserver) {
             this.initLazyLoading();
         } else {
-            // Fallback to immediate loading
             this.initImmediateLoading();
         }
     }
 
     loadCriticalImages() {
-        // Load first 6 images immediately (above the fold)
         const criticalImages = this.images.slice(0, 6);
         criticalImages.forEach(img => this.loadImage(img));
         console.log(`Loaded ${criticalImages.length} critical images immediately`);
@@ -161,11 +197,10 @@ export class ImageLoader {
                 }
             });
         }, {
-            rootMargin: '100px', // Start loading early
+            rootMargin: '100px',
             threshold: 0.1
         });
 
-        // Observe remaining images
         this.images.slice(6).forEach(img => {
             if (img.dataset.src && !img.src) {
                 this.observer.observe(img);
@@ -196,7 +231,6 @@ export class ImageLoader {
             const retries = this.retryMap.get(img) || 0;
             
             if (retries < 1 && img.dataset.src) {
-                // One retry
                 this.retryMap.set(img, retries + 1);
                 setTimeout(() => {
                     if (img.dataset.src) {
@@ -204,7 +238,6 @@ export class ImageLoader {
                     }
                 }, 1000);
             } else {
-                // Final failure - still keep visible
                 img.classList.remove('loading');
                 img.classList.add('error');
                 this.setPlaceholder(img);
@@ -220,19 +253,16 @@ export class ImageLoader {
         img.addEventListener('load', handleLoad, { once: true });
         img.addEventListener('error', handleError, { once: true });
 
-        // Actually load the image
         if (img.dataset.src && !img.src) {
             img.src = img.dataset.src;
         }
 
-        // Handle already loaded images
         if (img.complete && img.naturalWidth > 0) {
             handleLoad();
         }
     }
 
     setPlaceholder(img) {
-        // Create a simple placeholder that doesn't break layout
         const width = img.getAttribute('width') || '300';
         const height = img.getAttribute('height') || '200';
         
@@ -240,7 +270,6 @@ export class ImageLoader {
     }
 
     setupFailsafe() {
-        // Failsafe: Ensure all images are loaded after 10 seconds
         this.failsafeTimeout = setTimeout(() => {
             this.images.forEach(img => {
                 if (!img.classList.contains('loaded') && !img.classList.contains('error')) {
@@ -255,7 +284,6 @@ export class ImageLoader {
     }
 
     initFailsafe() {
-        // Emergency mode - just ensure all images are visible and loaded
         console.warn('🚨 Image loader failsafe mode');
         
         this.images.forEach(img => {

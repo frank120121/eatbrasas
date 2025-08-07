@@ -210,13 +210,13 @@
         aria-live="polite"
     ></div>
 
-    <!-- Header -->
     <header class="site-header fixed w-full top-0 z-50 bg-white transition-all duration-300 opacity-0 invisible">
         <div class="max-w-7xl mx-auto">
             <div class="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
 
-                <!-- Mobile: Logo + Menu Toggle -->
-                <div class="flex items-center space-x-4 lg:hidden">
+                <!-- MOBILE LAYOUT (lg:hidden) -->
+                <div class="flex items-center space-x-4 lg:hidden w-full justify-between">
+                    <!-- Mobile Logo -->
                     <a href="#home" class="flex items-center" aria-label="Brasas Smokehouse - Ir al inicio">
                         <img 
                             src="/assets/images/logo/brasas-icon-64.png"
@@ -227,6 +227,7 @@
                         >
                     </a>
 
+                    <!-- Mobile Menu Toggle -->
                     <button 
                         class="text-gray-700 mobile-menu-toggle p-2" 
                         aria-label="Abrir menú de navegación" 
@@ -239,10 +240,8 @@
                     </button>
                 </div>
 
-                <!-- Mobile: Empty spacer (for centering) -->
-                <div class="lg:hidden"></div>
-
-                <!-- Desktop: Logo -->
+                <!-- DESKTOP LAYOUT (hidden lg:flex) -->
+                <!-- Desktop Logo -->
                 <div class="hidden lg:flex items-center">
                     <a href="#home" class="flex items-center" aria-label="Brasas Smokehouse - Ir al inicio">
                         <img 
@@ -255,14 +254,14 @@
                     </a>
                 </div>
 
-                <!-- Desktop: Navigation -->
+                <!-- Desktop Navigation -->
                 <nav class="hidden lg:flex items-center space-x-8" role="navigation" aria-label="Navegación principal">
                     <a href="#menu" class="nav-link active">MENÚ</a>
                     <a href="#contacto" class="nav-link">EVENTOS</a>
                     <a href="#rewards" class="nav-link">REWARDS</a>
                 </nav>
 
-                <!-- Desktop: Location + User -->
+                <!-- Desktop Location -->
                 <div class="hidden lg:flex items-center space-x-6">
                     <a href="#location" class="location-picker" aria-label="Ubicación de recogida: Nogales, Sonora">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24.17" aria-hidden="true">

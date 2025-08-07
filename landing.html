@@ -1,260 +1,308 @@
 <!DOCTYPE html>
 <html lang="es" class="scroll-smooth">
 <head>
+    <!-- Essential Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="PRÓXIMAMENTE - Brasas Carne Ahumada en Nogales. Consigue tu descuento de apertura. Carne ahumada auténtica con mezclas especiales de leña.">
-    <meta name="keywords" content="brasas, carne ahumada, nogales sonora, drive-thru, proximamente, brisket, costillas">
+    <meta name="description" content="Próximamente en Nogales, Sonora - Brasas Smokehouse. Tacos a la leña y productos premium con auténtico sabor sonorense. ¡Sé el primero en conocer nuestro menú!">
+    <meta name="keywords" content="tacos, leña, mesquite, sonora, nogales, carne asada, productos artesanales, proximamente, coming soon, nuevo restaurante, brasas smokehouse">
+    <meta name="author" content="Brasas Smokehouse">
     <meta name="robots" content="index, follow">
     
-    <title>PRÓXIMAMENTE - Brasas Carne Ahumada | Nogales Sonora</title>
+    <!-- Coming Soon Specific -->
+    <meta name="status" content="coming-soon">
+    <meta property="business:contact_data:locality" content="Nogales">
+    <meta property="business:contact_data:region" content="Sonora">
+    <meta property="business:contact_data:country_name" content="Mexico">
     
-    <meta property="og:title" content="PRÓXIMAMENTE - Brasas Carne Ahumada">
-    <meta property="og:description" content="La mejor carne ahumada llega a Nogales. ¡Inscríbete y obtén un descuento especial para la gran apertura!">
+    <!-- Mobile Optimizations for Mexican Market -->
+    <meta name="format-detection" content="telephone=yes">
+    <meta name="format-detection" content="address=yes">
+    
+    <!-- Title -->
+    <title>Próximamente - Brasas Smokehouse | Carne Ahumada Sonorense</title>
+    
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://eatbrasas.com">
+    <meta property="og:title" content="Próximamente - Brasas Smokehouse | Carne Ahumada Sonorense">
+    <meta property="og:description" content="Nuevo restaurante en Nogales, Sonora. Tacos premium a la leña con auténtico sabor sonorense. ¡Regístrate para ser el primero en conocer nuestro menú!">
+    <meta property="og:image" content="https://eatbrasas.com/assets/images/logo/logo-og.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="es_MX">
+    <meta property="og:site_name" content="Brasas Smokehouse">
+    
+    <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#ad2118">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Brasas Smokehouse">
+    
+    <!-- Favicons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon/favicon-16x16.png">
+    <link rel="icon" type="image/x-icon" href="/assets/images/favicon/favicon.ico">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap" rel="stylesheet">
     
-    <style>
-        :root {
-            --primary: #ad2118;
-            --orange: #d97706;
-            --white: #ffffff;
-            --gray-dark: #1f2937;
-            --gray-light: #f9fafb;
-            --black-bg: #111111; 
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', -apple-system, system-ui, sans-serif;
-            line-height: 1.5; 
-            background: var(--black-bg);
-            color: var(--white);
-            overflow-x: hidden;
-        }
-        .container {
-            max-width: 520px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 40px 0;
-            /* TODO: THIS IS THE MOST IMPORTANT VISUAL CHANGE! */
-            /* Replace this pattern with a high-quality, mouth-watering photo of your food. */
-            /* A dark, moody shot of brisket or ribs would be perfect. */
-            background: 
-                linear-gradient(rgba(17, 17, 17, 0.85), rgba(17, 17, 17, 0.85)), 
-                url('https://images.unsplash.com/photo-1599454101155-d571556c9a3a?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy') no-repeat center center;
-            background-size: cover;
-        }
-        
-        /* logo section */
-        .logo-section { margin-bottom: 25px; }
-        .logo {
-            width: 80px; height: 80px; background: var(--primary); border-radius: 16px;
-            display: flex; align-items: center; justify-content: center;
-            margin: 0 auto 15px; border: 3px solid var(--white);
-        }
-        .flame-icon { width: 40px; height: 40px; color: var(--white); }
-        .brand-name { font-size: 28px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
-        .tagline { font-size: 14px; font-weight: 600; color: #ccc; margin-top: 5px; letter-spacing: 1px; }
-
-        /* Status Badge */
-        .status-badge {
-            background: var(--orange); color: var(--white); font-size: 14px; font-weight: 800;
-            padding: 8px 18px; border-radius: 25px; margin-bottom: 20px;
-            display: inline-block; letter-spacing: 1px; text-transform: uppercase;
-        }
-
-        /* Headlines for the Offer */
-        .headline {
-            font-size: clamp(2.2rem, 10vw, 3rem); /* Responsive font size */
-            font-weight: 900; line-height: 1.1; margin-bottom: 15px;
-        }
-        .subheadline {
-            font-size: clamp(1rem, 4vw, 1.2rem);
-            font-weight: 600; color: #ccc; margin-bottom: 30px; max-width: 400px;
-        }
-
-        /* --- LEAD CAPTURE FORM --- */
-        .lead-capture-form {
-            margin-bottom: 25px;
-        }
-        .email-input {
-            width: 100%;
-            padding: 18px 20px;
-            font-size: 16px;
-            border-radius: 12px;
-            border: 2px solid var(--gray-dark);
-            background: var(--gray-light);
-            color: var(--gray-dark);
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        .email-input::placeholder { color: #6b7280; }
-        .submit-btn {
-            background: var(--orange); color: var(--white);
-            border: none; width: 100%; padding: 18px 20px;
-            border-radius: 12px; font-weight: 800; font-size: 18px;
-            cursor: pointer; transition: all 0.2s ease;
-            box-shadow: 0 4px 15px rgba(217, 119, 6, 0.4);
-        }
-        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(217, 119, 6, 0.5); }
-        .form-feedback {
-            margin-top: 15px; font-weight: 600; height: 20px;
-        }
-        .form-feedback.success { color: #25D366; }
-
-        /* Secondary CTA (Social Follow) */
-        .secondary-cta-text { margin-bottom: 15px; font-weight: 600; color: #ccc; }
-        .social-buttons { display: flex; gap: 12px; justify-content: center; }
-        .social-btn {
-            background: rgba(255,255,255,0.1); color: var(--white);
-            padding: 12px; border-radius: 50%; display: flex;
-            align-items: center; justify-content: center;
-            transition: all 0.3s ease;
-        }
-        .social-btn:hover { background: rgba(255,255,255,0.2); transform: translateY(-2px); }
-        .social-btn svg { width: 24px; height: 24px; }
-
-        /* --- ANTICIPATION SECTION --- */
-        .anticipation-section {
-            padding: 80px 0;
-            background: var(--gray-dark);
-            text-align: center;
-        }
-        .anticipation-title {
-            font-size: clamp(1.5rem, 6vw, 2rem);
-            font-weight: 800; margin-bottom: 15px; color: var(--orange);
-        }
-        .anticipation-subtitle {
-            font-size: 1.1rem; color: #ccc; max-width: 450px;
-            margin: 0 auto 40px;
-        }
-
-        /* Countdown Timer */
-        .countdown { display: flex; justify-content: center; gap: 15px; }
-        .countdown-item {
-            background: rgba(0,0,0,0.2);
-            padding: 15px;
-            border-radius: 12px;
-            min-width: 80px;
-        }
-        .countdown-number { font-size: 2.5rem; font-weight: 900; line-height: 1; }
-        .countdown-label { font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #ccc; }
-
-        /* --- FOOTER --- */
-        .footer {
-            padding: 40px 0; text-align: center; font-size: 14px; color: #888;
-        }
-        .footer-logo { font-weight: 800; color: #ccc; }
-
-    </style>
-</head>
-<body>
-
-    <section class="hero">
-        <div class="container">
-            
-            <div class="logo-section">
-                <div class="logo">
-                    <svg class="flame-icon" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45.12l-2.495 4.575a1 1 0 01-1.393.422L4.05 5.234a1 1 0 00-1.55.372l-1.49 4.467a1 1 0 00.98 1.348h1.265a1 1 0 01.95.69l1.49 4.467a1 1 0 001.959-.04l2.495-4.575a1 1 0 011.393-.422l3.4-1.89a1 1 0 00-.98-1.348h-1.265a1 1 0 01-.95-.69L9.605 3.078a1 1 0 00-1.96 0l-1.49 4.467a1 1 0 00.98 1.348h1.265a1 1 0 01.95.69l1.49 4.467a1 1 0 001.959-.04l2.495-4.575a1 1 0 011.393-.422l3.4-1.89a1 1 0 00-.98-1.348H15.95a1 1 0 01-.95-.69l-1.49-4.467a1 1 0 00-1.55-.372l-2.496 4.575a1 1 0 01-1.393.422L6.05 5.234a1 1 0 00-1.55.372l-1.49 4.467a1 1 0 00.98 1.348h1.265a1 1 0 01.95.69l1.49 4.467a1 1 0 001.96 0L12.395 2.553z" clip-rule="evenodd"></path></svg>
-                </div>
-                <h1 class="brand-name">BRASAS</h1>
-                <p class="tagline">CARNE AHUMADA • DRIVE-THRU</p>
-            </div>
-
-            <div class="status-badge">PRÓXIMAMENTE EN NOGALES</div>
-
-            <h2 class="headline">Consigue tu Descuento de Apertura Ahora</h2>
-
-            <form class="lead-capture-form" id="signup-form">
-                <button type="submit" class="submit-btn">¡QUIERO MI DESCUENTO!</button>
-                <p class="form-feedback" id="form-feedback"></p>
-            </form>
-
-        </div>
-    </section>
-
-    <section class="anticipation-section">
-        <div class="container">
-            <h2 class="anticipation-title">La Espera Pronto Terminará</h2>
-            <p class="anticipation-subtitle">Estamos afinando cada detalle, desde nuestras mezclas secretas de leña hasta el servicio más rápido de drive-thru para que disfrutes la experiencia que te mereces.</p>
-            <div class="countdown" id="countdown">
-                <div class="countdown-item"><div class="countdown-number" id="days">00</div><div class="countdown-label">Días</div></div>
-                <div class="countdown-item"><div class="countdown-number" id="hours">00</div><div class="countdown-label">Horas</div></div>
-                <div class="countdown-item"><div class="countdown-number" id="minutes">00</div><div class="countdown-label">Minutos</div></div>
-                <div class="countdown-item"><div class="countdown-number" id="seconds">00</div><div class="countdown-label">Segundos</div></div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer">
-        <div class="container">
-            <p class="footer-logo">&copy; 2025 BRASAS</p>
-        </div>
-    </footer>
-
-    <script>
-        // --- FORM SUBMISSION SCRIPT ---
-        const signupForm = document.getElementById('signup-form');
-        const emailInput = document.getElementById('email-input');
-        const formFeedback = document.getElementById('form-feedback');
-
-        signupForm.addEventListener('submit', function(e) {
-            e.preventDefault(); // Stop form from reloading page
-            const userEmail = emailInput.value;
-
-            // Display instant feedback to the user
-            formFeedback.textContent = '¡Excelente! Estás en la lista. Revisa tu correo.';
-            formFeedback.classList.add('success');
-            emailInput.disabled = true;
-            this.querySelector('button').disabled = true;
-
-            // TODO: Integrate with your email marketing service
-            // Example using a fictional function:
-            // sendToEmailService(userEmail); 
-            console.log(`Email captured: ${userEmail}. Ready to send to email service.`);
-        });
-
-
-        // --- COUNTDOWN TIMER SCRIPT ---
-
-        const countdownDate = new Date('October 30, 2025 10:00:00').getTime();
-
-        const countdownFunction = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = countdownDate - now;
-
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // Add leading zero if number is less than 10
-            const format = (num) => (num < 10 ? '0' + num : num);
-
-            document.getElementById('days').innerText = format(days);
-            document.getElementById('hours').innerText = format(hours);
-            document.getElementById('minutes').innerText = format(minutes);
-            document.getElementById('seconds').innerText = format(seconds);
-
-            if (distance < 0) {
-                clearInterval(countdownFunction);
-                document.getElementById('countdown').innerHTML = "<h3 style='font-size: 1.5rem; font-weight: 800;'>¡YA ABRIMOS!</h3>";
+    <!-- DNS Prefetch for External Resources -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://wa.me">
+    <link rel="dns-prefetch" href="https://web.whatsapp.com">
+    
+    <!-- Critical Resource Preloading -->
+    <link rel="preload" href="/assets/images/hero/hero-poster-desktop.jpg" as="image">
+    
+    <!-- Critical CSS -->
+    <link rel="stylesheet" href="/assets/css/main.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Structured Data for Coming Soon Restaurant -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Restaurant",
+        "name": "Brasas Smokehouse",
+        "description": "Próximamente - Carne Ahumada Drive-Thru",
+        "url": "https://eatbrasas.com",
+        "telephone": "+526311093226",
+        "email": "info@eatbrasas.com",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Nogales",
+            "addressRegion": "Sonora",
+            "addressCountry": "MX"
+        },
+        "servesCuisine": "Mexican",
+        "priceRange": "$$",
+        "image": "https://eatbrasas.com/assets/images/logo/logo-og.jpg",
+        "openingHours": [],
+        "hasMenu": {
+            "@type": "Menu",
+            "name": "Próximamente"
+        },
+        "potentialAction": {
+            "@type": "ReserveAction",
+            "target": {
+                "@type": "EntryPoint",
+                "urlTemplate": "https://wa.me/message/VE4RQVV7SXPSN1",
+                "actionPlatform": [
+                    "http://schema.org/DesktopWebPlatform",
+                    "http://schema.org/MobileWebPlatform"
+                ]
+            },
+            "result": {
+                "@type": "Reservation",
+                "name": "Notificaciones de lanzamiento"
             }
-        }, 1000);
+        }
+    }
     </script>
+</head>
+
+<body class="font-body bg-white overflow-x-hidden">
+    <!-- Skip Navigation for Accessibility -->
+    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
     
+    <!-- Screen Reader Announcements -->
+    <div id="general-sr-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+    
+    <!-- ABOVE THE FOLD CONTAINER -->
+    <div class="above-fold-container">
+        <!-- Hero Section -->
+        <section id="home" class="home-section" role="banner">
+            <!-- Background Video -->
+            <div class="hero-background">
+                <!-- Desktop Video -->
+                <video 
+                    class="bg-video hidden md:block" 
+                    autoplay 
+                    muted 
+                    playsinline 
+                    loop
+                    preload="metadata"
+                    poster="/assets/images/hero/hero-poster-desktop.jpg"
+                    aria-label="Video de fondo mostrando brasas y comida"
+                >   
+                    <source src="/assets/videos/hero-desktop.webm" type="video/webm">
+                    <source src="/assets/videos/hero-desktop.mp4" type="video/mp4">
+                    
+                </video>
+                
+                <!-- Mobile Video -->
+                <video 
+                    class="bg-video block md:hidden" 
+                    autoplay 
+                    muted 
+                    playsinline 
+                    loop
+                    preload="metadata"
+                    poster="/assets/images/hero/hero-poster-mobile.jpg"
+                    aria-label="Video de fondo mostrando brasas y comida"
+                >
+                    <source src="/assets/videos/hero-mobile.webm" type="video/webm">
+                    <source src="/assets/videos/hero-mobile.mp4" type="video/mp4">
+                    
+                </video>
+                
+                <!-- Fallback -->
+                <div class="absolute inset-0 gradient-bg"></div>
+            </div>
+            
+            <!-- Hero Overlay -->
+            <div class="hero-overlay" aria-hidden="true"></div>
+            
+            <!-- Hero Content -->
+            <div class="hero-content w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col items-center text-center lg:text-left lg:items-start max-w-4xl">
+
+                    <!-- Hero Badge -->
+                    <div class="hero-badge mb-6">
+                        <span class="font-black">PRÓXIMAMENTE EN NOGALES</span>
+                    </div>
+                    <div class="fade-in">
+                        <a href="#home" class="inline-block mb-6" aria-label="Brasas Smokehouse - Ir al inicio">
+                            <img 
+                                src="/assets/images/logo/brasas-logo-full-1200.png"
+                                srcset="/assets/images/logo/brasas-logo-full-1200.png 2x, /assets/images/logo/brasas-logo-full-1200.png 3x"
+                                alt="Brasas Smokehouse"
+                                class="w-auto h-auto object-contain hover:scale-105 transition-all duration-200"
+                                loading="lazy"
+                            >
+                        </a>
+                    </div>
+
+                    <!-- Main Title -->
+                    <div class="space-y-2 mb-6">
+                        <h1 class="hero-title-main">Consigue tu Descuento de Apertura Ahora</h1>
+                    </div>  
+                    <!-- CTA Button -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center max-w-lg mx-auto">
+                        <a href="https://wa.me/message/VE4RQVV7SXPSN1"
+                        target="_blank"
+                        class="inline-flex items-center justify-center bg-primary-dark text-white px-6 sm:px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:brightness-95 shine space-x-3 w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-2">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.488"/>
+                            </svg>
+                            <span>¡QUIERO MI DESCUENTO!</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>        
+    </div>
+
+    <!-- Toast Container -->
+    <div 
+        id="toast-container" 
+        class="fixed top-20 right-4 z-50 space-y-3"
+        role="region"
+        aria-label="Notificaciones"
+        aria-live="polite"
+    ></div>
+    <!-- Header -->
+    <header class="site-header fixed w-full top-0 z-50 bg-white transition-all duration-300 opacity-0 invisible">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
+
+                <!-- Mobile: Logo + Menu Toggle -->
+                <div class="flex items-center space-x-4 lg:hidden">
+                    <a href="#home" class="flex items-center" aria-label="Brasas Smokehouse - Ir al inicio">
+                        <img 
+                            src="/assets/images/logo/brasas-icon-64.png"
+                            srcset="/assets/images/logo/brasas-icon-128.png 2x"
+                            alt="Brasas Smokehouse"
+                            class="w-12 h-12 rounded-xl hover:scale-105 transition-all duration-200 shadow-sm"
+                            loading="eager"
+                        >
+                    </a>
+
+                    <button 
+                        class="text-gray-700 mobile-menu-toggle p-2" 
+                        aria-label="Abrir menú de navegación" 
+                        aria-expanded="false"
+                        aria-controls="mobile-navigation"
+                    >
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Mobile: Empty spacer (for centering) -->
+                <div class="lg:hidden"></div>
+
+                <!-- Desktop: Logo -->
+                <div id="desktop-logo-container" class="hidden lg:flex items-center">
+                    <a href="#home" class="flex items-center" aria-label="Brasas Smokehouse - Ir al inicio">
+                        <img 
+                            src="/assets/images/logo/brasas-icon-256.png"
+                            srcset="/assets/images/logo/brasas-icon-256.png 2x"
+                            alt="Brasas Smokehouse"
+                            class="w-12 h-12 rounded-xl hover:scale-105 transition-all duration-200 shadow-sm"
+                            loading="eager"
+                        >
+                    </a>
+                </div>
+
+                <!-- Desktop: Navigation -->
+                <nav class="hidden lg:flex items-center space-x-8" role="navigation" aria-label="Navegación principal">
+                    <a href="#menu" class="nav-link active">MENÚ</a>
+                    <a href="#contacto" class="nav-link">EVENTOS</a>
+                    <a href="#rewards" class="nav-link">REWARDS</a>
+                </nav>
+
+                <!-- Desktop: Location + User -->
+                <div class="hidden lg:flex items-center space-x-6">
+                    <a href="#location" class="location-picker" aria-label="Ubicación de recogida: Nogales, Sonora">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24.17" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M12 0a7.875 7.875 0 0 1 6.831 11.795L12.09 24.17 5.164 11.794a7.88 7.88 0 0 1-1.039-3.919A7.875 7.875 0 0 1 12 0zm0 11.794a3.92 3.92 0 1 0 0-7.838 3.92 3.92 0 0 0 0 7.838z"/>
+                        </svg>
+                        <div class="text-sm">
+                            <div class="font-bold text-sm">Recoger en</div>
+                            <div class="text-gray-600 text-sm">Nogales, Sonora</div>
+                        </div>
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-navigation" class="mobile-menu fixed inset-0 bg-white z-40 lg:hidden" aria-hidden="true">
+                <div class="flex flex-col h-full">
+                    <div class="flex justify-end p-4">
+                        <button 
+                            class="mobile-menu-toggle text-gray-700 p-2" 
+                            aria-label="Cerrar menú de navegación"
+                        >
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <nav class="flex-1 px-6 py-4 space-y-6" role="navigation" aria-label="Navegación móvil">
+                        <a href="#menu" class="nav-link block py-3 text-lg font-bold">MENÚ</a>
+                        <a href="#catering" class="nav-link block py-3 text-lg font-bold">EVENTOS</a>
+                        <a href="#rewards" class="nav-link block py-3 text-lg font-bold">REWARDS</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- Scripts -->
+    <script type="module" src="assets/js/main.js"></script>
+    <script src="assets/js/sw-registration.js"></script>
+
+
+
 </body>
 </html>

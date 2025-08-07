@@ -3279,6 +3279,18 @@ img.lazy-loaded {
   }
 }
 
+/* ============================================= */
+
+/* == FORCE HIDE DESKTOP LOGO ON MOBILE FIX == */
+
+/* ============================================= */
+
+@media (max-width: 1023px) {
+  #desktop-logo-container {
+    display: none !important;
+  }
+}
+
 .last\:border-b-0:last-child {
   border-bottom-width: 0px;
 }
