@@ -1,7 +1,7 @@
 // assets/js/modules/business/contact.js
 
 import { CONFIG, CONTACT_INFO } from '../config.js';
-import { getElements, attachEventListeners, getWhatsAppUrl } from '../utils.js';
+import { getElements, attachEventListeners} from '../utils.js';
 
 /**
  * ContactManager - Handles contact functionality, address copying, and communication
