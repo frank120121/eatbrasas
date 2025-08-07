@@ -3,13 +3,13 @@
 const SW_CONFIG = {
     SW_URL: '/sw.js',
     UPDATE_CHECK_INTERVAL: 300000, // Check every 5 minutes (was 1 minute)
-    DATA_LIMIT_MB: 2,              // 2MB limit for Mexican prepaid plans
+    DATA_LIMIT_MB: 2,              // 2MB limit 
     WARN_AT_PERCENTAGE: 70,        // Warn at 70% usage
     DEBUG: window.location.hostname === 'localhost'
 };
 
 /**
- * Lightweight Service Worker Manager for Mexico
+ * Service Worker
  */
 class ServiceWorkerManager {
     constructor() {
@@ -36,7 +36,7 @@ class ServiceWorkerManager {
             this.startPeriodicTasks();
             this.handleInstallPrompt();
             
-            console.log('✅ SW Manager initialized for Mexico');
+            console.log('✅ SW Manager initialized');
             
         } catch (error) {
             console.error('❌ SW Manager initialization failed:', error);
@@ -75,7 +75,7 @@ class ServiceWorkerManager {
             this.handleServiceWorkerMessage(event);
         });
 
-        // Online/offline handling for Mexico
+        // Online/offline handling
         window.addEventListener('online', () => {
             console.log('📡 Back online');
             this.isOnline = true;
@@ -95,7 +95,7 @@ class ServiceWorkerManager {
             }
         });
 
-        // Monitor connection for Mexican networks
+        // Monitor connection
         if (navigator.connection) {
             navigator.connection.addEventListener('change', () => {
                 const { effectiveType, downlink } = navigator.connection;
@@ -223,7 +223,7 @@ class ServiceWorkerManager {
     }
 
     /**
-     * Show simplified install prompt for Mexico
+     * Show install prompt
      */
     showInstallPrompt(deferredPrompt) {
         // Check if recently dismissed
@@ -232,6 +232,7 @@ class ServiceWorkerManager {
             return;
         }
 
+        // Create a proper HTML structure instead of string template
         const installMessage = `
             <div style="display: flex; align-items: center; margin-bottom: 10px;">
                 <span style="font-size: 20px; margin-right: 8px;">🇲🇽</span>
@@ -241,24 +242,26 @@ class ServiceWorkerManager {
                 ✅ Funciona sin internet<br>
                 ✅ Ahorra datos móviles
             </div>
-            <button onclick="swManager.installPWA()" style="
-                background: #fff; 
-                color: #ad2118; 
-                border: none; 
-                padding: 10px 15px; 
-                border-radius: 8px; 
-                cursor: pointer; 
-                font-weight: bold;
-                margin-right: 10px;
-            ">📱 Instalar</button>
-            <button onclick="swManager.dismissInstall()" style="
-                background: transparent; 
-                color: #fff; 
-                border: 1px solid rgba(255,255,255,0.5); 
-                padding: 10px 15px; 
-                border-radius: 8px; 
-                cursor: pointer;
-            ">Más tarde</button>
+            <div>
+                <button onclick="swManager.installPWA()" style="
+                    background: #fff; 
+                    color: #ad2118; 
+                    border: none; 
+                    padding: 10px 15px; 
+                    border-radius: 8px; 
+                    cursor: pointer; 
+                    font-weight: bold;
+                    margin-right: 10px;
+                ">📱 Instalar</button>
+                <button onclick="swManager.dismissInstall()" style="
+                    background: transparent; 
+                    color: #fff; 
+                    border: 1px solid rgba(255,255,255,0.5); 
+                    padding: 10px 15px; 
+                    border-radius: 8px; 
+                    cursor: pointer;
+                ">Más tarde</button>
+            </div>
         `;
 
         this.showToast(installMessage, 'info', 30000);
@@ -266,6 +269,7 @@ class ServiceWorkerManager {
         // Store prompt for later use
         this.deferredPrompt = deferredPrompt;
     }
+
 
     /**
      * Install PWA
@@ -314,7 +318,7 @@ class ServiceWorkerManager {
      * Start periodic tasks
      */
     startPeriodicTasks() {
-        // Check for updates less frequently to save battery
+        // Check for updates
         this.updateCheckInterval = setInterval(() => {
             if (!document.hidden && this.isOnline) {
                 this.checkForUpdates();
@@ -324,7 +328,7 @@ class ServiceWorkerManager {
     }
 
     /**
-     * Simple toast notification
+     * toast notification
      */
     showToast(message, type = 'info', duration = 3000) {
         // Try to use existing toast function
@@ -332,9 +336,9 @@ class ServiceWorkerManager {
             return showToast(message, type, duration);
         }
         
-        // Simple fallback toast
+        // fallback toast with proper HTML support
         const toast = document.createElement('div');
-        toast.innerHTML = message;
+        toast.innerHTML = message; 
         toast.style.cssText = `
             position: fixed;
             top: 20px;
@@ -348,9 +352,20 @@ class ServiceWorkerManager {
             font-family: inherit;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             word-wrap: break-word;
+            max-width: 400px;
         `;
         
         document.body.appendChild(toast);
+        
+        // Add click event to buttons if they exist
+        const buttons = toast.querySelectorAll('button');
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+            });
+        });
         
         setTimeout(() => {
             if (toast.parentNode) {

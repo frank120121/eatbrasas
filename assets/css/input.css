@@ -21,6 +21,10 @@
     .shine {
       @apply transition-none;
     }
+
+    .header-auto-hide {
+      transition: none !important;
+    }
   }
   
   /* High contrast mode support */
@@ -65,6 +69,7 @@
 }
 
 /* ===== COMPONENT LAYER - Reusable Components ===== */
+
 @layer components {
   /* Base Navigation */
   .nav-link {
@@ -156,7 +161,33 @@
   .glass-dark {
     @apply bg-black/30 backdrop-blur-xl border border-white/10;
   }
+  /* Header Auto-Hide Component */
+  .header-auto-hide {
+    @apply fixed top-0 left-0 right-0 z-50 w-full;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
 
+  /* Header visibility states - controlled by JavaScript */
+  .header-auto-hide.header-hidden {
+    transform: translateY(-100%);
+    @apply opacity-0;
+  }
+
+  .header-auto-hide.header-visible {
+    transform: translateY(0);
+    @apply opacity-100;
+  }
+
+  /* Ensure header shows scrolled state when visible */
+  .header-auto-hide.header-visible.header-scrolled {
+    @apply bg-white/95 backdrop-blur-xl shadow-lg border-b border-gray-200;
+  }
+
+  /* Override for mobile menu - always show header when menu is open */
+  .header-auto-hide.mobile-menu-open {
+    transform: translateY(0) !important;
+    @apply opacity-100 !important;
+  }
   /* Header Styles */
   .header-scrolled {
     @apply bg-white/95 backdrop-blur-xl shadow-lg border-b border-gray-200;
@@ -168,11 +199,6 @@
     @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-1;
   }
 
-  .cart-icon {
-    @apply text-brown p-2 rounded-lg transition-all duration-300;
-    @apply hover:text-primary hover:bg-gray-50;
-    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-1;
-  }
 
   /* Mobile Menu */
   .mobile-menu {
@@ -262,24 +288,20 @@
 
   /* Enhanced mobile touch targets */
   @media (max-width: 768px) {
-    .add-to-cart-btn {
-      min-height: 44px; /* iOS recommended touch target */
-      @apply px-5 py-3;
-    }
 
     .category-nav-btn {
       min-height: 44px;
       @apply px-4 py-3;
     }
 
-    /* Mobile optimizations for menu preview */
+    /* Mobile menu preview */
     .category-preview-card {
       @apply mb-4;
       min-height: 280px;
     }
 
     .category-preview-card h3 {
-      @apply text-xl; /* Reduced from text-2xl for mobile */
+      @apply text-xl; 
     }
 
     .category-preview-card p {
@@ -337,59 +359,7 @@
     @apply text-white leading-relaxed mb-8 max-w-2xl;
   }
 
-  /* Cart Components */
-  .cart-item {
-    @apply bg-white border border-gray-200 p-4 rounded-3xl;
-    @apply transition-all duration-300 hover:shadow-md hover:-translate-y-0.5;
-  }
-
-  .cart-item-removing {
-    @apply opacity-0 translate-x-full transition-all duration-300;
-  }
-
-  .cart-item-error {
-    @apply border-red-300 bg-red-50;
-  }
-
-  .quantity-btn {
-    @apply w-8 h-8 rounded-full flex items-center justify-center font-bold;
-    @apply transition-all duration-300 hover:scale-110;
-    @apply disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100;
-    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-1;
-  }
-
-  .remove-item-btn {
-    @apply p-2 rounded-lg transition-all duration-300;
-    @apply hover:bg-red-50 hover:text-red-600 hover:scale-105;
-    @apply focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 focus:ring-offset-1;
-  }
-
-  .add-to-cart-btn {
-    @apply bg-gray-900 text-white font-semibold px-6 py-3 rounded-3xl;
-    @apply transition-all duration-300 hover:bg-orange-500;
-    @apply focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-opacity-50 focus:ring-offset-2;
-    @apply disabled:opacity-50 disabled:cursor-not-allowed;
-  }
   
-  .add-to-cart-btn.added {
-    @apply bg-green-500 text-white;
-  }
-  
-  .add-to-cart-btn.loading {
-    @apply bg-gray-400 cursor-not-allowed;
-  }
-
-  /* Loading States */
-  .cart-updating {
-    @apply pointer-events-none opacity-70;
-  }
-
-  .cart-loading::after {
-    content: '';
-    @apply inline-block w-4 h-4 border-2 border-gray-300 border-t-orange-500 rounded-full ml-2;
-    animation: spin 1s linear infinite;
-  }
-
   /* Toast Notifications */
   .toast {
     @apply p-4 rounded-xl shadow-lg text-white text-sm max-w-sm;
@@ -408,7 +378,7 @@
   /* Layout Components - Above the Fold */
   .above-fold-container {
     height: 100vh;
-    height: 100dvh; /* Dynamic viewport height for mobile */
+    height: 100dvh; 
     @apply flex flex-col overflow-hidden relative;
   }
 
@@ -463,50 +433,6 @@
     @apply text-sm font-black text-brown leading-tight text-center flex-1;
     margin: 0;
     order: 1;
-  }
-
-  .loyalty-buttons {
-    @apply flex items-center justify-center flex-shrink-0;
-    margin: 0;
-    gap: 8px;
-    order: 2;
-  }
-
-  /* CTA Button (CREAR UNA CUENTA) */
-  .loyalty-buttons button:first-child {
-    @apply bg-brown hover:bg-brown-dark text-white font-bold rounded-2xl;
-    @apply transition-all duration-300 hover:scale-105 uppercase tracking-wide;
-    @apply focus:outline-none focus:ring-2 focus:ring-brown focus:ring-opacity-50 focus:ring-offset-2;
-    padding: 6px 12px;
-    min-width: auto;
-    min-height: 32px;
-    font-size: 0.75rem;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-
-  /* OR text */
-  .loyalty-buttons span {
-    @apply text-brown font-medium;
-    font-size: 0.75rem;
-    min-width: auto;
-    text-align: center;
-    margin: 0;
-    flex-shrink: 0;
-  }
-
-  /* Sign in link (INICIAR SESIÓN) */
-  .loyalty-buttons button:last-child {
-    @apply bg-transparent text-brown font-medium hover:text-brown-dark;
-    @apply uppercase tracking-wide underline decoration-2 underline-offset-4;
-    @apply hover:decoration-brown-dark transition-all duration-300;
-    @apply focus:outline-none focus:ring-2 focus:ring-brown focus:ring-opacity-50 focus:ring-offset-2;
-    padding: 0;
-    cursor: pointer;
-    user-select: none;
-    min-width: auto;
-    font-size: 0.75rem;
-    flex-shrink: 0;
   }
 
   .sticky-header {
@@ -571,28 +497,6 @@
   }
 }
 
-/* ===== CART OVERLAY AND DRAWER ===== */
-#cart-overlay {
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.3s ease-out, visibility 0.3s ease-out;
-  pointer-events: none;
-}
-
-#cart-overlay.show {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-}
-
-#cart-drawer {
-  transform: translateX(100%);
-  transition: transform 0.3s ease-out;
-}
-
-#cart-drawer.show {
-  transform: translateX(0);
-}
 
 /* ===== RESPONSIVE BREAKPOINTS ===== */
 @media (max-width: 768px) {
@@ -636,12 +540,6 @@
     line-height: 1.1;
   }
 
-  .loyalty-buttons {
-    @apply w-full justify-center;
-    margin: 0;
-    order: 2;
-    gap: 6px;
-  }
 
   /* Adjust loyalty section height for mobile */
   .loyalty-section-compact {
@@ -651,17 +549,6 @@
     padding: 0.5rem 0;
   }
 
-  /* Cart drawer full width on mobile */
-  #cart-drawer {
-    @apply w-full max-w-full;
-  }
-
-  /* Improve touch targets on mobile */
-  .add-to-cart-btn,
-  .quantity-btn,
-  .remove-item-btn {
-    @apply min-h-[44px] min-w-[44px];
-  }
 }
 
 /* ===== LANDSCAPE MOBILE ADJUSTMENTS ===== */
@@ -681,25 +568,6 @@
     font-size: 0.7rem;
     line-height: 1;
     margin: 0;
-  }
-
-  .loyalty-buttons {
-    @apply flex-shrink-0;
-    gap: 6px;
-  }
-
-  .loyalty-buttons button:first-child {
-    padding: 4px 8px;
-    min-height: 28px;
-    font-size: 0.65rem;
-  }
-
-  .loyalty-buttons span {
-    font-size: 0.65rem;
-  }
-
-  .loyalty-buttons button:last-child {
-    font-size: 0.65rem;
   }
 
   /* Ensure above-fold container uses full viewport */
@@ -745,21 +613,6 @@
     @apply text-left text-lg flex-1;
     margin: 0;
     order: 2;
-  }
-
-  .loyalty-buttons {
-    margin: 0;
-    order: 3;
-    gap: 0.5rem;
-  }
-
-  .loyalty-buttons button:last-child {
-    margin-left: 0;
-  }
-
-  /* Cart drawer fixed width on desktop */
-  #cart-drawer {
-    @apply max-w-md;
   }
 }
 
@@ -814,9 +667,7 @@
 /* ===== PRINT STYLES ===== */
 @media print {
   .mobile-menu,
-  .cart-icon,
   .loyalty-section-compact,
-  #cart-overlay,
   #toast-container {
     @apply hidden;
   }

@@ -1,6 +1,6 @@
 //sw.js
 
-const CACHE_VERSION = 'brasas-mx-v1.2.0';
+const CACHE_VERSION = 'brasas-mx-v1.2.6';
 const CRITICAL_CACHE = `critical-${CACHE_VERSION}`;
 const MENU_CACHE = `menu-${CACHE_VERSION}`;
 const IMAGE_CACHE = `images-${CACHE_VERSION}`;
