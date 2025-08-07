@@ -40,7 +40,7 @@ const MENU_ASSETS = [
 const STATIC_ASSETS = [
   '/assets/images/logo/android-chrome-192x192.png',
   '/assets/images/logo/android-chrome-512x512.png',
-  '/assets/images/logo/favicon-32x32.png',
+  '/assets/images/favicon/favicon-32x32.png',
   '/assets/images/favicon/favicon.ico'
 ];
 
@@ -499,7 +499,7 @@ self.addEventListener('push', event => {
   const options = {
     body: 'Tu pedido está listo!',
     icon: '/assets/images/logo/android-chrome-192x192.png',
-    badge: '/assets/images/logo/favicon-32x32.png',
+    badge: '/assets/images/favicon/favicon-32x32.png',
     vibrate: [200, 100, 200],
     data: { url: '/' }
   };

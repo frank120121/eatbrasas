@@ -14,12 +14,12 @@
 
   "icons": [
     {
-      "src": "/assets/images/logo/favicon-16x16.png",
+      "src": "/assets/images/favicon/favicon-16x16.png",
       "sizes": "16x16",
       "type": "image/png"
     },
     {
-      "src": "/assets/images/logo/favicon-32x32.png",
+      "src": "/assets/images/favicon/favicon-32x32.png",
       "sizes": "32x32",
       "type": "image/png"
     },
@@ -56,7 +56,7 @@
       "description": "Ver todas las diferentes carnes ahumadas",
       "url": "/#menu",
       "icons": [{ 
-        "src": "/assets/images/logo/favicon-32x32.png", 
+        "src": "/assets/images/favicon/favicon-32x32.png", 
         "sizes": "32x32",
         "type": "image/png"
       }]
@@ -67,7 +67,7 @@
       "description": "Encuéntranos en Villa Sonora, Nogales",
       "url": "/#location",
       "icons": [{ 
-        "src": "/assets/images/logo/favicon-32x32.png", 
+        "src": "/assets/images/favicon/favicon-32x32.png", 
         "sizes": "32x32",
         "type": "image/png"
       }]
@@ -78,7 +78,7 @@
       "description": "Contacta a Brasas Smokehouse por WhatsApp, teléfono o email",
       "url": "/#contacto",
       "icons": [{ 
-        "src": "/assets/images/logo/favicon-32x32.png", 
+        "src": "/assets/images/favicon/favicon-32x32.png", 
         "sizes": "32x32",
         "type": "image/png"
       }]
