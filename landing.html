@@ -107,6 +107,8 @@
         }
     }
     </script>
+
+
 </head>
 
 <body class="font-body bg-white overflow-x-hidden">
@@ -119,82 +121,61 @@
     <!-- ABOVE THE FOLD CONTAINER -->
     <div class="above-fold-container">
         <!-- Hero Section -->
-        <section id="home" class="home-section" role="banner">
-            <!-- Background Video -->
-            <div class="hero-background">
-                <!-- Desktop Video -->
-                <video 
-                    class="bg-video hidden md:block" 
-                    autoplay 
-                    muted 
-                    playsinline 
-                    loop
-                    preload="metadata"
-                    poster="/assets/images/hero/hero-poster-desktop.jpg"
-                    aria-label="Video de fondo mostrando brasas y comida"
-                >   
-                    <source src="/assets/videos/hero-desktop.webm" type="video/webm">
-                    <source src="/assets/videos/hero-desktop.mp4" type="video/mp4">
-                    
-                </video>
-                
-                <!-- Mobile Video -->
-                <video 
-                    class="bg-video block md:hidden" 
-                    autoplay 
-                    muted 
-                    playsinline 
-                    loop
-                    preload="metadata"
-                    poster="/assets/images/hero/hero-poster-mobile.jpg"
-                    aria-label="Video de fondo mostrando brasas y comida"
-                >
-                    <source src="/assets/videos/hero-mobile.webm" type="video/webm">
-                    <source src="/assets/videos/hero-mobile.mp4" type="video/mp4">
-                    
-                </video>
-                
-                <!-- Fallback -->
-                <div class="absolute inset-0 gradient-bg"></div>
-            </div>
-            
+        <section id="home" class="home-section" role="banner">            
+            <div class="absolute inset-0 gradient-bg"></div>
+
             <!-- Hero Overlay -->
             <div class="hero-overlay" aria-hidden="true"></div>
             
             <!-- Hero Content -->
-            <div class="hero-content w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex flex-col items-center text-center lg:text-left lg:items-start max-w-4xl">
+            <div class="hero-content w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col items-center justify-center min-h-screen py-8 sm:py-12 lg:py-16">
 
                     <!-- Hero Badge -->
-                    <div class="hero-badge mb-6">
+                    <div class="hero-badge mb-8 lg:mb-12">
                         <span class="font-black">PRÓXIMAMENTE EN NOGALES</span>
                     </div>
-                    <div class="fade-in">
-                        <a href="#home" class="inline-block mb-6" aria-label="Brasas Smokehouse - Ir al inicio">
+                    
+                    <!-- Logo -->
+                    <div class="fade-in mb-16 lg:mb-24">
+                        <a href="#home" class="inline-block" aria-label="Brasas Smokehouse - Ir al inicio">
                             <img 
                                 src="/assets/images/logo/brasas-logo-full-1200.png"
                                 srcset="/assets/images/logo/brasas-logo-full-1200.png 2x, /assets/images/logo/brasas-logo-full-1200.png 3x"
                                 alt="Brasas Smokehouse"
-                                class="w-auto h-auto object-contain hover:scale-105 transition-all duration-200"
+                                class="w-auto h-auto object-contain hover:scale-105 transition-all duration-200 max-w-xs lg:max-w-sm mx-auto"
                                 loading="lazy"
                             >
                         </a>
                     </div>
 
-                    <!-- Main Title -->
-                    <div class="space-y-2 mb-6">
-                        <h1 class="hero-title-main">Consigue tu Descuento de Apertura Ahora</h1>
-                    </div>  
+                    <!-- Main Message -->
+                    <div class="text-center space-y-2 mb-6">
+                        <h1 class="hero-title-main">Consigue tu Descuento Exclusivo de Apertura Ahora</h1>
+                    </div>
+                    
                     <!-- CTA Button -->
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center max-w-lg mx-auto">
+                    <div class="flex flex-col items-center w-full max-w-sm mx-auto">
                         <a href="https://wa.me/message/VE4RQVV7SXPSN1"
-                        target="_blank"
-                        class="inline-flex items-center justify-center bg-primary-dark text-white px-6 sm:px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:brightness-95 shine space-x-3 w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-2">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                           target="_blank"
+                           class="inline-flex items-center justify-center w-full bg-green-500 hover:bg-green-600 text-white font-bold text-lg uppercase tracking-wider px-8 py-4 rounded-2xl transition-all duration-300 hover:scale-105 hover:-translate-y-1 shadow-xl hover:shadow-2xl space-x-3"
+                           style="background-color: #25D366 !important;"
+                           onmouseover="this.style.backgroundColor='#128C7E'"
+                           onmouseout="this.style.backgroundColor='#25D366'"
+                           aria-label="Obtener descuento exclusivo por WhatsApp">
+                            <!-- Official WhatsApp Logo SVG -->
+                            <svg class="w-6 h-6 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.488"/>
                             </svg>
-                            <span>¡QUIERO MI DESCUENTO!</span>
+                            <span>¡Quiero Mi Descuento!</span>
                         </a>
+                        
+                        <!-- Trust Message -->
+                        <div class="text-center mt-4">
+                            <p class="text-sm text-white font-medium px-2">
+                                Es gratis, sin spam y solo para las primeras 50 personas
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -209,100 +190,20 @@
         aria-label="Notificaciones"
         aria-live="polite"
     ></div>
+    
     <!-- Header -->
     <header class="site-header fixed w-full top-0 z-50 bg-white transition-all duration-300 opacity-0 invisible">
         <div class="max-w-7xl mx-auto">
             <div class="flex justify-between items-center h-16 px-4 sm:px-6 lg:px-8">
-
-                <!-- Mobile: Logo + Menu Toggle -->
-                <div class="flex items-center space-x-4 lg:hidden">
-                    <a href="#home" class="flex items-center" aria-label="Brasas Smokehouse - Ir al inicio">
-                        <img 
-                            src="/assets/images/logo/brasas-icon-64.png"
-                            srcset="/assets/images/logo/brasas-icon-128.png 2x"
-                            alt="Brasas Smokehouse"
-                            class="w-12 h-12 rounded-xl hover:scale-105 transition-all duration-200 shadow-sm"
-                            loading="eager"
-                        >
-                    </a>
-
-                    <button 
-                        class="text-gray-700 mobile-menu-toggle p-2" 
-                        aria-label="Abrir menú de navegación" 
-                        aria-expanded="false"
-                        aria-controls="mobile-navigation"
-                    >
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                        </svg>
-                    </button>
-                </div>
-
                 <!-- Mobile: Empty spacer (for centering) -->
                 <div class="lg:hidden"></div>
-
-                <!-- Desktop: Logo -->
-                <div id="desktop-logo-container" class="hidden lg:flex items-center">
-                    <a href="#home" class="flex items-center" aria-label="Brasas Smokehouse - Ir al inicio">
-                        <img 
-                            src="/assets/images/logo/brasas-icon-256.png"
-                            srcset="/assets/images/logo/brasas-icon-256.png 2x"
-                            alt="Brasas Smokehouse"
-                            class="w-12 h-12 rounded-xl hover:scale-105 transition-all duration-200 shadow-sm"
-                            loading="eager"
-                        >
-                    </a>
-                </div>
-
-                <!-- Desktop: Navigation -->
-                <nav class="hidden lg:flex items-center space-x-8" role="navigation" aria-label="Navegación principal">
-                    <a href="#menu" class="nav-link active">MENÚ</a>
-                    <a href="#contacto" class="nav-link">EVENTOS</a>
-                    <a href="#rewards" class="nav-link">REWARDS</a>
-                </nav>
-
-                <!-- Desktop: Location + User -->
-                <div class="hidden lg:flex items-center space-x-6">
-                    <a href="#location" class="location-picker" aria-label="Ubicación de recogida: Nogales, Sonora">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24.17" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M12 0a7.875 7.875 0 0 1 6.831 11.795L12.09 24.17 5.164 11.794a7.88 7.88 0 0 1-1.039-3.919A7.875 7.875 0 0 1 12 0zm0 11.794a3.92 3.92 0 1 0 0-7.838 3.92 3.92 0 0 0 0 7.838z"/>
-                        </svg>
-                        <div class="text-sm">
-                            <div class="font-bold text-sm">Recoger en</div>
-                            <div class="text-gray-600 text-sm">Nogales, Sonora</div>
-                        </div>
-                    </a>
-                </div>
-
-            </div>
-
-            <!-- Mobile Menu -->
-            <div id="mobile-navigation" class="mobile-menu fixed inset-0 bg-white z-40 lg:hidden" aria-hidden="true">
-                <div class="flex flex-col h-full">
-                    <div class="flex justify-end p-4">
-                        <button 
-                            class="mobile-menu-toggle text-gray-700 p-2" 
-                            aria-label="Cerrar menú de navegación"
-                        >
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
-                            </svg>
-                        </button>
-                    </div>
-                    <nav class="flex-1 px-6 py-4 space-y-6" role="navigation" aria-label="Navegación móvil">
-                        <a href="#menu" class="nav-link block py-3 text-lg font-bold">MENÚ</a>
-                        <a href="#catering" class="nav-link block py-3 text-lg font-bold">EVENTOS</a>
-                        <a href="#rewards" class="nav-link block py-3 text-lg font-bold">REWARDS</a>
-                    </nav>
-                </div>
             </div>
         </div>
     </header>
+    
     <!-- Scripts -->
     <script type="module" src="assets/js/main.js"></script>
     <script src="assets/js/sw-registration.js"></script>
-
-
 
 </body>
 </html>
