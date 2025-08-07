@@ -1,4 +1,4 @@
-// assets/js/modules/ui/header.js - FIXED VERSION
+// assets/js/modules/ui/header.js
 
 import { CONFIG } from '../config.js';
 import { 
@@ -11,7 +11,7 @@ import {
 } from '../utils.js';
 
 /**
- * HeaderManager with improved auto-hide functionality
+ * HeaderManager
  */
 export class HeaderManager {
     constructor(showToast = null) {
@@ -25,12 +25,11 @@ export class HeaderManager {
         this.scrollHandler = null;
         this.resizeHandler = null;
         
-        // Improved auto-hide functionality
         this.hideTimeout = null;
-        this.autoHideDelay = 2000; // Reduced to 2 seconds
+        this.autoHideDelay = 2000; 
         this.isHeaderVisible = true;
         this.scrollDirection = null;
-        this.scrollThreshold = 10; // Increased threshold for better detection
+        this.scrollThreshold = 10; 
         this.isScrolling = false;
         this.scrollEndTimeout = null;
     }
@@ -63,11 +62,22 @@ export class HeaderManager {
             throw new Error('Header element not found');
         }
 
-        // Ensure header is visible initially
-        this.header.style.transform = 'translateY(0)';
-        this.header.style.opacity = '1';
         this.header.style.transition = 'transform 0.3s ease-in-out, opacity 0.3s ease-in-out';
         this.header.classList.add('sticky-header');
+
+        const isAtTop = window.scrollY <= 50;
+        
+        if (isAtTop) {
+            this.header.style.transform = 'translateY(-100%)';
+            this.header.style.opacity = '0';
+            this.isHeaderVisible = false;
+            console.log('Header initialized - hidden (at top)');
+        } else {
+            this.header.style.transform = 'translateY(0)';
+            this.header.style.opacity = '1';
+            this.isHeaderVisible = true;
+            console.log('Header initialized - visible (scrolled)');
+        }
 
         console.log(`Found header and ${this.mobileMenuToggles.length} mobile menu toggles`);
     }
@@ -83,7 +93,6 @@ export class HeaderManager {
 
         window.addEventListener('scroll', this.scrollHandler, { passive: true });
         
-        // Set initial state
         this.updateHeaderScrollState();
     }
 
@@ -94,35 +103,31 @@ export class HeaderManager {
         const headerHeight = this.header.offsetHeight;
         const scrollDifference = currentScrollY - this.lastScrollY;
 
-        // Clear any pending hide timeout when actively scrolling
         this.clearHideTimeout();
         this.isScrolling = true;
 
-        // Clear existing scroll end timeout
         if (this.scrollEndTimeout) {
             clearTimeout(this.scrollEndTimeout);
         }
 
-        // Set new scroll end timeout
         this.scrollEndTimeout = setTimeout(() => {
             this.isScrolling = false;
             this.handleScrollEnd();
         }, 150);
 
-        // Determine scroll direction with better threshold
         if (Math.abs(scrollDifference) > this.scrollThreshold) {
             this.scrollDirection = scrollDifference > 0 ? 'down' : 'up';
         }
 
-        // Always show header at the top
-        if (currentScrollY <= headerHeight * 1.5) {
+        if (currentScrollY <= 50) {
+            this.hideHeader();
+        }
+        else if (currentScrollY <= headerHeight * 1.5) {
             this.showHeader();
         }
-        // Show header when scrolling up (any amount)
         else if (this.scrollDirection === 'up') {
             this.showHeader();
         }
-        // Hide header when scrolling down and past threshold
         else if (this.scrollDirection === 'down' && currentScrollY > headerHeight * 2) {
             this.hideHeader();
         }
@@ -131,7 +136,6 @@ export class HeaderManager {
     }
 
     handleScrollEnd() {
-        // When scrolling stops, set auto-hide timer if header is visible and we're not at top
         if (this.isHeaderVisible && 
             window.scrollY > this.header.offsetHeight * 1.5 && 
             !this.isMobileMenuOpen) {
@@ -153,7 +157,6 @@ export class HeaderManager {
     hideHeader() {
         if (!this.header) return;
 
-        // Don't hide if mobile menu is open
         if (this.isMobileMenuOpen) return;
 
         if (this.isHeaderVisible) {
@@ -168,7 +171,6 @@ export class HeaderManager {
         this.clearHideTimeout();
         
         this.hideTimeout = setTimeout(() => {
-            // Only hide if user is not at the top, not scrolling, and mobile menu is not open
             if (window.scrollY > this.header?.offsetHeight * 1.5 && 
                 !this.isScrolling && 
                 !this.isMobileMenuOpen) {
@@ -184,7 +186,6 @@ export class HeaderManager {
         }
     }
 
-    // Mobile menu methods
     initMobileMenu() {
         if (!this.mobileMenu || this.mobileMenuToggles.length === 0) {
             console.warn('Mobile menu elements not found - skipping mobile menu initialization');
@@ -324,7 +325,6 @@ export class HeaderManager {
             this.mobileMenuToggles[0].focus();
         }
 
-        // Resume auto-hide behavior if not at top
         if (window.scrollY > (this.header?.offsetHeight || 0) * 1.5) {
             this.setHideTimeout();
         }
@@ -332,7 +332,6 @@ export class HeaderManager {
         console.log('Mobile menu closed');
     }
 
-    // Smooth scrolling
     initSmoothScrolling() {
         const smoothScrollLinks = attachEventListeners('a[href^="#"]', 'click', (e) => {
             this.handleSmoothScroll(e);
@@ -372,7 +371,6 @@ export class HeaderManager {
         }
     }
 
-    // Resize handling
     initResizeHandler() {
         this.resizeHandler = throttle(() => {
             this.handleResize();
@@ -395,7 +393,6 @@ export class HeaderManager {
         console.log(`Window resized: ${window.innerWidth}px (${isDesktop ? 'desktop' : 'mobile'})`);
     }
 
-    // Public API methods
     getHeaderState() {
         return {
             isVisible: this.isHeaderVisible,

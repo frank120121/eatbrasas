@@ -239,21 +239,11 @@
                     </button>
                 </div>
 
-                <!-- Mobile: Location -->
-                <div class="flex items-center space-x-4 lg:hidden">
-                    <a href="#location" class="location-picker" aria-label="Ubicación de recogida: Nogales, Sonora">
-                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24.17" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M12 0a7.875 7.875 0 0 1 6.831 11.795L12.09 24.17 5.164 11.794a7.88 7.88 0 0 1-1.039-3.919A7.875 7.875 0 0 1 12 0zm0 11.794a3.92 3.92 0 1 0 0-7.838 3.92 3.92 0 0 0 0 7.838z"/>
-                        </svg>
-                        <div class="text-sm hidden sm:block">
-                            <div class="font-bold text-sm">Recoger en</div>
-                            <div class="text-gray-600 text-sm">Nogales, Sonora</div>
-                        </div>
-                    </a>
-                </div>
+                <!-- Mobile: Empty spacer (for centering) -->
+                <div class="lg:hidden"></div>
 
                 <!-- Desktop: Logo -->
-                <div class="hidden lg:flex items-center space-x-4">
+                <div class="hidden lg:flex items-center">
                     <a href="#home" class="flex items-center" aria-label="Brasas Smokehouse - Ir al inicio">
                         <img 
                             src="/assets/images/logo/brasas-icon-256.png"
@@ -262,6 +252,10 @@
                             class="w-12 h-12 rounded-xl hover:scale-105 transition-all duration-200 shadow-sm"
                             loading="eager"
                         >
+                    </a>
+                </div>
+
+                <!-- Desktop: Navigation -->
                 <nav class="hidden lg:flex items-center space-x-8" role="navigation" aria-label="Navegación principal">
                     <a href="#menu" class="nav-link active">MENÚ</a>
                     <a href="#contacto" class="nav-link">EVENTOS</a>
