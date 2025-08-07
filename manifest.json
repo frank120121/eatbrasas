@@ -82,34 +82,6 @@
         "sizes": "32x32",
         "type": "image/png"
       }]
-    },
-    {
-      "name": "Notificaciones WhatsApp",
-      "short_name": "WhatsApp",
-      "description": "Recibe notificaciones por WhatsApp cuando abramos",
-      "url": "https://wa.me/message/VE4RQVV7SXPSN1",
-      "icons": [{ 
-        "src": "/assets/images/logo/favicon-32x32.png", 
-        "sizes": "32x32",
-        "type": "image/png"
-      }]
-    }
-  ],
-
-  "screenshots": [
-    {
-      "src": "/assets/images/screenshots/desktop-hero.png",
-      "sizes": "1280x720",
-      "type": "image/png",
-      "form_factor": "wide",
-      "label": "Vista principal de Brasas Smokehouse en desktop"
-    },
-    {
-      "src": "/assets/images/screenshots/mobile-menu.png",
-      "sizes": "360x640",
-      "type": "image/png",
-      "form_factor": "narrow",
-      "label": "Menú de carnes ahumadas en dispositivo móvil"
     }
   ],
 

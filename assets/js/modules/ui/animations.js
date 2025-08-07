@@ -1,11 +1,7 @@
 // assets/js/modules/ui/animations.js
-// Lightweight Animation Manager - Optimized for low-end mobile devices
 
 import { getElement, getElements } from '../utils.js';
 
-/**
- * Lightweight AnimationManager - Mobile-first, low-resource approach
- */
 export class AnimationManager {
     constructor(showToast = null) {
         this.showToast = showToast;
@@ -14,214 +10,189 @@ export class AnimationManager {
         this.isLowEndDevice = false;
         this.visibilityObserver = null;
         this.elementsToReveal = new Set();
+        this.fallbackTimeout = null;
     }
 
-    /**
-     * Initialize animation system with device detection
-     */
     async init() {
-        // Defer initialization to avoid blocking main thread
-        if ('requestIdleCallback' in window) {
-            requestIdleCallback(() => this.performInit(), { timeout: 500 });
-        } else {
-            setTimeout(() => this.performInit(), 100);
-        }
+        // Initialize immediately to prevent any hiding
+        this.performInit();
     }
 
-    /**
-     * Actual initialization
-     */
     performInit() {
         try {
             this.detectDeviceCapabilities();
             this.checkMotionPreferences();
             
+            // ALWAYS ensure content is visible first
+            this.ensureContentVisibility();
+            
             if (this.isLowEndDevice || this.reducedMotion) {
-                this.initStaticMode();
+                this.initAccessibleMode();
             } else {
-                this.initLightAnimations();
+                this.initProgressiveEnhancement();
             }
             
             this.initEssentials();
+            this.setupFallbacks();
             this.isInitialized = true;
             
-            console.log(`✅ Animations initialized (${this.isLowEndDevice ? 'static' : 'light'} mode)`);
+            console.log(`✅ Animation manager initialized (${this.getMode()} mode)`);
             
         } catch (error) {
             console.error('❌ Animation init error:', error);
-            // Fallback to static mode on error
-            this.initStaticMode();
+            // Always fallback to showing content
+            this.initAccessibleMode();
         }
     }
 
-    /**
-     * Detect device capabilities
-     */
-    detectDeviceCapabilities() {
-        // Check for low-end device indicators
-        const indicators = {
-            lowMemory: navigator.deviceMemory && navigator.deviceMemory < 4,
-            lowConcurrency: navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4,
-            slowConnection: navigator.connection && 
-                          (navigator.connection.effectiveType === 'slow-2g' || 
-                           navigator.connection.effectiveType === '2g'),
-            lowEndCPU: window.performance && 
-                      window.performance.now() > 50 // Basic timing check
-        };
-
-        this.isLowEndDevice = Object.values(indicators).some(Boolean);
+    ensureContentVisibility() {
+        // CRITICAL: Ensure all content is visible immediately
+        const allElements = getElements('section, .product-card, .category-preview-card, #menu, #location, #contacto');
         
-        if (this.isLowEndDevice) {
-            console.log('📱 Low-end device detected - using minimal animations');
-        }
-    }
-
-    /**
-     * Check user motion preferences
-     */
-    checkMotionPreferences() {
-        if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) {
-            this.reducedMotion = true;
-            console.log('♿ Reduced motion preference detected');
-        }
-    }
-
-    /**
-     * Initialize static mode (no animations)
-     */
-    initStaticMode() {
-        // Immediately show all elements that would normally animate
-        const elementsToShow = getElements('.fade-in, [data-animate]');
-        elementsToShow.forEach(el => {
+        allElements.forEach(el => {
+            // Remove any hiding
+            el.style.display = '';
+            el.style.visibility = 'visible';
             el.style.opacity = '1';
-            el.style.transform = 'none';
-            el.classList.add('no-animation');
+            el.classList.remove('hidden', 'invisible');
         });
 
-        // Handle videos - show static fallbacks
-        this.handleVideosStatic();
-        
-        console.log('🔇 Static mode initialized');
-    }
-
-    /**
-     * Initialize lightweight animations
-     */
-    initLightAnimations() {
-        // Very simple fade-in on scroll
-        this.initSimpleFadeIn();
-        
-        // Basic video handling
-        this.initBasicVideos();
-        
-        // Simple button feedback
-        this.initButtonFeedback();
-    }
-
-    /**
-     * Simple fade-in using single Intersection Observer
-     */
-    initSimpleFadeIn() {
-        const elements = getElements('.fade-in');
-        if (elements.length === 0) return;
-
-        // Add all elements to reveal set
-        elements.forEach(el => {
-            this.elementsToReveal.add(el);
-            // Set initial state ONLY if not already visible
-            if (!el.classList.contains('visible')) {
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(20px)';
-                el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        // Handle fade-in elements safely
+        const fadeElements = getElements('.fade-in');
+        fadeElements.forEach(el => {
+            // Only animate if explicitly marked AND animations are enabled
+            if (!el.classList.contains('animate-on-scroll')) {
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+                el.style.visibility = 'visible';
             }
         });
 
-        // Single observer for all elements
+        console.log(`✅ Ensured visibility for ${allElements.length} elements`);
+    }
+
+    detectDeviceCapabilities() {
+        // Conservative device detection
+        const indicators = {
+            lowMemory: navigator.deviceMemory && navigator.deviceMemory < 3,
+            lowCPU: navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4,
+            slowConnection: navigator.connection && 
+                          (navigator.connection.effectiveType === '2g' || 
+                           navigator.connection.effectiveType === 'slow-2g' ||
+                           navigator.connection.downlink < 2),
+            oldBrowser: !window.IntersectionObserver || !window.requestAnimationFrame
+        };
+
+        this.isLowEndDevice = Object.values(indicators).some(Boolean);
+    }
+
+    checkMotionPreferences() {
+        try {
+            this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        } catch (e) {
+            this.reducedMotion = false;
+        }
+    }
+
+    initAccessibleMode() {
+        // Show everything immediately, no animations
+        const animatedElements = getElements('.fade-in, [data-animate]');
+        animatedElements.forEach(el => {
+            el.style.opacity = '1';
+            el.style.transform = 'none';
+            el.style.visibility = 'visible';
+            el.classList.add('visible');
+            el.classList.remove('animate-on-scroll');
+        });
+
+        this.handleVideos();
+        console.log('♿ Accessible mode - all content immediately visible');
+    }
+
+    initProgressiveEnhancement() {
+        // Safe progressive enhancement
+        this.markElementsForAnimation();
+        this.initSafeScrollAnimations();
+        this.initBasicInteractions();
+    }
+
+    markElementsForAnimation() {
+        // Only mark specific elements for animation, not all .fade-in
+        const candidateElements = getElements('.fade-in');
+        
+        candidateElements.forEach((el, index) => {
+            // Only animate elements that are not critical and are below the fold
+            const rect = el.getBoundingClientRect();
+            const isAboveFold = rect.top < window.innerHeight;
+            const isCritical = el.closest('#menu, #location, #contacto, .product-card');
+            
+            if (!isAboveFold && !isCritical && index > 2) {
+                // Safe to animate this element
+                el.classList.add('animate-on-scroll');
+                this.elementsToReveal.add(el);
+            } else {
+                // Keep visible immediately
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+                el.classList.add('visible');
+            }
+        });
+
+        console.log(`Marked ${this.elementsToReveal.size} elements for animation, ${candidateElements.length - this.elementsToReveal.size} immediately visible`);
+    }
+
+    initSafeScrollAnimations() {
+        if (this.elementsToReveal.size === 0) return;
+
+        if (!window.IntersectionObserver) {
+            // No IntersectionObserver support - show everything
+            this.showAllElements();
+            return;
+        }
+
         this.visibilityObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting && this.elementsToReveal.has(entry.target)) {
-                    // Simple fade-in
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                    entry.target.classList.add('visible');
-                    
-                    // Remove from observation
+                    this.revealElement(entry.target);
                     this.elementsToReveal.delete(entry.target);
                     this.visibilityObserver.unobserve(entry.target);
-                    
-                    console.log('Faded in:', entry.target.tagName, entry.target.alt || entry.target.className);
                 }
             });
         }, {
             threshold: 0.1,
-            rootMargin: '50px'
+            rootMargin: '100px' // Start animation early
         });
 
-        // Observe all elements
-        elements.forEach(el => this.visibilityObserver.observe(el));
-        
-        console.log(`👁️ Simple fade-in for ${elements.length} elements`);
-    }
-
-    /**
-     * Basic video handling
-     */
-    initBasicVideos() {
-        const videos = getElements('video[autoplay]');
-        
-        videos.forEach(video => {
-            // Set basic attributes
-            video.muted = true;
-            video.playsInline = true;
-            video.setAttribute('aria-hidden', 'true');
-            
-            // Try to play, fallback on error
-            video.play().catch(() => {
-                this.showVideoFallback(video);
-            });
-            
-            // Pause when not visible (battery saving)
-            video.addEventListener('error', () => this.showVideoFallback(video));
+        this.elementsToReveal.forEach(el => {
+            this.visibilityObserver.observe(el);
         });
 
-        if (videos.length > 0) {
-            console.log(`🎥 Basic video setup for ${videos.length} videos`);
-        }
+        console.log(`👁️ Scroll animations enabled for ${this.elementsToReveal.size} elements`);
     }
 
-    /**
-     * Simple video fallback
-     */
-    showVideoFallback(video) {
-        video.style.display = 'none';
-        const parent = video.parentElement;
-        
-        if (!parent.querySelector('.video-fallback')) {
-            const fallback = document.createElement('div');
-            fallback.className = 'video-fallback';
-            fallback.style.cssText = `
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-                z-index: -1;
-            `;
-            parent.appendChild(fallback);
-        }
+    revealElement(element) {
+        element.style.opacity = '1';
+        element.style.transform = 'translateY(0)';
+        element.classList.add('visible');
     }
 
-    /**
-     * Lightweight button feedback
-     */
+    showAllElements() {
+        this.elementsToReveal.forEach(el => this.revealElement(el));
+        this.elementsToReveal.clear();
+    }
+
+    initBasicInteractions() {
+        // Lightweight button feedback
+        this.initButtonFeedback();
+        this.initVideoHandling();
+    }
+
     initButtonFeedback() {
-        // Use event delegation for all buttons
+        // Simple touch feedback
         document.addEventListener('touchstart', (e) => {
             const button = e.target.closest('button, .btn, [role="button"]');
             if (button && !button.disabled) {
-                button.style.transform = 'scale(0.95)';
-                button.style.opacity = '0.8';
+                button.style.transform = 'scale(0.98)';
             }
         }, { passive: true });
 
@@ -229,147 +200,128 @@ export class AnimationManager {
             const button = e.target.closest('button, .btn, [role="button"]');
             if (button) {
                 button.style.transform = '';
-                button.style.opacity = '';
-            }
-        }, { passive: true });
-
-        // Handle touch cancel
-        document.addEventListener('touchcancel', (e) => {
-            const button = e.target.closest('button, .btn, [role="button"]');
-            if (button) {
-                button.style.transform = '';
-                button.style.opacity = '';
             }
         }, { passive: true });
     }
 
-    /**
-     * Handle videos in static mode
-     */
-    handleVideosStatic() {
-        const videos = getElements('video');
+    initVideoHandling() {
+        const videos = getElements('video[autoplay]');
         videos.forEach(video => {
-            video.pause();
-            this.showVideoFallback(video);
+            video.muted = true;
+            video.playsInline = true;
+            video.setAttribute('aria-hidden', 'true');
+            
+            video.play().catch(() => {
+                this.handleVideoFallback(video);
+            });
         });
     }
 
-    /**
-     * Initialize essential non-animation features
-     */
-    initEssentials() {
-        // Update current year (always needed)
-        this.updateCurrentYear();
-        
-        // Handle visibility changes for battery optimization
-        this.initVisibilityOptimization();
-    }
-
-    /**
-     * Update footer year
-     */
-    updateCurrentYear() {
-        const yearElements = getElements('#current-year, .current-year');
-        const currentYear = new Date().getFullYear();
-        
-        yearElements.forEach(el => {
-            el.textContent = currentYear;
-        });
-
-        if (yearElements.length > 0) {
-            console.log(`📅 Updated ${yearElements.length} year elements to ${currentYear}`);
+    handleVideoFallback(video) {
+        video.style.display = 'none';
+        const parent = video.parentElement;
+        if (parent && !parent.querySelector('.video-fallback')) {
+            const fallback = document.createElement('div');
+            fallback.className = 'video-fallback';
+            fallback.style.cssText = `
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(135deg, #ad2118, #ea580c);
+                z-index: -1;
+            `;
+            parent.appendChild(fallback);
         }
     }
 
-    /**
-     * Optimize for battery when page is hidden
-     */
+    handleVideos() {
+        const videos = getElements('video');
+        videos.forEach(video => {
+            if (this.isLowEndDevice) {
+                video.pause();
+                this.handleVideoFallback(video);
+            }
+        });
+    }
+
+    setupFallbacks() {
+        // Fallback: If something goes wrong, show everything after 3 seconds
+        this.fallbackTimeout = setTimeout(() => {
+            if (this.elementsToReveal.size > 0) {
+                console.warn('⚠️ Animation fallback triggered - showing remaining elements');
+                this.showAllElements();
+            }
+        }, 3000);
+
+        // Fallback: Show everything when page becomes visible
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden && this.elementsToReveal.size > 0) {
+                this.showAllElements();
+            }
+        });
+    }
+
+    initEssentials() {
+        this.updateCurrentYear();
+        this.initVisibilityOptimization();
+    }
+
+    updateCurrentYear() {
+        const yearElements = getElements('#current-year, .current-year');
+        const currentYear = new Date().getFullYear();
+        yearElements.forEach(el => el.textContent = currentYear);
+    }
+
     initVisibilityOptimization() {
         document.addEventListener('visibilitychange', () => {
+            const videos = getElements('video');
             if (document.hidden) {
-                // Pause all videos
-                getElements('video').forEach(video => {
+                videos.forEach(video => {
                     if (!video.paused) {
                         video.pause();
                         video.dataset.wasPaused = 'false';
                     }
                 });
-            } else {
-                // Resume videos that were playing (if not low-end device)
-                if (!this.isLowEndDevice && !this.reducedMotion) {
-                    getElements('video').forEach(video => {
-                        if (video.dataset.wasPaused === 'false') {
-                            video.play().catch(() => {
-                                this.showVideoFallback(video);
-                            });
-                        }
-                    });
-                }
+            } else if (!this.isLowEndDevice) {
+                videos.forEach(video => {
+                    if (video.dataset.wasPaused === 'false') {
+                        video.play().catch(() => this.handleVideoFallback(video));
+                    }
+                });
             }
         });
     }
 
-    /**
-     * Simple element reveal (for dynamic content)
-     */
-    revealElement(element, immediate = false) {
-        if (!element) return;
-
-        if (immediate || this.isLowEndDevice || this.reducedMotion) {
-            element.style.opacity = '1';
-            element.style.transform = 'none';
-        } else {
-            element.style.transition = 'opacity 0.3s ease';
-            element.style.opacity = '1';
-        }
+    // Public API
+    forceShowAll() {
+        this.showAllElements();
+        this.ensureContentVisibility();
+        console.log('🔧 Force showed all content');
     }
 
-    /**
-     * Manual trigger for specific animations
-     */
-    animate(element, type = 'fadeIn') {
-        if (!element || this.isLowEndDevice || this.reducedMotion) {
-            return Promise.resolve();
-        }
-
-        return new Promise(resolve => {
-            switch (type) {
-                case 'fadeIn':
-                    element.style.transition = 'opacity 0.3s ease';
-                    element.style.opacity = '1';
-                    break;
-                case 'slideUp':
-                    element.style.transition = 'transform 0.3s ease';
-                    element.style.transform = 'translateY(0)';
-                    break;
-                default:
-                    element.style.opacity = '1';
-            }
-            
-            setTimeout(resolve, 300);
-        });
+    getMode() {
+        if (this.isLowEndDevice || this.reducedMotion) return 'accessible';
+        return 'enhanced';
     }
 
-    /**
-     * Get simple stats
-     */
     getStats() {
         return {
             isInitialized: this.isInitialized,
+            mode: this.getMode(),
+            pendingElements: this.elementsToReveal.size,
             isLowEndDevice: this.isLowEndDevice,
-            reducedMotion: this.reducedMotion,
-            elementsToReveal: this.elementsToReveal.size,
-            mode: this.isLowEndDevice || this.reducedMotion ? 'static' : 'light'
+            reducedMotion: this.reducedMotion
         };
     }
 
-    /**
-     * Cleanup
-     */
     destroy() {
         if (this.visibilityObserver) {
             this.visibilityObserver.disconnect();
             this.visibilityObserver = null;
+        }
+        
+        if (this.fallbackTimeout) {
+            clearTimeout(this.fallbackTimeout);
+            this.fallbackTimeout = null;
         }
         
         this.elementsToReveal.clear();
@@ -379,5 +331,4 @@ export class AnimationManager {
     }
 }
 
-// Export singleton
 export const animationManager = new AnimationManager();

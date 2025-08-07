@@ -129,13 +129,66 @@
 
   /* Animation Classes */
   .fade-in {
-    @apply opacity-0 translate-y-8 transition-all duration-700;
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
   }
   
-  .fade-in.visible {
-    @apply opacity-100 translate-y-0;
+  .fade-in.animate-on-scroll {
+    opacity: 0;
+    transform: translateY(20px);
   }
-
+  .fade-in.animate-on-scroll.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Fallback: If no JavaScript, show everything after 2 seconds */
+  .no-js .fade-in.animate-on-scroll {
+    animation: auto-show 0.1s ease-out 2s forwards;
+  }
+  
+  @keyframes auto-show {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Ensure critical elements are always visible */
+  #menu,
+  #location,
+  #contacto,
+  .product-card,
+  .category-preview-card {
+    display: block;
+    visibility: visible;
+    opacity: 1;
+  }
+  
+  /* Safe image loading */
+  img {
+    opacity: 1;
+    visibility: visible;
+    display: block;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Only hide images that are explicitly being lazy-loaded */
+  img.lazy-loading {
+    opacity: 0.7;
+  }
+  
+  img.lazy-loaded {
+    opacity: 1;
+  }
+  
+  /* Ensure grid layouts work */
+  #categories-grid {
+    display: grid !important;
+    opacity: 1;
+    visibility: visible;
+  }
   /* Enhanced Shine Effect */
   .shine {
     @apply relative overflow-hidden;
@@ -652,7 +705,7 @@
   }
 }
 
-/* Enhanced fadeIn animation for menu preview */
+/*fadeIn animation for menu preview */
 @keyframes fadeIn {
   from {
     opacity: 0;

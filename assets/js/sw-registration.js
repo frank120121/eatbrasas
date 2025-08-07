@@ -1,29 +1,23 @@
+// assets/js/sw-registration.js 
 
-// sw-registration.js
 const SW_CONFIG = {
     SW_URL: '/sw.js',
-    UPDATE_CHECK_INTERVAL: 300000, // Check every 5 minutes (was 1 minute)
+    UPDATE_CHECK_INTERVAL: 300000, // Check every 5 minutes
     DATA_LIMIT_MB: 2,              // 2MB limit 
     WARN_AT_PERCENTAGE: 70,        // Warn at 70% usage
     DEBUG: window.location.hostname === 'localhost'
 };
 
-/**
- * Service Worker
- */
 class ServiceWorkerManager {
     constructor() {
         this.registration = null;
         this.isOnline = navigator.onLine;
         this.dataUsage = 0;
         this.updateCheckInterval = null;
-        // Initialize immediately for critical functionality
+        this.deferredPrompt = null; 
         this.init();
     }
 
-    /**
-     * Initialize service worker
-     */
     async init() {
         if (!('serviceWorker' in navigator)) {
             console.warn('Service Workers not supported');
@@ -43,9 +37,6 @@ class ServiceWorkerManager {
         }
     }
 
-    /**
-     * Register service worker
-     */
     async registerServiceWorker() {
         try {
             this.registration = await navigator.serviceWorker.register(SW_CONFIG.SW_URL, {
@@ -54,7 +45,6 @@ class ServiceWorkerManager {
 
             console.log('✅ Service Worker registered');
 
-            // Handle registration states
             if (this.registration.installing) {
                 this.trackInstalling(this.registration.installing);
             } else if (this.registration.waiting) {
@@ -66,9 +56,6 @@ class ServiceWorkerManager {
         }
     }
 
-    /**
-     * Setup essential event listeners
-     */
     setupEventListeners() {
         // Service worker messages
         navigator.serviceWorker.addEventListener('message', event => {
@@ -88,20 +75,17 @@ class ServiceWorkerManager {
             this.showToast('📱 Modo offline activado', 'info');
         });
 
-        // Check for updates when page becomes visible
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden) {
                 this.checkForUpdates();
             }
         });
 
-        // Monitor connection
         if (navigator.connection) {
             navigator.connection.addEventListener('change', () => {
                 const { effectiveType, downlink } = navigator.connection;
                 console.log(`📡 Connection: ${effectiveType}, ${downlink}Mbps`);
                 
-                // Notify SW of poor connection for optimization
                 if (effectiveType === '2g' || downlink < 1) {
                     this.notifyServiceWorker('SLOW_CONNECTION', { effectiveType, downlink });
                 }
@@ -109,9 +93,6 @@ class ServiceWorkerManager {
         }
     }
 
-    /**
-     * Handle service worker messages
-     */
     handleServiceWorkerMessage(event) {
         const { type, message } = event.data || {};
 
@@ -119,12 +100,9 @@ class ServiceWorkerManager {
             case 'SW_READY':
                 console.log('✅ Service Worker ready');
                 break;
-
-
             case 'UPDATE_AVAILABLE':
                 this.showUpdateNotification();
                 break;
-
             default:
                 if (SW_CONFIG.DEBUG) {
                     console.log('📨 SW Message:', type, message);
@@ -132,9 +110,6 @@ class ServiceWorkerManager {
         }
     }
 
-    /**
-     * Check for service worker updates
-     */
     async checkForUpdates() {
         if (!this.registration) return;
 
@@ -149,9 +124,6 @@ class ServiceWorkerManager {
         }
     }
 
-    /**
-     * Show update notification
-     */
     showUpdateNotification() {
         const updateMessage = `
             🔄 Nueva versión disponible con mejoras para México. 
@@ -170,9 +142,6 @@ class ServiceWorkerManager {
         this.showToast(updateMessage, 'info', 10000);
     }
 
-    /**
-     * Apply service worker update
-     */
     applyUpdate() {
         if (!this.registration?.waiting) {
             console.warn('❌ No update waiting');
@@ -183,9 +152,6 @@ class ServiceWorkerManager {
         this.showToast('🔄 Aplicando actualización...', 'info');
     }
 
-    /**
-     * Track service worker installation
-     */
     trackInstalling(worker) {
         worker.addEventListener('statechange', () => {
             if (worker.state === 'installed') {
@@ -199,83 +165,151 @@ class ServiceWorkerManager {
         });
     }
 
-    /**
-     * Handle PWA install prompt
-     */
     handleInstallPrompt() {
-        this.deferredPrompt = null;
-
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
-            this.deferredPrompt = e;
+            this.deferredPrompt = e; 
             
-            // Show install prompt after short delay
             setTimeout(() => {
-                this.showInstallPrompt(deferredPrompt);
+                this.showInstallPrompt();
             }, 5000);
         });
 
         window.addEventListener('appinstalled', () => {
             console.log('🎉 PWA installed');
             this.showToast('🎉 App instalada correctamente', 'success');
-            deferredPrompt = null;
+            this.deferredPrompt = null;
         });
     }
 
-    /**
-     * Show install prompt
-     */
-    showInstallPrompt(deferredPrompt) {
-        // Check if recently dismissed
+    showInstallPrompt() {
         const dismissed = localStorage.getItem('pwa-install-dismissed');
         if (dismissed && Date.now() < parseInt(dismissed)) {
             return;
         }
 
-        // Create a proper HTML structure instead of string template
-        const installMessage = `
-            <div style="display: flex; align-items: center; margin-bottom: 10px;">
-                <span style="font-size: 20px; margin-right: 8px;">🇲🇽</span>
-                <strong>Instalar Brasas Smokehouse</strong>
-            </div>
-            <div style="font-size: 14px; margin-bottom: 15px;">
-                ✅ Funciona sin internet<br>
-                ✅ Ahorra datos móviles
-            </div>
-            <div>
-                <button onclick="swManager.installPWA()" style="
-                    background: #fff; 
-                    color: #ad2118; 
-                    border: none; 
-                    padding: 10px 15px; 
-                    border-radius: 8px; 
-                    cursor: pointer; 
-                    font-weight: bold;
-                    margin-right: 10px;
-                ">📱 Instalar</button>
-                <button onclick="swManager.dismissInstall()" style="
-                    background: transparent; 
-                    color: #fff; 
-                    border: 1px solid rgba(255,255,255,0.5); 
-                    padding: 10px 15px; 
-                    border-radius: 8px; 
-                    cursor: pointer;
-                ">Más tarde</button>
-            </div>
+        // Create toast container
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            left: 20px;
+            background: #007bff;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 10000;
+            font-family: inherit;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            word-wrap: break-word;
+            max-width: 400px;
+            margin: 0 auto;
         `;
 
-        this.showToast(installMessage, 'info', 30000);
+        // Create header
+        const header = document.createElement('div');
+        header.style.cssText = 'display: flex; align-items: center; margin-bottom: 10px;';
         
-        // Store prompt for later use
-        this.deferredPrompt = deferredPrompt;
+        const flag = document.createElement('span');
+        flag.textContent = '🇲🇽';
+        flag.style.cssText = 'font-size: 20px; margin-right: 8px;';
+        
+        const title = document.createElement('strong');
+        title.textContent = 'Instalar Brasas Smokehouse';
+        
+        header.appendChild(flag);
+        header.appendChild(title);
+
+        // Create benefits
+        const benefits = document.createElement('div');
+        benefits.style.cssText = 'font-size: 14px; margin-bottom: 15px; line-height: 1.4;';
+        benefits.innerHTML = '✅ Funciona sin internet<br>✅ Ahorra datos móviles';
+
+        // Create button container
+        const buttonContainer = document.createElement('div');
+        
+        // Install button
+        const installBtn = document.createElement('button');
+        installBtn.textContent = '📱 Instalar';
+        installBtn.style.cssText = `
+            background: #fff; 
+            color: #ad2118; 
+            border: none; 
+            padding: 10px 15px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: bold;
+            margin-right: 10px;
+        `;
+        installBtn.onclick = () => {
+            this.installPWA();
+            toast.remove();
+        };
+
+        // Dismiss button
+        const dismissBtn = document.createElement('button');
+        dismissBtn.textContent = 'Más tarde';
+        dismissBtn.style.cssText = `
+            background: transparent; 
+            color: #fff; 
+            border: 1px solid rgba(255,255,255,0.5); 
+            padding: 10px 15px; 
+            border-radius: 8px; 
+            cursor: pointer;
+        `;
+        dismissBtn.onclick = () => {
+            this.dismissInstall();
+            toast.remove();
+        };
+
+        // Close button (X)
+        const closeBtn = document.createElement('button');
+        closeBtn.textContent = '×';
+        closeBtn.style.cssText = `
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        `;
+        closeBtn.onclick = () => {
+            toast.remove();
+        };
+
+        // Assemble everything
+        buttonContainer.appendChild(installBtn);
+        buttonContainer.appendChild(dismissBtn);
+        
+        toast.appendChild(closeBtn);
+        toast.appendChild(header);
+        toast.appendChild(benefits);
+        toast.appendChild(buttonContainer);
+        
+        document.body.appendChild(toast);
+
+        // Auto-remove after 30 seconds
+        setTimeout(() => {
+            if (toast.parentNode) {
+                toast.remove();
+            }
+        }, 30000);
     }
 
-
-    /**
-     * Install PWA
-     */
     async installPWA() {
-        if (!this.deferredPrompt) return;
+        if (!this.deferredPrompt) {
+            console.log('No install prompt available');
+            return;
+        }
 
         try {
             this.deferredPrompt.prompt();
@@ -289,18 +323,12 @@ class ServiceWorkerManager {
         }
     }
 
-    /**
-     * Dismiss install prompt
-     */
     dismissInstall() {
         // Don't show again for 7 days
         localStorage.setItem('pwa-install-dismissed', Date.now() + (7 * 24 * 60 * 60 * 1000));
         this.deferredPrompt = null;
     }
 
-    /**
-     * Notify service worker
-     */
     notifyServiceWorker(type, data = {}) {
         if (!navigator.serviceWorker.controller) return;
 
@@ -314,29 +342,20 @@ class ServiceWorkerManager {
         });
     }
 
-    /**
-     * Start periodic tasks
-     */
     startPeriodicTasks() {
-        // Check for updates
         this.updateCheckInterval = setInterval(() => {
             if (!document.hidden && this.isOnline) {
                 this.checkForUpdates();
             }
         }, SW_CONFIG.UPDATE_CHECK_INTERVAL);
-
     }
 
-    /**
-     * toast notification
-     */
     showToast(message, type = 'info', duration = 3000) {
-        // Try to use existing toast function
         if (typeof showToast === 'function') {
             return showToast(message, type, duration);
         }
         
-        // fallback toast with proper HTML support
+        // Fallback toast with proper HTML support
         const toast = document.createElement('div');
         toast.innerHTML = message; 
         toast.style.cssText = `
@@ -357,7 +376,6 @@ class ServiceWorkerManager {
         
         document.body.appendChild(toast);
         
-        // Add click event to buttons if they exist
         const buttons = toast.querySelectorAll('button');
         buttons.forEach(button => {
             button.addEventListener('click', () => {
@@ -376,22 +394,17 @@ class ServiceWorkerManager {
         return toast;
     }
 
-    /**
-     * Get current status
-     */
     getStatus() {
         return {
             supported: 'serviceWorker' in navigator,
             registered: !!this.registration,
             active: !!this.registration?.active,
             isOnline: this.isOnline,
-            dataUsage: this.dataUsage
+            dataUsage: this.dataUsage,
+            hasDeferredPrompt: !!this.deferredPrompt
         };
     }
 
-    /**
-     * Cleanup
-     */
     destroy() {
         if (this.updateCheckInterval) {
             clearInterval(this.updateCheckInterval);
@@ -406,9 +419,9 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
         swManager = new ServiceWorkerManager();
         
-        // Make globally available for debugging
+        window.swManager = swManager;
+        
         if (SW_CONFIG.DEBUG) {
-            window.swManager = swManager;
             console.log('🔧 SW Manager available at window.swManager');
         }
     } catch (error) {
