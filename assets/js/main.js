@@ -65,6 +65,15 @@ class BrasasSmokehouseApp {
         
         const images = getElements('img');
         images.forEach(el => {
+
+            if (el.offsetParent === null) {
+   
+                if (el.dataset.src && !el.src) {
+                    el.src = el.dataset.src;
+                }
+                return; 
+            }
+
             el.style.visibility = 'visible';
             el.style.opacity = '1';
             el.style.display = '';
@@ -72,7 +81,7 @@ class BrasasSmokehouseApp {
                 el.src = el.dataset.src;
             }
         });
-        
+                
         const grids = getElements('#categories-grid, .grid');
         grids.forEach(el => {
             el.style.display = 'grid';
