@@ -47,9 +47,22 @@
     <link rel="icon" type="image/x-icon" href="/assets/images/favicon/favicon.ico">
     <link rel="manifest" href="/manifest.json">
     
-    <!-- Preconnect for Performance -->
+    <!-- Preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- NON-BLOCKING Font Loading -->
+    <link 
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Nunito:wght@300;400;500;600;700;800;900&display=swap" 
+        rel="stylesheet" 
+        media="print" 
+        onload="this.media='all'"
+    >
+
+    <!-- Fallback for browsers that don't support onload -->
+    <noscript>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    </noscript>
+
     
     <!-- DNS Prefetch for External Resources -->
     <link rel="dns-prefetch" href="https://fonts.googleapis.com">
@@ -57,12 +70,157 @@
     <link rel="dns-prefetch" href="https://wa.me">
     <link rel="dns-prefetch" href="https://web.whatsapp.com">
     
-    <!-- Critical CSS -->
-    <link rel="stylesheet" href="/assets/css/main.css">
-    
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Nunito:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
+    <!-- Critical CSS (inline - only essential styles for above-the-fold) -->
+    <style>
+    /* Critical styles - only what's needed for hero section */
+    *, ::before, ::after {
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: #e5e7eb;
+    }
+
+    body {
+    margin: 0;
+    line-height: inherit;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+    background-color: white;
+    overflow-x: hidden;
+    font-display: swap;
+    }
+
+    .font-body { 
+    font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+    font-display: swap;
+    }
+
+    @font-face {
+    font-family: 'Inter Fallback';
+    src: local('Arial');
+    size-adjust: 107%;
+    ascent-override: 90%;
+    descent-override: 22%;
+    line-gap-override: 0%;
+    }
+
+    .hero-title-main {
+    margin-bottom: 1rem;
+    font-weight: 900;
+    line-height: 1.25;
+    color: rgb(255 255 255);
+    font-size: clamp(2rem, 6vw, 4rem);
+    min-height: 2.5rem;
+    }
+
+    .above-fold-container {
+    height: 100vh;
+    height: 100dvh;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    }
+
+    .home-section {
+    position: relative;
+    display: flex;
+    min-height: 0px;
+    flex: 1 1 0%;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    }
+
+    .hero-background {
+    position: absolute;
+    inset: 0px;
+    z-index: 0;
+    }
+
+    .hero-overlay {
+    position: absolute;
+    inset: 0px;
+    z-index: 10;
+    background-color: rgb(0 0 0 / 0.4);
+    }
+
+    .hero-content {
+    position: relative;
+    z-index: 20;
+    }
+
+    .bg-video {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    }
+
+    .hero-badge {
+    display: inline-block;
+    border-width: 4px;
+    border-color: rgb(255 255 255);
+    padding: 0.5rem 1.5rem;
+    font-weight: 900;
+    color: rgb(255 255 255);
+    }
+
+    .hero-title-main {
+    margin-bottom: 1rem;
+    font-weight: 900;
+    line-height: 1.25;
+    color: rgb(255 255 255);
+    font-size: clamp(2rem, 6vw, 4rem);
+    }
+
+    .text-center { text-align: center; }
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .items-center { align-items: center; }
+    .justify-center { justify-content: center; }
+    .w-full { width: 100%; }
+    .h-auto { height: auto; }
+    .max-w-7xl { max-width: 80rem; }
+    .max-w-4xl { max-width: 56rem; }
+    .mx-auto { margin-left: auto; margin-right: auto; }
+    .px-4 { padding-left: 1rem; padding-right: 1rem; }
+    .mb-6 { margin-bottom: 1.5rem; }
+    .space-y-2 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.5rem;
+    }
+
+    .bg-primary-dark { background-color: rgb(138 26 19); }
+    .text-white { color: rgb(255 255 255); }
+    .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+    .rounded-2xl { border-radius: 1rem; }
+    .font-bold { font-weight: 700; }
+    .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+
+    @media (min-width: 640px) {
+    .sm\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .sm\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+    .sm\:flex-row { flex-direction: row; }
+    }
+
+    @media (min-width: 1024px) {
+    .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+    .lg\:text-left { text-align: left; }
+    .lg\:items-start { align-items: flex-start; }
+    }
+    </style>
+
+    <!-- Load full CSS asynchronously (non-blocking) -->
+    <link 
+        rel="preload" 
+        href="/assets/css/main.css" 
+        as="style" 
+        onload="this.onload=null;this.rel='stylesheet'"
+    >
+
+    <!-- Fallback for browsers that don't support preload -->
+    <noscript>
+        <link rel="stylesheet" href="/assets/css/main.css">
+    </noscript>
     <!-- Structured Data for Coming Soon Restaurant -->
     <script type="application/ld+json">
     {
@@ -141,7 +299,8 @@
                                 srcset="/assets/images/logo/brasas-logo-full-1200-400.png 2x, /assets/images/logo/brasas-logo-full-1200-400.png 3x"
                                 alt="Brasas Smokehouse"
                                 class="w-auto h-auto object-contain hover:scale-105 transition-all duration-200 max-w-xs lg:max-w-sm mx-auto"
-                                loading="lazy"
+                                fetchpriority="high"
+                                loading="eager"
                             >
                         </a>
                     </div>
@@ -205,8 +364,8 @@
     </header>
 
     <!-- Scripts -->
-    <script type="module" src="assets/js/main.js"></script>
-    <script src="assets/js/sw-registration.js"></script>
+    <script type="module" src="assets/js/main.js" defer></script>
+    <script src="assets/js/sw-registration.js" defer></script>
 
 </body>
 </html>

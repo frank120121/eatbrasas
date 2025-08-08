@@ -1,7 +1,7 @@
 // tailwind.config.js
 module.exports = {
   content: [
-    "./index.html", 
+    "./*.html",
     "./assets/**/*.js",
     "./assets/css/input.css"
   ],
