@@ -69,9 +69,6 @@
     <link rel="dns-prefetch" href="https://wa.me">
     <link rel="dns-prefetch" href="https://web.whatsapp.com">
     
-    <!-- Critical Resource Preloading -->
-    <link rel="preload" href="/assets/images/hero/hero-poster-desktop-1920-1080.jpg" as="image">
-    
     <!-- Critical CSS (inline - only essential styles for above-the-fold) -->
     <style>
     /* Critical styles - only what's needed for hero section */
@@ -151,11 +148,6 @@
     z-index: 20;
     }
 
-    .bg-video {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    }
 
     .hero-badge {
     display: inline-block;
@@ -164,6 +156,10 @@
     padding: 0.5rem 1.5rem;
     font-weight: 900;
     color: rgb(255 255 255);
+    /* Reserve space */
+    min-height: 2.5rem;
+    min-width: 280px;
+    text-align: center;
     }
 
     .hero-title-main {
@@ -172,9 +168,28 @@
     line-height: 1.25;
     color: rgb(255 255 255);
     font-size: clamp(2rem, 6vw, 4rem);
+    /* Reserve space - be more specific */
+    min-height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    }
+    .hero-logo {
+    width: 320px;
+    height: 107px;
+    max-width: 100%;
+    height: auto;
     }
 
-    .text-center { text-align: center; }
+    /* Ensure button doesn't shift */    .hero-cta-button {
+    min-height: 4rem !important;
+    min-width: 280px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    }
+
+        .text-center { text-align: center; }
     .flex { display: flex; }
     .flex-col { flex-direction: column; }
     .items-center { align-items: center; }
@@ -211,6 +226,7 @@
     }
     </style>
 
+    <!-- Load full CSS asynchronously (non-blocking) -->
     <link 
         rel="preload" 
         href="/assets/css/main.css" 
@@ -222,7 +238,7 @@
     <noscript>
         <link rel="stylesheet" href="/assets/css/main.css">
     </noscript>
-    <!-- Structured Data for BRASAS SMOKEHOUSE -->
+    <!-- Structured Data for Coming Soon Restaurant -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
@@ -240,7 +256,7 @@
         },
         "servesCuisine": "Mexican",
         "priceRange": "$$",
-        "image": "https://eatbrasas.com/assets/images/logo/logo-og-1200-630.jpg",
+        "image": "https://eatbrasas.com/assets/images/logo/logo-og-1200×630.png",
         "openingHours": [],
         "hasMenu": {
             "@type": "Menu",
@@ -275,83 +291,72 @@
     <!-- ABOVE THE FOLD CONTAINER -->
     <div class="above-fold-container">
         <!-- Hero Section -->
-        <section id="home" class="home-section" role="banner">
-            <!-- Background Video -->
-            <div class="hero-background">
-                <!-- Desktop Video -->
-                <video 
-                    class="bg-video hidden md:block" 
-                    autoplay 
-                    muted 
-                    playsinline 
-                    loop
-                    preload="metadata"
-                    poster="/assets/images/hero/hero-poster-desktop-1920-1080.jpg"
-                    aria-label="Video de fondo mostrando brasas y comida"
-                >   
-                    <source src="/assets/videos/hero-desktop.webm" type="video/webm">
-                    <source src="/assets/videos/hero-desktop.mp4" type="video/mp4">
-                    
-                </video>
-                
-                <!-- Mobile Video -->
-                <video 
-                    class="bg-video block md:hidden" 
-                    autoplay 
-                    muted 
-                    playsinline 
-                    loop
-                    preload="metadata"
-                    poster="/assets/images/hero/hero-poster-mobile-1200-1200.jpg"
-                    aria-label="Video de fondo mostrando brasas y comida"
-                >
-                    <source src="/assets/videos/hero-mobile.webm" type="video/webm">
-                    <source src="/assets/videos/hero-mobile.mp4" type="video/mp4">
-                    
-                </video>
-                
-                <!-- Fallback -->
-                <div class="absolute inset-0 gradient-bg"></div>
-            </div>
-            
+        <section id="home" class="home-section" role="banner">            
+            <div class="absolute inset-0 gradient-bg"></div>
+
             <!-- Hero Overlay -->
             <div class="hero-overlay" aria-hidden="true"></div>
             
             <!-- Hero Content -->
-            <div class="hero-content w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex flex-col items-center text-center lg:text-left lg:items-start max-w-4xl">
+            <div class="hero-content w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col items-center justify-center min-h-screen py-8 sm:py-12 lg:py-16">
 
                     <!-- Hero Badge -->
-                    <div class="hero-badge mb-6">
+                    <div class="hero-badge mb-8 lg:mb-12">
                         <span class="font-black">PRÓXIMAMENTE EN NOGALES</span>
                     </div>
-                    <div class="fade-in">
-                        <a href="#home" class="inline-block mb-6" aria-label="Brasas Smokehouse - Ir al inicio">
+                    
+                    <!-- Logo -->
+                    <div class="fade-in mb-16 lg:mb-24">
+                        <a href="#home" class="inline-block" aria-label="Brasas Smokehouse - Ir al inicio">
                             <img 
                                 src="/assets/images/logo/brasas-logo-full-600-200.png"
                                 srcset="/assets/images/logo/brasas-logo-full-600-200.png 2x, /assets/images/logo/brasas-logo-full-600-200.png 3x"
                                 alt="Brasas Smokehouse"
-                                class="w-auto h-auto object-contain hover:scale-105 transition-all duration-200"
+                                class="w-auto h-auto object-contain hover:scale-105 transition-all duration-200 max-w-xs lg:max-w-sm mx-auto"
                                 fetchpriority="high"
                                 loading="eager"
+                                width="320"
+                                height="107"
                             >
                         </a>
                     </div>
 
-                    <!-- Main Title -->
-                    <div class="space-y-2 mb-6">
-                        <h1 class="hero-title-main">Consigue tu Descuento de Apertura Ahora</h1>
-                    </div>  
+                    <!-- Main Message -->
+                    <div class="text-center space-y-2 mb-6">
+                        <h1 class="hero-title-main">Consigue tu Descuento Exclusivo de Apertura Ahora</h1>
+                    </div>
+                    
                     <!-- CTA Button -->
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center max-w-lg mx-auto">
+                    <div class="flex flex-col items-center w-full max-w-sm mx-auto">
                         <a href="https://wa.me/message/VE4RQVV7SXPSN1"
                         target="_blank"
-                        class="inline-flex items-center justify-center bg-primary-dark text-white px-6 sm:px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:brightness-95 shine space-x-3 w-full sm:w-auto focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50 focus:ring-offset-2">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        class="hero-cta-button inline-flex items-center justify-center text-white px-6 sm:px-8 py-4 rounded-2xl font-bold text-lg transition-all duration-300 hover:scale-105 shine space-x-3 w-full sm:w-auto"
+                        style="background-color: #25D366 !important; min-height: 4rem; min-width: 280px;"
+                        onmouseover="this.style.backgroundColor='#128C7E'"
+                        onmouseout="this.style.backgroundColor='#25D366'"
+                        aria-label="Obtener descuento exclusivo por WhatsApp">
+                            
+                            <!-- Official WhatsApp Logo SVG -->
+                            <svg class="w-6 h-6 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.488"/>
                             </svg>
-                            <span>¡QUIERO MI DESCUENTO!</span>
+                            <span>¡Quiero Mi Descuento!</span>
                         </a>
+                        
+                        
+                        <!-- Trust Message -->
+                        <div class="text-center mt-4">
+                            <p class="text-sm text-white font-medium px-2">
+                                Es gratis, sin spam y solo para las primeras 50 personas
+                            </p>
+                        </div>
+                        <!-- Footer text -->
+                        <div class="text-center mt-12">
+                            <p class="text-sm text-white font-medium px-2">
+                                 © 2025 Brasas Smokehouse. Nogales, Sonora.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
