@@ -24,25 +24,25 @@
       "type": "image/png"
     },
     {
-      "src": "/assets/images/logo/android-chrome-192x192.png",
+      "src": "/assets/images/logo/brasas-icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/images/logo/android-chrome-192x192.png",
+      "src": "/assets/images/logo/brasas-icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/assets/images/logo/android-chrome-512x512.png",
+      "src": "/assets/images/logo/favicon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/assets/images/logo/android-chrome-512x512.png",
+      "src": "/assets/images/logo/favicon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
