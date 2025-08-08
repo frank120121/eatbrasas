@@ -38,9 +38,9 @@ const MENU_ASSETS = [
 
 // Static assets
 const STATIC_ASSETS = [
-  '/assets/images/logo/brasas-icon-192x192.png',
-  '/assets/images/logo/favicon-512x512.png',
-  '/assets/images/favicon/favicon-512x512.png',
+  '/assets/images/logo/brasas-icon-192-192.png',
+  '/assets/images/logo/favicon-512-512.png',
+  '/assets/images/favicon/favicon-512-512.png',
   '/assets/images/favicon/favicon.ico'
 ];
 
@@ -498,7 +498,7 @@ self.addEventListener('push', event => {
   const title = 'Brasas Smokehouse';
   const options = {
     body: 'Tu pedido está listo!',
-    icon: '/assets/images/logo/brasas-icon-192x192.png',
+    icon: '/assets/images/logo/brasas-icon-192-192.png',
     badge: '/assets/images/favicon/favicon-32x32.png',
     vibrate: [200, 100, 200],
     data: { url: '/' }
